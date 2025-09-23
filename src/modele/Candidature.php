@@ -2,7 +2,7 @@
 
 namespace modele;
 
-class Candidatture
+class Candidature
 {
 
 }
