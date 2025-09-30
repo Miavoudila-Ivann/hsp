@@ -2,24 +2,23 @@
 
 class Contact
 {
-    private $id;
+    private $id_contact;
     private $nom;
-    private $email;
+    private $status;
     private $sujet;
     private $message;
 
     public function __construct(array $data = [])
     {
-        if (isset($data['id'])) $this->id = $data['id'];
+        if (isset($data['id_contact'])) $this->id_contact = $data['id_contact'];
         if (isset($data['nom'])) $this->nom = $data['nom'];
         if (isset($data['email'])) $this->email = $data['email'];
         if (isset($data['sujet'])) $this->sujet = $data['sujet'];
         if (isset($data['message'])) $this->message = $data['message'];
     }
 
-    // --- Getters ---
-    public function getId() {
-        return $this->id;
+    public function getId_contact() {
+        return $this->id_contact;
     }
     public function getNom() {
         return $this->nom;
