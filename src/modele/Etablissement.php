@@ -75,7 +75,7 @@ class Etablissement
 
     public function __construct(array $data = [])
     {
-        if (isset($data['id_etablissement'])) $this->id_etablissement = $data['idEtablissement'];
+        if (isset($data['id_etablissement'])) $this->id_etablissement = $data['id_etablissement'];
         if (isset($data['nom_etablissement'])) $this->nom_etablissemnet = $data['nom_etablissement'];
         if (isset($data['adresse_etablissement'])) $this->adresse_etablissement = $data['adresse_etablissement'];
         if (isset($data['site_web_etablissement'])) $this->site_web_etablissement = $data['site_web_etablissement'];
