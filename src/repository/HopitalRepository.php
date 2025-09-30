@@ -42,7 +42,7 @@ class HopitalRepository
         $stmt->execute([
             '$id_hopital' => $hopital->getIdHopital(),
             'adresse_hopital' => $hopital->getAdresseHopital(),
-            'lieu' => $hopital->getNom(),
+            'nom' => $hopital->getNom(),
             'ville_hopital' => $hopital->getVilleHopital()
 
         ]);
@@ -53,5 +53,5 @@ class HopitalRepository
         $req = $this->bdd->getBdd()->prepare('DELETE FROM hopital WHERE $id_hopital = :id_hopital');
         return $req->execute(['id_hopital' => $id_hopital]);
     }
-    
+
 }
