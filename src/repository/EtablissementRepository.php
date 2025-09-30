@@ -29,7 +29,20 @@ class EtablissementRepository
             'site_web_etablissement' => $etablissement->getSiteWebEtablissement()
         ]);
     }
+    public function modifierEtablissement(Etablissement $etablissement)
+    {
+        $sql = "UPDATE etablissement SET 
+                    nom_etablissement = :nom_etablissement,adresse_etablissement = :adresse_etablissement,site_web_etablissement = :site_web_etablissement
+                WHERE id_etablissement = :id_etablissement";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            'id_etablissement' => $etablissement->getIdSpecialite(),
+            'nom_etablissement' => $etablissement->getNomEtablissemnet(),
+            'adress_etablissement' => $etablissement->getAdresseEtablissement(),
+            'site_web_etablissement' => $etablissement->getSiteWebEtablissement()
 
+        ]);
+    }
     public function supprimerEtablissement($id_etablissement)
     {
         $req = $this->bdd->getBdd()->prepare('DELETE FROM etablissement WHERE id_etablissement = :id_etablissement');
