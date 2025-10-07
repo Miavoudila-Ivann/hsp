@@ -23,6 +23,9 @@ class Contact
     public function getNom() {
         return $this->nom;
     }
+    public function getStatus() {
+        return $this->status;
+    }
     public function getEmail() {
         return $this->email;
     }

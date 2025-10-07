@@ -67,8 +67,8 @@ $isAdmin = $isConnected && isset($_SESSION['role']) && $_SESSION['role'] === 'Ad
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-lg-8">
-                <h2 class="text-white mb-4">Aéroport Français</h2>
-                <p class="text-white-50">Le meilleur et le plus grand Aéroport de France</p>
+                <h2 class="text-white mb-4">Hopital Sud Paris</h2>
+                <p class="text-white-50">Le meilleur et le plus grand Hopital de France</p>
             </div>
         </div>
     </div>
@@ -80,7 +80,7 @@ $isAdmin = $isConnected && isset($_SESSION['role']) && $_SESSION['role'] === 'Ad
             <div class="col-xl-8 col-lg-7"><img class="img-fluid" src="assets/img/AéroAvion.jpg" alt="..." /></div>
             <div class="col-xl-4 col-lg-5">
                 <div class="featured-text text-center text-lg-left">
-                    <h4>Plusieurs avions à disposition</h4>
+                    <h4>Plusieurs établissement à disposition</h4>
                     <p class="text-black-50 mb-0">Aéroport Dugny le plus grand Aéroport de France situé à Dugny, avec plus de 50 avions à votre disposition.</p>
                 </div>
             </div>
