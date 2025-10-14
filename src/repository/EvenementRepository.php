@@ -1,7 +1,7 @@
 <?php
 
 namespace repository;
-use modele\Etablissement;
+use Bdd;;
 use modele\Evenement;
 
 require_once __DIR__ . '/../modele/Evenement.php';

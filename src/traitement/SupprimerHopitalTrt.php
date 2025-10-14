@@ -12,7 +12,7 @@ if (isset($_GET['id_hopital'])) {
     $result = $repo->supprimer($id_hopital);
 
     if ($result) {
-        header('Location: ../vue/ListeHopital.php');
+        header('Location: ../vue/PageCreeHopital.php');
         exit();
     } else {
         echo "Erreur lors de la suppression de l'hopital.";

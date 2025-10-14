@@ -16,7 +16,7 @@ if (isset($_POST['ok'])) {
         $result = $repo->ajouter($etablissement);
 
         if ($result) {
-            header('Location: ../../vue/ListeEtablissement.php');
+            header('Location: ../../vue/PageCreeEtablissement.php');
             exit();
         } else {
             echo "Erreur lors de l'ajout de l'établissement.";

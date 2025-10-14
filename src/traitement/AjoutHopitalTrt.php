@@ -16,7 +16,7 @@ if (isset($_POST['ok'])) {
         $result = $repo->ajouter($hopital);
 
         if ($result) {
-            header('Location: ../../vue/ListeHopital.php');
+            header('Location: ../../vue/PageCreeHopital.php');
             exit();
         } else {
             echo "Erreur lors de l'ajout de l'hopital.";

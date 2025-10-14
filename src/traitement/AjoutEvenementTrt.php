@@ -16,7 +16,7 @@ if (isset($_POST['ok'])) {
         $result = $repo->ajouter($evenement);
 
         if ($result) {
-            header('Location: ../../vue/ListeEvenement.php');
+            header('Location: ../../vue/PageCreeEvenement.php');
             exit();
         } else {
             echo "Erreur lors de l'ajout de l'evenement.";

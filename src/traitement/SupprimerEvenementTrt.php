@@ -12,7 +12,7 @@ if (isset($_GET['id_evenement'])) {
     $result = $repo->supprimer($id_evenement);
 
     if ($result) {
-        header('Location: ../../vue/ListeEvenement.php');
+        header('Location: ../../vue/PageCreeEvenement.php');
         exit();
     } else {
         echo "Erreur lors de la suppression de l'évenement.";

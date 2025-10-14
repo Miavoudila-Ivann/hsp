@@ -12,7 +12,7 @@ if (isset($_GET['id_etablissement'])) {
     $result = $repo->supprimer(id_etablissement);
 
     if ($result) {
-        header('Location: ../../vue/ListeEtablissement.php');
+        header('Location: ../../vue/PageCreeEtablissement.php');
         exit();
     } else {
         echo "Erreur lors de la suppression de l'établissement.";
