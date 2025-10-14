@@ -1,5 +1,6 @@
 <?php
 namespace repository;
+use Bdd;
 use modele\Etablissement;
 
 require_once __DIR__ . '/../modele/Etablissement.php';
@@ -24,7 +25,7 @@ class EtablissementRepository
 
         return $req->execute([
             'id_etablissement' => $etablissement->getIdEtablissement(),
-            'nom_etablissement' => $etablissement->getNomEtablissemnet(),
+            'nom_etablissement' => $etablissement->getNomEtablissement(),
             'adresse_etablissement' => $etablissement->getAdresseEtablissement(),
             'site_web_etablissement' => $etablissement->getSiteWebEtablissement()
         ]);
@@ -37,7 +38,7 @@ class EtablissementRepository
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
             'id_etablissement' => $etablissement->getIdSpecialite(),
-            'nom_etablissement' => $etablissement->getNomEtablissemnet(),
+            'nom_etablissement' => $etablissement->getNomEtablissement(),
             'adress_etablissement' => $etablissement->getAdresseEtablissement(),
             'site_web_etablissement' => $etablissement->getSiteWebEtablissement()
 
