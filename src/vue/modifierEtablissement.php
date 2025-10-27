@@ -167,7 +167,7 @@ try {
         <input type="submit" value="Modifier l'établissement">
     </form>
 
-    <a href="PageCreeEtablissement.php" class="back-link">← Retour à la liste</a>
+    <a href="CreeEtablissement.php" class="back-link">← Retour à la liste</a>
 </div>
 </body>
 </html>

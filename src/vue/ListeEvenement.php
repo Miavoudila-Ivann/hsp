@@ -64,7 +64,7 @@ $evenements = $pdo->query('SELECT * FROM evenement')->fetchAll(PDO::FETCH_ASSOC)
             <td>
                 <a class="button" href="ModifierEvenement.php?id=<?= $evenement['id_evenement'] ?>">Modifier</a>
                 <a class="button delete" href="SupprimerEvenement.php?id=<?= $evenement['id_evenement'] ?>" onclick="return confirm('Voulez-vous vraiment supprimer cet événement ?');">Supprimer</a>
-                <a class="button" href="PageCreeEvenement.php">Ajouter</a>
+                <a class="button" href="CreeEvenement.php">Ajouter</a>
             </td>
         </tr>
     <?php endforeach; ?>

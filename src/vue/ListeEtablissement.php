@@ -64,7 +64,7 @@ $etablissements = $pdo->query('SELECT * FROM etablissement')->fetchAll(PDO::FETC
             <td>
                 <a class="button" href="ModifierEtablissement.php?id=<?= $etablissement['id_etablissement'] ?>">Modifier</a>
                 <a class="button delete" href="SupprimerEtablissement.php?id=<?= $etablissement['id_etablissement'] ?>" onclick="return confirm('Voulez-vous vraiment supprimer cet établissement ?');">Supprimer</a>
-                <a class="button" href="PageCreeEtablissement.php">Ajouter</a>
+                <a class="button" href="CreeEtablissement.php">Ajouter</a>
             </td>
         </tr>
     <?php endforeach; ?>

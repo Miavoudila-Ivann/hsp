@@ -64,7 +64,7 @@ $hopitaux = $pdo->query('SELECT * FROM hopital')->fetchAll(PDO::FETCH_ASSOC);
             <td>
                 <a class="button" href="ModifierHopital.php?id=<?= $hopital['id_hopital'] ?>">Modifier</a>
                 <a class="button delete" href="SupprimerHopital.php?id=<?= $hopital['id_hopital'] ?>" onclick="return confirm('Voulez-vous vraiment supprimer cet hôpital ?');">Supprimer</a>
-                <a class="button" href="PageCreeHopital.php">Ajouter</a>
+                <a class="button" href="CreeHopital.php">Ajouter</a>
 
             </td>
         </tr>

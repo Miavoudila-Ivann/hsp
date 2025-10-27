@@ -28,7 +28,7 @@ try {
     // Suppression de l'établissement
     if ($repo->supprimerEtablissement($id)) {
         $message = 'Établissement supprimé avec succès ! Vous allez être redirigé.';
-        echo '<script>setTimeout(function(){ window.location.href = "PageCreeEtablissement.php"; }, 2000);</script>';
+        echo '<script>setTimeout(function(){ window.location.href = "CreeEtablissement.php"; }, 2000);</script>';
     } else {
         $error = 'Erreur lors de la suppression de l\'établissement. Veuillez réessayer.';
     }

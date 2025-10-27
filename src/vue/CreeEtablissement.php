@@ -42,7 +42,7 @@ try {
                 // Insertion dans la BDD
                 if ($repo->creerEtablissement($etablissement)) {
                     $message = 'Établissement ajouté avec succès ! Vous allez être redirigé.';
-                    echo '<script>setTimeout(function(){ window.location.href = "PageCreeEtablissement.php"; }, 2000);</script>';
+                    echo '<script>setTimeout(function(){ window.location.href = "CreeEtablissement.php"; }, 2000);</script>';
                 } else {
                     $error = "Erreur lors de l'ajout. Veuillez réessayer.";
                 }
@@ -152,7 +152,7 @@ try {
         <input type="submit" value="Ajouter l'établissement">
     </form>
 
-    <a href="PageCreeEtablissement.php" class="back-link">← Retour à la liste</a>
+    <a href="CreeEtablissement.php" class="back-link">← Retour à la liste</a>
 </div>
 </body>
 </html>

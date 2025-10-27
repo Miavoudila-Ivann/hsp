@@ -16,7 +16,7 @@ if (isset($_POST['ok'])) {
         $result = $repo->modifier($evenement);
 
         if ($result) {
-            header('Location: ../vue/PageCreeEvenement.php');
+            header('Location: ../vue/CreeEvenement.php');
             exit();
         } else {
             echo "Erreur lors de la modification de l'évenement.";

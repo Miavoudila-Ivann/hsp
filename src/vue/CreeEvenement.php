@@ -40,7 +40,7 @@ try {
 
             if ($repo->creerEvenement($evenement)) {
                 $message = 'Événement ajouté avec succès ! Vous allez être redirigé.';
-                echo '<script>setTimeout(function(){ window.location.href = "PageCreeEvenement.php"; }, 2000);</script>';
+                echo '<script>setTimeout(function(){ window.location.href = "CreeEvenement.php"; }, 2000);</script>';
             } else {
                 $error = "Erreur lors de l'ajout. Veuillez réessayer.";
             }
@@ -208,7 +208,7 @@ try {
 
             if ($repo->creerEvenement($evenement)) {
                 $message = 'Événement ajouté avec succès ! Vous allez être redirigé.';
-                echo '<script>setTimeout(function(){ window.location.href = "PageCreeEvenement.php"; }, 2000);</script>';
+                echo '<script>setTimeout(function(){ window.location.href = "CreeEvenement.php"; }, 2000);</script>';
             } else {
                 $error = "Erreur lors de l'ajout. Veuillez réessayer.";
             }

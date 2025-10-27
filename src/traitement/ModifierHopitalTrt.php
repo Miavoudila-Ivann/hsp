@@ -16,7 +16,7 @@ if (isset($_POST['ok'])) {
         $result = $repo->modifier($hopital);
 
         if ($result) {
-            header('Location: ../vue/PageCreeHopital.php');
+            header('Location: ../vue/CreeHopital.php');
             exit();
         } else {
             echo "Erreur lors de la modification de l'hopital.";
