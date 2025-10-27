@@ -164,7 +164,7 @@ try {
         <input type="submit" value="Créer l'événement">
     </form>
 
-    <a href="ListeEvenements.php" class="back-link">← Retour à la liste</a>
+    <a href="ListeEvenement.php" class="back-link">← Retour à la liste</a>
 </div>
 
 </body>
