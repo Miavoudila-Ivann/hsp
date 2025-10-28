@@ -2,29 +2,31 @@
 
 class Candidature
 {
-    private $idCandidature;
-    private $status;
-    private $idRef_offre;
-    private $idRef_utilisateur;
-    private $motivation;
+    private ?int $id_candidature;
+    private string $motivation;
+    private string $statut;
+    private string $date_candidature;
+    private int $ref_offre;
+    private int $ref_utilisateur;
 
-    public function __construct(array $data = [])
+    public function __construct($id_candidature, $motivation, $statut, $date_candidature, $ref_offre, $ref_utilisateur)
     {
-        if (isset($data['idRef_offre'])) $this->idRef_offre = $data['idRef_offre'];
-        if (isset($data['id_candidature'])) $this->idCandidature = $data['id_candidature'];
-        if (isset($data['idRef_utilisateur'])) $this->idRef_utilisateur = $data['idRef_utilisateur'];
-        if (isset($data['statut'])) $this->status = $data['statut'];
-        if (isset($data['motivation'])) $this->motivation = $data['motivation'];
+        $this->id_candidature = $id_candidature;
+        $this->motivation = $motivation;
+        $this->statut = $statut;
+        $this->date_candidature = $date_candidature;
+        $this->ref_offre = $ref_offre;
+        $this->ref_utilisateur = $ref_utilisateur;
     }
 
-    public function getIdRef_offre() {
-        return $this->idRef_offre;
+    public function getRef_offre() {
+        return $this->ref_offre;
     }
-    public function getIdCandidature() {
-        return $this->idCandidature;
+    public function getId_andidature() {
+        return $this->id_candidature;
     }
-    public function getIdRef_utilisateur() {
-        return $this->idRef_utilisateur;
+    public function getRef_utilisateur() {
+        return $this->ref_utilisateur;
     }
     public function getStatut(){
       return $this->statut;
@@ -35,14 +37,14 @@ class Candidature
     }
 
 
-    public function setIdRef_offre($idRef_offre) {
-        $this->idRef_offre = $idRef_offre;
+    public function setRef_offre($ref_offre) {
+        $this->idRef_offre = $ref_offre;
     }
     public function setIdCandidature($idCandidature) {
-        $this->idOffre = $idCandidature;
+        $this->idCandidature = $idCandidature;
     }
-    public function setIdRef_utilisateur($idRef_utilisateur) {
-        $this->idOffre = $idRef_utilisateur;
+    public function setRef_utilisateur($ref_utilisateur) {
+        $this->ref_utilisateur = $ref_utilisateur;
     }
     public function setStatut($statut) {
         $this->statut = $statut;

@@ -140,8 +140,8 @@ $hours = [
 
             <!-- Desktop Menu -->
             <div class="hidden md:flex items-center space-x-8">
-                <a href="#accueil" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Accueil</a>
-                <a href="#services" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Services</a>
+                <a href="src/vue/AjoutCandidature.php" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Candidatures</a>
+                <a href="src/vue/ListeEtablissement.php" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Etablissements</a>
                 <a href="#apropos" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">À Propos</a>
                 <a href="#contact" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Contact</a>
                 <a href="src/vue/inscription.php" class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-6 py-2.5 rounded-lg hover:shadow-lg transition-all duration-300 font-medium">

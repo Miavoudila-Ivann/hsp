@@ -95,7 +95,7 @@
 <!-- ====================== PROFIL ENTREPRISE ======================= -->
 <section id="profil" class="card">
     <h2>Créer un Profil d’Entreprise</h2>
-    <form action="insert_entreprise.php" method="POST">
+    <form action="entreprise.php" method="POST">
         <input type="text" name="nom_entreprise" placeholder="Nom de l'entreprise" required>
         <input type="text" name="rue_entreprise" placeholder="Rue" required>
         <input type="text" name="ville_entreprise" placeholder="Ville" required>
@@ -108,7 +108,7 @@
 <!-- ====================== OFFRES ======================= -->
 <section id="offres" class="card">
     <h2>Publier une Offre</h2>
-    <form action="insert_offre.php" method="POST">
+    <form action="offre.php" method="POST">
         <input type="text" name="titre" placeholder="Titre de l'offre" required>
         <textarea name="description" placeholder="Description" required></textarea>
         <textarea name="mission" placeholder="Missions principales" required></textarea>
@@ -128,7 +128,7 @@
 <!-- ====================== EVENEMENTS ======================= -->
 <section id="evenements" class="card">
     <h2>Proposer un Événement</h2>
-    <form action="insert_evenement.php" method="POST">
+    <form action="evenement.php" method="POST">
         <input type="text" name="titre" placeholder="Titre de l’événement" required>
         <textarea name="description" placeholder="Description de l’événement" required></textarea>
         <input type="text" name="type_evenement" placeholder="Type d’événement" required>

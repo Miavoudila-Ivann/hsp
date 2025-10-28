@@ -14,14 +14,16 @@ class CandidatureRepository
     public function creerCandidature(Candidature $candidature)
     {
         $req = $this->bdd->getBdd()->prepare('
-            INSERT INTO candidatures (id_utilisateur, id_offre, motivation)
-            VALUES (:id_utilisateur, :id_offre, :motivation)
+            INSERT INTO candidatures (motivation, statut, date_candidature, ref_offre, ref_utilisateur)
+            VALUES (:motivation, :statut, :date_candidature, :ref_offre, :ref_utilisateur)
         ');
 
         return $req->execute([
-            'id_utilisateur' => $candidature->getIdUtilisateur(),
-            'id_offre'       => $candidature->getIdOffre(),
-            'motivation'     => $candidature->getMotivation()
+            ':motivation' => $candidature->getMotivation(),
+            ':statut' => $candidature->getStatut(),
+            ':date_candidature' => $candidature->getDateCandidature(),
+            ':ref_offre' => $candidature->getRefOffre(),
+            ':ref_utilisateur' => $candidature->getRefUtilisateur(),
         ]);
     }
 
