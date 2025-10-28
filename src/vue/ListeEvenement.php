@@ -15,6 +15,7 @@ $evenements = $pdo->query('SELECT * FROM evenement')->fetchAll(PDO::FETCH_ASSOC)
 <head>
     <meta charset="UTF-8">
     <title>Liste des Événements</title>
+
     <style>
         table {
             width: 90%;
@@ -43,6 +44,11 @@ $evenements = $pdo->query('SELECT * FROM evenement')->fetchAll(PDO::FETCH_ASSOC)
     </style>
 </head>
 <body>
+
+    <td>
+        <a class="button" href="CreeEvenement.php">Ajouter</a>
+    </td>
+
 <h1 style="text-align:center;">Liste des Événements</h1>
 <table>
     <thead>

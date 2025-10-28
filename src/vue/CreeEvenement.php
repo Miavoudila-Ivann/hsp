@@ -143,6 +143,9 @@ try {
                 <option value="conférence" <?= (($_POST['type_evenement'] ?? '') === 'conférence') ? 'selected' : '' ?>>Conférence</option>
                 <option value="atelier" <?= (($_POST['type_evenement'] ?? '') === 'atelier') ? 'selected' : '' ?>>Atelier</option>
                 <option value="séminaire" <?= (($_POST['type_evenement'] ?? '') === 'séminaire') ? 'selected' : '' ?>>Séminaire</option>
+                <option value="formation" <?= (($_POST['type_evenement'] ?? '') === 'formation') ? 'selected' : '' ?>>Formation</option>
+                <option value="fête" <?= (($_POST['type_evenement'] ?? '') === 'fête') ? 'selected' : '' ?>>Fête</option>
+
             </select>
         </div>
 
