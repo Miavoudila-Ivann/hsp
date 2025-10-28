@@ -1,15 +1,17 @@
 <?php
+require_once '../../src/bdd/Bdd.php';
+global $pdo;
 session_start();
 
 // Connexion à la base de données
 $host = 'localhost';
 $dbname = 'hsp';
 $user = 'root';
-$pass = ''; //
+$pass = '';
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $database = new Bdd($host, $dbname, $user, $pass);
+    $pdo = $database->getBdd();  // Connexion PDO
 } catch (PDOException $e) {
     die("Erreur de connexion : " . $e->getMessage());
 }
@@ -18,69 +20,79 @@ $error = "";
 $success = false;
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $email = trim($_POST["email"]);
-    $password = trim($_POST["password"]);
-    $nom = trim($_POST["nom"]);
-    $prenom = trim($_POST["prenom"]);
-    $code_postal = trim($_POST["code_postal"]);
-    $ville = trim($_POST["ville"]);
+    // Vérifie que toutes les clés existent
+    $nom = isset($_POST["nom"]) ? trim($_POST["nom"]) : '';
+    $prenom = isset($_POST["prenom"]) ? trim($_POST["prenom"]) : '';
+    $email = isset($_POST["email"]) ? trim($_POST["email"]) : '';
+    $rue = isset($_POST["rue"]) ? trim($_POST["rue"]) : '';
+    $password = isset($_POST["password"]) ? trim($_POST["password"]) : '';
+    $cp = isset($_POST["code_postal"]) ? trim($_POST["code_postal"]) : '';
+    $ville = isset($_POST["ville"]) ? trim($_POST["ville"]) : '';
 
-    if (!$email || !$password || !$nom || !$prenom || !$code_postal || !$ville) {
+    // Vérifie que tous les champs sont remplis
+    if (!$email || !$password || !$nom || !$prenom || !$cp || !$ville) {
         $error = "Tous les champs sont requis.";
     } else {
-        // Vérifie si l’email est déjà utilisé
-        $stmt = $pdo->prepare("SELECT id_utilisateur FROM utilisateurs WHERE email = ?");
+        // Vérifie si l’email existe déjà
+        $stmt = $pdo->prepare("SELECT id_utilisateur FROM utilisateur WHERE email = ?");
         $stmt->execute([$email]);
 
         if ($stmt->fetch()) {
             $error = "Cet email est déjà utilisé.";
         } else {
             // Insère le nouvel utilisateur
-            $stmt = $pdo->prepare("INSERT INTO utilisateurs (nom, prenom, email, cd, ville, mdp) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt = $pdo->prepare("INSERT INTO utilisateur (nom, prenom, email, rue, cd, ville, mdp) VALUES (?, ?, ?, ?, ?, ?, ?)");
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            $stmt->execute([$nom, $prenom, $email, $code_postal, $ville, $hashedPassword]);
-            $success = true;
+
+            if ($stmt->execute([$nom, $prenom, $email, $rue, $cp, $ville, $hashedPassword])) {
+                $success = true;
+            } else {
+                $error = "Erreur lors de l'inscription.";
+            }
         }
     }
 }
 ?>
 
+<!-- Partie HTML pour afficher les messages -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>Inscription</title>
-    <style>
-        body { font-family: sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .box { background: #fff; padding: 20px; border-radius: 10px; width: 320px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        input { width: 100%; padding: 8px; margin-top: 8px; border: 1px solid #ccc; border-radius: 5px; }
-        button { width: 100%; padding: 10px; margin-top: 15px; background: #28a745; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
-        .msg { text-align: center; color: <?= $error ? 'red' : 'green' ?>; margin-bottom: 10px; }
-        a { display: block; text-align: center; margin-top: 15px; color: #007bff; text-decoration: none; }
-    </style>
 </head>
 <body>
+<h2>Formulaire d'inscription</h2>
 
-<div class="box">
-    <h2>Inscription</h2>
+<?php if (!empty($error)): ?>
+    <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
+<?php elseif ($success): ?>
+    <p style="color: green;">Inscription réussie !</p>
+<?php endif; ?>
 
-    <?php if ($success): ?>
-        <p class="msg">Inscription réussie !</p>
-        <a href="index.php">Se connecter maintenant</a>
-    <?php else: ?>
-        <?php if ($error): ?><p class="msg"><?= htmlspecialchars($error) ?></p><?php endif; ?>
-        <form method="post">
-            <input type="text" name="nom" placeholder="Nom" required>
-            <input type="text" name="prenom" placeholder="Prénom" required>
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="text" name="code_postal" placeholder="Code postal" required>
-            <input type="text" name="ville" placeholder="Ville" required>
-            <input type="password" name="password" placeholder="Mot de passe" required>
-            <button type="submit">S'inscrire</button>
-        </form>
-        <a href="index.php">Déjà inscrit ? Se connecter</a>
-    <?php endif; ?>
-</div>
+<form method="POST" action="">
+    <label>Nom :</label><br>
+    <input type="text" name="nom" required><br><br>
 
+    <label>Prénom :</label><br>
+    <input type="text" name="prenom" required><br><br>
+
+    <label>Email :</label><br>
+    <input type="email" name="email" required><br><br>
+
+    <label>Rue :</label><br>
+    <input type="text" name="rue" required><br><br>
+
+    <label>Code postal :</label><br>
+    <input type="text" name="code_postal" required><br><br>
+
+    <label>Ville :</label><br>
+    <input type="text" name="ville" required><br><br>
+
+    <label>Mot de passe :</label><br>
+    <input type="password" name="password" required><br><br>
+
+    <a  type="submit" <a href="Connexion.php" class="back-link">S'inscrire</a>
+</form>
 </body>
 </html>
