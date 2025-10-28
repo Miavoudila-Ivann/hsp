@@ -6,22 +6,26 @@ require_once '../../src/repository/EntrepriseRepository.php';
 $database = new Bdd();
 $bdd = $database->getBdd();
 
-if (isset($_POST['ok'])) {
-    extract($_POST);
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ok'])) {
 
-    if (!empty($nom_entreprise) && !empty($rue_entreprise) && !empty($ville_entreprise) && !empty($cd_entreprise) && !empty($site_web)) {
-        $entreprise = new Entreprise(null, $nom_entreprise, $rue_entreprise, $ville_entreprise, $cd_entreprise, $site_web);
+    $nom = trim($_POST['nom_entreprise'] ?? '');
+    $rue = trim($_POST['rue_entreprise'] ?? '');
+    $ville = trim($_POST['ville_entreprise'] ?? '');
+    $cd = trim($_POST['cd_entreprise'] ?? '');
+    $site = trim($_POST['site_web'] ?? '');
+
+    if ($nom && $rue && $ville && $cd && $site) {
+        $entreprise = new Entreprise(null, $nom, $rue, $ville, $cd, $site);
         $repo = new EntrepriseRepository($bdd);
 
-        $result = $repo->ajouter($entreprise);
-
-        if ($result) {
+        if ($repo->ajouter($entreprise)) {
             header('Location: ../../vue/ListeEntreprise.php');
-            exit();
+            exit;
         } else {
-            echo "Erreur lors de l'ajout de l'entreprise.";
+            echo "❌ Erreur lors de l'ajout de l'entreprise.";
         }
     } else {
-        echo "Tous les champs sont obligatoires.";
+        echo "⚠️ Tous les champs sont obligatoires.";
     }
 }
+?>
