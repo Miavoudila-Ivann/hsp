@@ -1,17 +1,13 @@
 <?php
-require_once '../../src/bdd/Bdd.php';
-global $pdo;
+require_once __DIR__ . '/../../src/bdd/Bdd.php';
+require_once __DIR__ . '/../../src/repository/UtilisateurRepository.php';
+
 session_start();
 
-// Connexion à la base de données
-$host = 'localhost';
-$dbname = 'hsp';
-$user = 'root';
-$pass = '';
-
 try {
-    $database = new Bdd($host, $dbname, $user, $pass);
-    $pdo = $database->getBdd();  // Connexion PDO
+    $database = new Bdd('localhost', 'hsp', 'root', '');
+    $bdd = $database->getBdd();
+    $repo = new UtilisateurRepository($bdd);
 } catch (PDOException $e) {
     die("Erreur de connexion : " . $e->getMessage());
 }
@@ -19,53 +15,27 @@ try {
 $error = "";
 $success = false;
 
-// Fonction de validation du mot de passe
-function verifierMotDePasse($password) {
-    if (strlen($password) < 8) return "Le mot de passe doit contenir au moins 8 caractères.";
-    if (!preg_match('/[A-Z]/', $password)) return "Le mot de passe doit contenir au moins une majuscule.";
-    if (!preg_match('/[a-z]/', $password)) return "Le mot de passe doit contenir au moins une minuscule.";
-    if (!preg_match('/[0-9]/', $password)) return "Le mot de passe doit contenir au moins un chiffre.";
-    if (!preg_match('/[\W_]/', $password)) return "Le mot de passe doit contenir au moins un caractère spécial.";
-    return true;
-}
-
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $nom = isset($_POST["nom"]) ? trim($_POST["nom"]) : '';
-    $prenom = isset($_POST["prenom"]) ? trim($_POST["prenom"]) : '';
-    $email = isset($_POST["email"]) ? trim($_POST["email"]) : '';
-    $rue = isset($_POST["rue"]) ? trim($_POST["rue"]) : '';
-    $password = isset($_POST["password"]) ? trim($_POST["password"]) : '';
-    $cp = isset($_POST["code_postal"]) ? trim($_POST["code_postal"]) : '';
-    $ville = isset($_POST["ville"]) ? trim($_POST["ville"]) : '';
+    $data = [
+            'nom' => trim($_POST["nom"] ?? ''),
+            'prenom' => trim($_POST["prenom"] ?? ''),
+            'email' => trim($_POST["email"] ?? ''),
+            'rue' => trim($_POST["rue"] ?? ''),
+            'code_postal' => trim($_POST["code_postal"] ?? ''),
+            'ville' => trim($_POST["ville"] ?? ''),
+            'password' => trim($_POST["password"] ?? '')
+    ];
 
-    if (!$email || !$password || !$nom || !$prenom || !$cp || !$ville) {
+    if (!$data['nom'] || !$data['prenom'] || !$data['email'] || !$data['rue'] || !$data['code_postal'] || !$data['ville'] || !$data['password']) {
         $error = "Tous les champs sont requis.";
     } else {
-        // Vérification de la complexité du mot de passe
-        $checkPassword = verifierMotDePasse($password);
-        if ($checkPassword !== true) {
-            $error = $checkPassword;
-        } else {
-            // Vérifie si l’email existe déjà
-            $stmt = $pdo->prepare("SELECT id_utilisateur FROM utilisateur WHERE email = ?");
-            $stmt->execute([$email]);
-
-            if ($stmt->fetch()) {
-                $error = "Cet email est déjà utilisé.";
-            } else {
-                // Insère le nouvel utilisateur avec mot de passe hashé
-                $stmt = $pdo->prepare("INSERT INTO utilisateur (nom, prenom, email, rue, cd, ville, mdp) VALUES (?, ?, ?, ?, ?, ?, ?)");
-                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-                if ($stmt->execute([$nom, $prenom, $email, $rue, $cp, $ville, $hashedPassword])) {
-                    $success = true;
-                } else {
-                    $error = "Erreur lors de l'inscription.";
-                }
-            }
-        }
+        $result = $repo->inscription($data);
+        $success = $result['success'];
+        $error = $result['error'];
     }
 }
+
+
 ?>
 
 <!DOCTYPE html>

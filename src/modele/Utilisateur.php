@@ -1,129 +1,88 @@
 <?php
-class Utilisateur
-{
-    private $nom_uti;
-    private $idUtilisateur;
-    private $prenom_uti;
-    private $mail_uti;
+class Utilisateur {
+    private $id_utilisateur;
+    private $prenom;
+    private $nom;
+    private $email;
     private $mdp;
     private $role;
+    private $rue;
+    private $cd;
+    private $ville;
 
-    /**
-     * @return mixed
-     */
-    public function getNomUti()
-    {
-        return $this->nom_uti;
+
+    public function __construct($id_utilisateur = null, $prenom = null, $nom = null, $email = null, $mdp = null, $role = null, $rue = null, $cd = null, $ville = null) {
+        $this->id_utilisateur = $id_utilisateur;
+        $this->prenom = $prenom;
+        $this->nom = $nom;
+        $this->email = $email;
+        $this->mdp = $mdp;
+        $this->role = $role;
+        $this->rue = $rue;
+        $this->cd = $cd;
+        $this->ville = $ville;
     }
 
-    /**
-     * @param mixed $nom_uti
-     */
-    public function setNomUti($nom_uti)
-    {
-        $this->nom_uti = $nom_uti;
-    }
 
-    /**
-     * @return mixed
-     */
-    public function getPrenomUti()
-    {
-        return $this->prenom_uti;
-    }
+    public function getIdUtilisateur() {
 
-    /**
-     * @param mixed $prenom_uti
-     */
-    public function setPrenomUti($prenom_uti)
-    {
-        $this->prenom_uti = $prenom_uti;
-    }
+        return $this->id_utilisateur;
 
-    /**
-     * @return mixed
-     */
-    public function getIdUtilisateur()
-    {
-        return $this->idUtilisateur;
     }
+    public function getPrenom() {
 
-    /**
-     * @param mixed $idUtilisateur
-     */
-    public function setIdUtilisateur($idUtilisateur)
-    {
-        $this->idUtilisateur = $idUtilisateur;
+        return $this->prenom;
     }
+    public function getNom() {
 
-    /**
-     * @return mixed
-     */
-    public function getMailUti()
-    {
-        return $this->mail_uti;
+        return $this->nom;
     }
-
-    /**
-     * @param mixed $mail_uti
-     */
-    public function setMailUti($mail_uti)
-    {
-        $this->mail_uti = $mail_uti;
+    public function getEmail() {
+        return $this->email;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getMdp()
-    {
+    public function getMdp() {
         return $this->mdp;
     }
-
-    /**
-     * @param mixed $mdp
-     */
-    public function setMdp($mdp)
-    {
-        $this->mdp = $mdp;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getRole()
-    {
+    public function getRole() {
         return $this->role;
     }
+    public function getRue() {
+        return $this->rue;
+    }
+    public function getCd() {
+        return $this->cd;
+    }
+    public function getVille() {
+        return $this->ville;
+    }
 
-    /**
-     * @param mixed $role
-     */
-    public function setRole($role)
-    {
+
+    public function setIdUtilisateur($id_utilisateur) {
+        $this->id_utilisateur = $id_utilisateur;
+    }
+    public function setPrenom($prenom) {
+        $this->prenom = $prenom;
+    }
+    public function setNom($nom) {
+        $this->nom = $nom;
+    }
+    public function setEmail($email) {
+        $this->email = $email;
+    }
+    public function setMdp($mdp) {
+        $this->mdp = $mdp;
+    }
+    public function setRole($role) {
         $this->role = $role;
     }
-
-
-
-
-    public function __construct(array $donnees)
-    {
-        $this->hydrate($donnees);
+    public function setRue($rue) {
+        $this->rue = $rue;
     }
-    public function hydrate($donnees)
-    {
-        foreach ($donnees as $key => $value)
-        {
-            $method = 'set'.ucfirst($key);
-
-            if (is_callable(array($this, $method)))
-            {
-                $this->$method($value);
-            }
-        }
+    public function setCd($cd) {
+        $this->cd = $cd;
     }
-
-
+    public function setVille($ville) {
+        $this->ville = $ville;
+    }
 }
 ?>
