@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mar. 28 oct. 2025 à 15:17
--- Version du serveur : 9.1.0
--- Version de PHP : 8.3.14
+-- Généré le : dim. 02 nov. 2025 à 14:47
+-- Version du serveur : 8.3.0
+-- Version de PHP : 8.2.18
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -35,7 +35,9 @@ CREATE TABLE IF NOT EXISTS `candidature` (
   `date_candidature` date NOT NULL,
   `ref_offre` int NOT NULL,
   `ref_utilisateur` int NOT NULL,
-  PRIMARY KEY (`id_candidature`)
+  PRIMARY KEY (`id_candidature`),
+  KEY `ref_offre_candidature` (`ref_offre`),
+  KEY `ref_utilisateur_candidature` (`ref_utilisateur`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 
 -- --------------------------------------------------------
@@ -50,7 +52,8 @@ CREATE TABLE IF NOT EXISTS `contact` (
   `sujet` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
   `message` varchar(100) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
   `date_envoie` date NOT NULL,
-  `status` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL
+  `status` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
+  PRIMARY KEY (`id_contact`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 
 -- --------------------------------------------------------
@@ -90,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `etablissement` (
 --
 
 INSERT INTO `etablissement` (`id_etablissement`, `nom_etablissement`, `adresse_etablissement`, `site_web_etablissement`) VALUES
-(1, 'Lycee Robert schuman', '23 rue auguste delaune', 'https://www.google.com/search?q=lego&oq=lego&gs_lcrp=EgZjaHJvbWUqBwgAEAAYjwIyBwgAEAAYjwIyEwgBEC4YgwE');
+(1, 'UFR NANTE', '28 rue de l esplanade', 'https://www.larousse.fr/dictionnaires/francais/site/72964');
 
 -- --------------------------------------------------------
 
@@ -108,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `evenement` (
   `nb_place` int NOT NULL,
   `date_evenement` date NOT NULL,
   PRIMARY KEY (`id_evenement`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 
 -- --------------------------------------------------------
 
@@ -123,16 +126,7 @@ CREATE TABLE IF NOT EXISTS `hopital` (
   `adresse_hopital` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
   `ville_hopital` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
   PRIMARY KEY (`id_hopital`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
-
---
--- Déchargement des données de la table `hopital`
---
-
-INSERT INTO `hopital` (`id_hopital`, `nom`, `adresse_hopital`, `ville_hopital`) VALUES
-(1, 'clinique priver robert Elias', '23 rue de pain perdu', 'Dugny'),
-(4, 'Paul Eluard', '14 rue du tatamar', 'La ville de mehdi'),
-(5, 'Paul Eluard', '14 rue du tatamar', 'La ville de mehdi');
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 
 -- --------------------------------------------------------
 
@@ -146,7 +140,9 @@ CREATE TABLE IF NOT EXISTS `inscription_evenement` (
   `ref_evenement` int NOT NULL,
   `ref_utilisateur` int NOT NULL,
   `status` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  PRIMARY KEY (`id_inscription_evenement`)
+  PRIMARY KEY (`id_inscription_evenement`),
+  KEY `ref_evenement` (`ref_evenement`),
+  KEY `ref_utilisateur_evenement` (`ref_utilisateur`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 
 -- --------------------------------------------------------
@@ -161,7 +157,10 @@ CREATE TABLE IF NOT EXISTS `medecin` (
   `ref_specialite` int NOT NULL,
   `ref_hopital` int NOT NULL,
   `ref_etablissement` int NOT NULL,
-  PRIMARY KEY (`id_medecin`)
+  PRIMARY KEY (`id_medecin`),
+  KEY `ref_etablissement_medecin` (`ref_etablissement`),
+  KEY `ref_hopital_medecin` (`ref_hopital`),
+  KEY `ref_specialite_medecin` (`ref_specialite`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 
 -- --------------------------------------------------------
@@ -172,7 +171,7 @@ CREATE TABLE IF NOT EXISTS `medecin` (
 
 DROP TABLE IF EXISTS `offre`;
 CREATE TABLE IF NOT EXISTS `offre` (
-  `id_offre` int NOT NULL,
+  `id_offre` int NOT NULL AUTO_INCREMENT,
   `titre` int NOT NULL,
   `description` int NOT NULL,
   `mission` int NOT NULL,
@@ -181,7 +180,10 @@ CREATE TABLE IF NOT EXISTS `offre` (
   `etat` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
   `ref_utilisateur` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
   `ref_entreprise` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  `date_publication` date NOT NULL
+  `date_publication` date NOT NULL,
+  PRIMARY KEY (`id_offre`),
+  KEY `ref_utilisateur_offre` (`ref_utilisateur`),
+  KEY `ref_entreprise_offre` (`ref_entreprise`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 
 -- --------------------------------------------------------
@@ -213,7 +215,9 @@ CREATE TABLE IF NOT EXISTS `reponse` (
   `date_post` date NOT NULL,
   `ref_post` int NOT NULL,
   `ref_auteur` int NOT NULL,
-  PRIMARY KEY (`id_reponse`)
+  PRIMARY KEY (`id_reponse`),
+  UNIQUE KEY `ref_post_reponse` (`ref_post`),
+  KEY `ref_auteur_reponse` (`ref_auteur`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 
 -- --------------------------------------------------------
@@ -244,20 +248,42 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   `rue` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
   `cd` int NOT NULL,
   `ville` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  `mdp` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  PRIMARY KEY (`id_utilisateur`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+  `mdp` varchar(255) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
+  `role` enum('admin','user','medecin') CHARACTER SET latin2 COLLATE latin2_bin DEFAULT 'user',
+  PRIMARY KEY (`id_utilisateur`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 
 --
 -- Déchargement des données de la table `utilisateur`
 --
 
-INSERT INTO `utilisateur` (`id_utilisateur`, `nom`, `prenom`, `email`, `rue`, `cd`, `ville`, `mdp`) VALUES
-(1, 'Paul Eluard', 'CF', 'VQG@zFBU', '', 999, 'GEvgQE', '$2y$10$w2g2pWwkDScyNNTfYxtvZOwmJ9sMP4fnXadyXtKDWnD'),
-(2, 'Paul Eluard', 'CF', 'i.touzanine@lprs.fr', 'b', 44, 'RF', '$2y$10$VEB7CEQPPAS/cqChhD9WWu2hmUbFH6jiBwd8YtaBmLu'),
-(3, 'clinique priver robert Elias', '<sgse', 'sgse@fuyq', 'se<', 9976, 'GEvgQE', '$2y$10$G/HFMD9r3FFyt8woXd/fpuKRrOmPHbjrT.JhCdKOsZH'),
-(4, 'Toujini', 'Mehdi', 'ToujiniMehdi@gmail.com', '13', 93440, 'Dugny', '$2y$10$G6nDnr4wSTZIGYujxJU6e.9fYjeWK5QEhe.N4KrSuVJ'),
-(5, 'Toujini', 'Mehdi', 'ToujiniMehd@gmail.com', '13', 93440, 'Dugny', '$2y$10$LXi7wP6CvL/AU1QK9ZnI7uCnWd3Ldecb8nPOySrw.a6');
+INSERT INTO `utilisateur` (`id_utilisateur`, `nom`, `prenom`, `email`, `rue`, `cd`, `ville`, `mdp`, `role`) VALUES
+(17, 'paparadzi', 'broo', 'panormalfakeee@gmail.com', '28', 93200, 'ST-Denis', '$2y$10$XXVSSjYCQEJOtrvbm5Rw5uJAOc9zo1YotJrEDw8xS5cnNZwXZFWLG', 'medecin'),
+(18, 'Rodriguez', 'Escobar', 'panormalfake@gmail.com', '28', 93200, 'ST-Denis', '$2y$10$ES8QUhoZuOF.DMHhj7gI2uBN.KLCYETJZnrbowavEQXKxL0ETCYlK', 'medecin');
+
+--
+-- Contraintes pour les tables déchargées
+--
+
+--
+-- Contraintes pour la table `candidature`
+--
+ALTER TABLE `candidature`
+  ADD CONSTRAINT `candidature_ibfk_1` FOREIGN KEY (`ref_offre`) REFERENCES `offre` (`id_offre`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `medecin`
+--
+ALTER TABLE `medecin`
+  ADD CONSTRAINT `medecin_ibfk_1` FOREIGN KEY (`ref_specialite`) REFERENCES `specialite` (`id_specialite`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `medecin_ibfk_2` FOREIGN KEY (`ref_hopital`) REFERENCES `hopital` (`id_hopital`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `reponse`
+--
+ALTER TABLE `reponse`
+  ADD CONSTRAINT `reponse_ibfk_1` FOREIGN KEY (`ref_post`) REFERENCES `post` (`id_post`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
