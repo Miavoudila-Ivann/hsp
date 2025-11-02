@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -144,9 +147,28 @@ $hours = [
                 <a href="src/vue/ListeEtablissement.php" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Etablissements</a>
                 <a href="#apropos" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">À Propos</a>
                 <a href="#contact" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Contact</a>
-                <a href="src/vue/inscription.php" class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-6 py-2.5 rounded-lg hover:shadow-lg transition-all duration-300 font-medium">
-                    Inscription / Connexion
-                </a>
+
+                <?php if (isset($_SESSION["id"])): ?>
+                    <!-- Si connecté -->
+                    <div class="flex items-center space-x-4 bg-gray-100 px-4 py-2 rounded-lg">
+                        <div class="text-right">
+                            <div class="font-semibold text-gray-900">
+                                <?= htmlspecialchars($_SESSION["prenom"] . " " . $_SESSION["nom"]) ?>
+                            </div>
+                            <div class="text-sm text-gray-500">
+                                <?= htmlspecialchars($_SESSION["role"]) ?>
+                            </div>
+                        </div>
+                        <a href="src/vue/deconnexion.php" class="text-red-500 hover:text-red-700 font-medium">
+                            Déconnexion
+                        </a>
+                    </div>
+                <?php else: ?>
+                    <!-- Si non connecté -->
+                    <a href="src/vue/inscription.php" class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-6 py-2.5 rounded-lg hover:shadow-lg transition-all duration-300 font-medium">
+                        Inscription / Connexion
+                    </a>
+                <?php endif; ?>
             </div>
 
             <!-- Mobile Menu Button -->
