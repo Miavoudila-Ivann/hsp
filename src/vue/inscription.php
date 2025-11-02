@@ -21,12 +21,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             'prenom' => trim($_POST["prenom"] ?? ''),
             'email' => trim($_POST["email"] ?? ''),
             'rue' => trim($_POST["rue"] ?? ''),
-            'code_postal' => trim($_POST["code_postal"] ?? ''),
+            'cd' => trim($_POST["cd"] ?? ''),
             'ville' => trim($_POST["ville"] ?? ''),
-            'password' => trim($_POST["password"] ?? '')
+            'password' => trim($_POST["password"] ?? ''),
+            'role' => trim($_POST["role"] ?? 'user') // ✅ ajout du rôle
     ];
 
-    if (!$data['nom'] || !$data['prenom'] || !$data['email'] || !$data['rue'] || !$data['code_postal'] || !$data['ville'] || !$data['password']) {
+    if (!$data['nom'] || !$data['prenom'] || !$data['email'] || !$data['rue'] || !$data['cd'] || !$data['ville'] || !$data['password']) {
         $error = "Tous les champs sont requis.";
     } else {
         $result = $repo->inscription($data);
@@ -34,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $error = $result['error'];
     }
 }
+
 
 
 ?>
@@ -46,11 +48,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <style>
         body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; }
         .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); width: 350px; }
-        input { width: 100%; padding: 10px; margin: 5px 0 15px 0; border-radius: 5px; border: 1px solid #ccc; }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] { width: 100%; padding: 10px; margin: 5px 0 15px 0; border-radius: 5px; border: 1px solid #ccc; }
         button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
         .error { color: red; font-size: 14px; }
         .success { color: green; font-size: 14px; }
         .info { font-size: 12px; color: #555; margin-bottom: 10px; }
+
+        /* Pour aligner cases à cocher et radios à côté du texte */
+        .checkbox-group, .checkbox-rgpd {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .checkbox-group label, .checkbox-rgpd label {
+            margin-left: 8px;
+            user-select: none;
+            font-size: 14px;
+            color: #333;
+        }
+        .checkbox-group > div {
+            margin-right: 15px;
+        }
     </style>
 </head>
 <body>
@@ -77,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <input type="text" name="rue" required>
 
         <label>Code postal :</label>
-        <input type="text" name="code_postal" required>
+        <input type="text" name="cd" required>
 
         <label>Ville :</label>
         <input type="text" name="ville" required>
@@ -87,16 +107,37 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <div class="info" id="msg">
             Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.
         </div>
-        <label class="rgpdRegle">
-            <input type="checkbox" name="rgpdRegle" required>
-            J’accepte la <a href="politique_confidentialite.php" target="_blank">politique de confidentialité</a>
-            et le traitement de mes données dans le cadre de la création de mon compte.
-        </label>
-        <label class="rgpdCondition">
-            <input type="checkbox" name="rgpdCondition" required>
-            J’accepte la <a href="condition_utilisation.php" target="_blank">Conditions d’Utilisation et de Services</a>
-            et le traitement de mes données dans le cadre de la création de mon compte.
-        </label>
+
+        <div class="checkbox-rgpd">
+            <input type="checkbox" id="rgpdRegle" name="rgpdRegle" required>
+            <label for="rgpdRegle">
+                J’accepte la <a href="politique_confidentialite.php" target="_blank">politique de confidentialité</a> et le traitement de mes données dans le cadre de la création de mon compte.
+            </label>
+        </div>
+
+        <div class="checkbox-rgpd">
+            <input type="checkbox" id="rgpdCondition" name="rgpdCondition" required>
+            <label for="rgpdCondition">
+                J’accepte les <a href="condition_utilisation.php" target="_blank">Conditions d’Utilisation et de Services</a> et le traitement de mes données dans le cadre de la création de mon compte.
+            </label>
+        </div>
+
+        <label>Rôle :</label>
+        <div class="checkbox-group">
+            <div>
+                <input type="radio" id="role_user" name="role" value="user" required>
+                <label for="role_user">Utilisateur</label>
+            </div>
+            <div>
+                <input type="radio" id="role_medecin" name="role" value="medecin">
+                <label for="role_medecin">Médecin</label>
+            </div>
+            <div>
+                <input type="radio" id="role_admin" name="role" value="admin">
+                <label for="role_admin">Admin</label>
+            </div>
+        </div>
+
         <button type="submit">S'inscrire</button>
         <a href="Connexion.php">Se connecter</a>
     </form>
