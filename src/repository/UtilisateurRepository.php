@@ -3,6 +3,11 @@ namespace repository;
 require_once __DIR__ . '/../bdd/Bdd.php';
 require_once __DIR__ . '/../modele/Utilisateur.php';
 
+namespace repository;
+
+use \PDO;
+use \Utilisateur; // si ta classe Utilisateur est dans le namespace global
+
 class UtilisateurRepository
 {
     private $bdd;
@@ -104,7 +109,7 @@ class UtilisateurRepository
             $sql = "SELECT * FROM utilisateur WHERE email = ?";
             $stmt = $this->bdd->prepare($sql);
             $stmt->execute([$email]);
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            $user = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             // Si aucun utilisateur trouvé
             if (!$user) {
@@ -192,4 +197,7 @@ class UtilisateurRepository
     }
 
 }
+
+include __DIR__ . '/../vue/footer.php';
+
 ?>

@@ -3,6 +3,7 @@ session_start();
 require_once __DIR__ . '/../bdd/Bdd.php';
 require_once __DIR__ . '/../repository/UtilisateurRepository.php';
 
+use repository\UtilisateurRepository;
 if (!isset($_SESSION["role"]) || $_SESSION["role"] !== "admin") {
     header("Location: ../../index.php");
     exit();

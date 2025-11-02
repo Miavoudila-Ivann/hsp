@@ -1,9 +1,8 @@
 <?php
 require_once __DIR__ . '/../../src/bdd/Bdd.php';
 require_once __DIR__ . '/../../src/repository/UtilisateurRepository.php';
-
+use repository\UtilisateurRepository;
 session_start();
-
 try {
     $database = new Bdd('localhost', 'hsp', 'root', '');
     $bdd = $database->getBdd();
@@ -36,10 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-
-
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -161,4 +157,5 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     });
 </script>
 </body>
+
 </html>

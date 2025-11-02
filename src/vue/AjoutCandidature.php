@@ -1,5 +1,6 @@
 <?php
 namespace vue; // optionnel si tu veux organiser tes vues
+include __DIR__ . '/header.php';
 
 require_once __DIR__ . '/../bdd/Bdd.php';
 require_once __DIR__ . '/../repository/CandidatureRepository.php';
@@ -7,7 +8,7 @@ require_once __DIR__ . '/../modele/Candidature.php';
 
 use modele\Candidature; // ✅ Import obligatoire pour le namespace
 
-$database = new Bdd();
+$database = new \Bdd();
 $bdd = $database->getBdd();
 $repo = new \repository\CandidatureRepository($bdd); // si ton repository est dans namespace repository
 

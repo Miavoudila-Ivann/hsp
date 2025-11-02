@@ -155,6 +155,11 @@ $hours = [
                         <button type="submit">👥Accéder au Dashboard</button>
                     </form>
                 <?php endif; ?>
+                <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "medecin"): ?>
+                    <a href="src/vue/ListeUtilisateurs.php" class="text-gray-700 hover:text-red-600 transition-colors font-medium">
+                        👥 Liste des utilisateurs
+                    </a>
+                <?php endif; ?>
 
                 <?php if (isset($_SESSION["id"])): ?>
                     <!-- Si connecté -->

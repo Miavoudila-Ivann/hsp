@@ -3,7 +3,7 @@ session_start();
 
 require_once __DIR__ . '/../bdd/Bdd.php';
 require_once __DIR__ . '/../repository/UtilisateurRepository.php';
-
+use repository\UtilisateurRepository;
 $database = new Bdd();
 $bdd = $database->getBdd();
 $repo = new UtilisateurRepository($bdd);
@@ -106,7 +106,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <button type="submit">Se connecter</button>
     </form>
 
-    <div class="footer">admin / password123</div>
 </div>
 
 </body>
