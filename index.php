@@ -147,6 +147,14 @@ $hours = [
                 <a href="src/vue/ListeEtablissement.php" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Etablissements</a>
                 <a href="#apropos" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">À Propos</a>
                 <a href="#contact" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Contact</a>
+                <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin"): ?>
+                    <a href="src/vue/ListeUtilisateurs.php" class="text-gray-700 hover:text-red-600 transition-colors font-medium">
+                        👥 Liste des utilisateurs
+                    </a>
+                    <form action="src/vue/admin.php" method="get">
+                        <button type="submit">👥Accéder au Dashboard</button>
+                    </form>
+                <?php endif; ?>
 
                 <?php if (isset($_SESSION["id"])): ?>
                     <!-- Si connecté -->

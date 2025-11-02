@@ -1,5 +1,5 @@
 <?php
-
+namespace repository;
 require_once __DIR__ . '/../bdd/Bdd.php';
 require_once __DIR__ . '/../modele/Utilisateur.php';
 
@@ -7,10 +7,10 @@ class UtilisateurRepository
 {
     private $bdd;
 
-    public function __construct(PDO $bdd)
-    {
+    public function __construct(\PDO $bdd) {
         $this->bdd = $bdd;
     }
+
 
     // les méthodes, comme connexion(), etc.
 
@@ -140,6 +140,17 @@ class UtilisateurRepository
         }
     }
 
+    public function findAll(): array
+    {
+        try {
+            $sql = "SELECT id_utilisateur, nom, prenom, email, role, ville FROM utilisateur ORDER BY id_utilisateur ASC";
+            $stmt = $this->bdd->query($sql);
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Erreur findAll utilisateurs : " . $e->getMessage());
+            return [];
+        }
+    }
 
 
 
@@ -174,10 +185,11 @@ class UtilisateurRepository
     /**
      * Suppression d’un utilisateur
      */
-    public function supprimerUtilisateur(Utilisateur $utilisateur)
+    public function supprimerUtilisateur($id)
     {
-        $req = $this->bdd->prepare('DELETE FROM utilisateur WHERE id_utilisateur = :id_utilisateur');
-        return $req->execute([':id_utilisateur' => $utilisateur->getIdUtilisateur()]);
+        $req = $this->bdd->prepare('DELETE FROM utilisateur WHERE id_utilisateur = :id');
+        return $req->execute([':id' => $id]);
     }
+
 }
 ?>

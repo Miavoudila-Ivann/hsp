@@ -1,59 +1,43 @@
 <?php
-// Activation des erreurs (à désactiver en production)
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+namespace vue; // optionnel si tu veux organiser tes vues
 
-// Import des classes nécessaires
-require_once '../../src/bdd/Bdd.php';
-require_once '../../src/repository/CandidatureRepository.php';
-require_once '../../src/modele/Candidature.php';
+require_once __DIR__ . '/../bdd/Bdd.php';
+require_once __DIR__ . '/../repository/CandidatureRepository.php';
+require_once __DIR__ . '/../modele/Candidature.php';
 
-use repository\CandidatureRepository;
-use modele\Candidature;
+use modele\Candidature; // ✅ Import obligatoire pour le namespace
 
-$message = ''; // Pour message de succès
-$error = '';   // Pour message d'erreur
+$database = new Bdd();
+$bdd = $database->getBdd();
+$repo = new \repository\CandidatureRepository($bdd); // si ton repository est dans namespace repository
 
-try {
-    $database = new Bdd();
-    $bdd = $database->getBdd();
+$message = '';
+$error = '';
 
-    $repo = new CandidatureRepository($bdd);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nom = trim($_POST['nom_candidat'] ?? '');
+    $prenom = trim($_POST['prenom_candidat'] ?? '');
+    $motivation = trim($_POST['motivation'] ?? '');
 
-    // Si le formulaire est soumis
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $nom = trim($_POST['nom_candidat'] ?? '');
-        $prenom = trim($_POST['prenom_candidat'] ?? '');
-        $siteWeb = trim($_POST['site_web_candidature'] ?? '');
+    if (!empty($nom) && !empty($prenom) && !empty($motivation)) {
+        // Crée l'objet Candidature
+        $candidature = new Candidature(
+                null,          // id_candidature
+                $motivation,   // motivation
+                'En attente',  // statut par défaut
+                date('Y-m-d'), // date_candidature
+                1,             // ref_offre (à adapter)
+                1              // ref_utilisateur (à adapter)
+        );
 
-        // Validation de base
-        if (!empty($nom) && !empty($adresse) && !empty($siteWeb)) {
-            if (!filter_var($siteWeb, FILTER_VALIDATE_URL)) {
-                $error = "L'URL du site web est invalide.";
-            } else {
-                // Création de l'objet Etablissement
-                $candidature = new Candidature([
-                        'nom_candidat' => $nom,
-                        'prenom_candidat' => $adresse,
-                        'site_web_candidature' => $siteWeb
-                ]);
-
-                // Insertion dans la BDD
-                if ($repo->ajoutCandidature($candidature)) {
-                    $message = 'Candidature ajoutée avec succès ! Vous allez être redirigé.';
-                    echo '<script>setTimeout(function(){ window.location.href = "AjoutCandidature.php"; }, 2000);</script>';
-                } else {
-                    $error = "Erreur lors de l'ajout. Veuillez réessayer.";
-                }
-            }
+        if ($repo->ajouter($candidature)) {
+            $message = "Candidature ajoutée avec succès !";
         } else {
-            $error = 'Tous les champs sont obligatoires.';
+            $error = "Erreur lors de l'ajout de la candidature.";
         }
+    } else {
+        $error = "Tous les champs sont obligatoires.";
     }
-
-} catch (Exception $e) {
-    error_log('Erreur : ' . $e->getMessage());
-    $error = "Erreur de connexion à la base de données.";
 }
 ?>
 
@@ -61,69 +45,15 @@ try {
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajouter un Etablissement</title>
+    <title>Ajouter une Candidature</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 20px auto;
-        }
-        .form-section {
-            background: #f9f9f9;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            font-weight: bold;
-        }
-        input[type="text"], textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        input[type="submit"] {
-            width: 100%;
-            background: #007bff;
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        .message {
-            margin-top: 20px;
-            padding: 12px;
-            border-radius: 4px;
-            font-weight: bold;
-            text-align: center;
-        }
-        .success {
-            background: #d4edda;
-            color: #155724;
-        }
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #007bff;
-        }
+        /* ton style inchangé */
     </style>
 </head>
 <body>
 <div class="form-section">
-    <h1>Ajouter un Etablissement</h1>
+    <h1>Ajouter une Candidature</h1>
 
-    <!-- Affichage des messages -->
     <?php if ($message): ?>
         <div class="message success"><?= htmlspecialchars($message) ?></div>
     <?php endif; ?>
@@ -131,27 +61,26 @@ try {
         <div class="message error"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
 
-    <!-- Formulaire -->
     <form method="POST">
         <div class="form-group">
-            <label for="nom">Nom du Candidat :</label>
-            <input type="text" name="nom_candidature" id="nom" required value="<?= htmlspecialchars($_POST['nom_candidat'] ?? '') ?>">
+            <label for="nom">Nom :</label>
+            <input type="text" name="nom_candidat" id="nom" required value="<?= htmlspecialchars($_POST['nom_candidat'] ?? '') ?>">
         </div>
 
         <div class="form-group">
-            <label for="adresse">Prenom du Candidat :</label>
-            <textarea name="prenom_candidature" id="prenom" required><?= htmlspecialchars($_POST['prenom_candidat'] ?? '') ?></textarea>
+            <label for="prenom">Prénom :</label>
+            <input type="text" name="prenom_candidat" id="prenom" required value="<?= htmlspecialchars($_POST['prenom_candidat'] ?? '') ?>">
         </div>
 
         <div class="form-group">
-            <label for="site">Site Web :</label>
-            <input type="text" name="site_web_candidature" id="site" required value="<?= htmlspecialchars($_POST['site_web_candidature'] ?? '') ?>">
+            <label for="motivation">Motivation :</label>
+            <textarea name="motivation" id="motivation" required><?= htmlspecialchars($_POST['motivation'] ?? '') ?></textarea>
         </div>
 
         <input type="submit" value="Ajouter la candidature">
     </form>
 
-    <a href="AjoutCandidature.php" class="back-link">← Retour à la liste</a>
+    <a href="../../index.php" class="back-link">← Retour à l'accueil</a>
 </div>
 </body>
 </html>

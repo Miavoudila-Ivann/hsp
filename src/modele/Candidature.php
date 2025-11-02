@@ -1,4 +1,5 @@
 <?php
+namespace modele;
 
 class Candidature
 {
@@ -9,7 +10,7 @@ class Candidature
     private int $ref_offre;
     private int $ref_utilisateur;
 
-    public function __construct($id_candidature, $motivation, $statut, $date_candidature, $ref_offre, $ref_utilisateur)
+    public function __construct(?int $id_candidature, string $motivation, string $statut, string $date_candidature, int $ref_offre, int $ref_utilisateur)
     {
         $this->id_candidature = $id_candidature;
         $this->motivation = $motivation;
@@ -19,37 +20,54 @@ class Candidature
         $this->ref_utilisateur = $ref_utilisateur;
     }
 
-    public function getRef_offre() {
-        return $this->ref_offre;
-    }
-    public function getId_andidature() {
+    // --- Getters ---
+    public function getIdCandidature(): ?int {
         return $this->id_candidature;
     }
-    public function getRef_utilisateur() {
-        return $this->ref_utilisateur;
-    }
-    public function getStatut(){
-      return $this->statut;
-    }
 
-    public function getMotivation() {
+    public function getMotivation(): string {
         return $this->motivation;
     }
 
+    public function getStatut(): string {
+        return $this->statut;
+    }
 
-    public function setRef_offre($ref_offre) {
-        $this->idRef_offre = $ref_offre;
+    public function getDateCandidature(): string {
+        return $this->date_candidature;
     }
-    public function setIdCandidature($idCandidature) {
-        $this->idCandidature = $idCandidature;
+
+    public function getRefOffre(): int {
+        return $this->ref_offre;
     }
-    public function setRef_utilisateur($ref_utilisateur) {
-        $this->ref_utilisateur = $ref_utilisateur;
+
+    public function getRefUtilisateur(): int {
+        return $this->ref_utilisateur;
     }
-    public function setStatut($statut) {
-        $this->statut = $statut;
+
+    // --- Setters ---
+    public function setIdCandidature(?int $id_candidature): void {
+        $this->id_candidature = $id_candidature;
     }
-    public function setMotivation($motivation) {
+
+    public function setMotivation(string $motivation): void {
         $this->motivation = $motivation;
     }
+
+    public function setStatut(string $statut): void {
+        $this->statut = $statut;
+    }
+
+    public function setDateCandidature(string $date_candidature): void {
+        $this->date_candidature = $date_candidature;
+    }
+
+    public function setRefOffre(int $ref_offre): void {
+        $this->ref_offre = $ref_offre;
+    }
+
+    public function setRefUtilisateur(int $ref_utilisateur): void {
+        $this->ref_utilisateur = $ref_utilisateur;
+    }
 }
+?>

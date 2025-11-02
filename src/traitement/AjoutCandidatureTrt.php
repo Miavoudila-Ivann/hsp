@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once '../../src/bdd/Bdd.php';
 require_once '../../src/modele/Candidature.php';
 require_once '../../src/repository/CandidatureRepository.php';

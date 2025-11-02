@@ -1,48 +1,64 @@
 <?php
-require_once __DIR__ . '/../modele/Candidature.php';
+namespace repository;
+
 require_once __DIR__ . '/../bdd/Bdd.php';
+require_once __DIR__ . '/../modele/Candidature.php';
+
+use modele\Candidature;
+use PDO;
 
 class CandidatureRepository
 {
-    private $bdd;
+    private PDO $bdd;
 
-    public function __construct()
-    {
-        $this->bdd = new Bdd();
+    public function __construct(\PDO $bdd) {
+        $this->bdd = $bdd;
     }
 
-    public function creerCandidature(Candidature $candidature)
+    public function findAll(): array
     {
-        $req = $this->bdd->getBdd()->prepare('
-            INSERT INTO candidatures (motivation, statut, date_candidature, ref_offre, ref_utilisateur)
-            VALUES (:motivation, :statut, :date_candidature, :ref_offre, :ref_utilisateur)
-        ');
+        $stmt = $this->bdd->query("SELECT * FROM candidature ORDER BY date_candidature DESC");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-        return $req->execute([
+    public function findByUtilisateur(int $idUtilisateur): array
+    {
+        $stmt = $this->bdd->prepare("SELECT * FROM candidature WHERE ref_utilisateur = :id");
+        $stmt->execute(['id' => $idUtilisateur]);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function findById(int $id)
+    {
+        $stmt = $this->bdd->prepare("SELECT * FROM candidature WHERE id_candidature = :id");
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    public function ajouter(Candidature $candidature): bool
+    {
+        $sql = "INSERT INTO candidature (motivation, statut, date_candidature, ref_offre, ref_utilisateur)
+                VALUES (:motivation, :statut, :date_candidature, :ref_offre, :ref_utilisateur)";
+        $stmt = $this->bdd->prepare($sql);
+        return $stmt->execute([
             ':motivation' => $candidature->getMotivation(),
             ':statut' => $candidature->getStatut(),
             ':date_candidature' => $candidature->getDateCandidature(),
             ':ref_offre' => $candidature->getRefOffre(),
-            ':ref_utilisateur' => $candidature->getRefUtilisateur(),
+            ':ref_utilisateur' => $candidature->getRefUtilisateur()
         ]);
     }
 
-    public function getCandidaturesParOffre($idOffre)
+    public function modifierStatut(int $id, string $statut): bool
     {
-        $req = $this->bdd->getBdd()->prepare('SELECT * FROM candidatures WHERE id_offre = :id_offre');
-        $req->execute(['id_offre' => $idOffre]);
-        $data = $req->fetchAll(PDO::FETCH_ASSOC);
-
-        $liste = [];
-        foreach ($data as $row) {
-            $liste[] = new Candidature($row);
-        }
-        return $liste;
+        $sql = "UPDATE candidature SET statut = :statut WHERE id_candidature = :id";
+        $stmt = $this->bdd->prepare($sql);
+        return $stmt->execute([':statut' => $statut, ':id' => $id]);
     }
 
-    public function supprimerCandidature($id)
+    public function supprimer(int $id): bool
     {
-        $req = $this->bdd->getBdd()->prepare('DELETE FROM candidatures WHERE id = :id');
-        return $req->execute(['id' => $id]);
+        $stmt = $this->bdd->prepare("DELETE FROM candidature WHERE id_candidature = :id");
+        return $stmt->execute([':id' => $id]);
     }
 }

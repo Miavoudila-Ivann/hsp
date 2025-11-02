@@ -29,7 +29,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION["nom"] = $utilisateur->getNom();
             $_SESSION["role"] = $utilisateur->getRole();
 
-
             header("Location: ../../index.php");
             exit();
         } else {

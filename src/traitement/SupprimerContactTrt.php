@@ -1,6 +1,6 @@
 <?php
 require_once '../../src/bdd/Bdd.php';
-require_once '../../src/repository/ContactRepository.php';
+require_once '../../src/repository/ContratRepository.php';
 
 $database = new Bdd();
 $bdd = $database->getBdd();
