@@ -19,59 +19,42 @@ class UtilisateurRepository
      * Inscription d'un nouvel utilisateur
      */
 
-    public function inscription(array $data): array
-    {
-        // Nettoyage du mot de passe et de l'email
-        $password = trim($data['password']);
-        $email = trim($data['email']);
+    public function inscription(array $data): array {
+        try {
+            // Vérifie si l'email existe déjà
+            $stmt = $this->bdd->prepare("SELECT COUNT(*) FROM utilisateur WHERE email = :email");
+            $stmt->execute(['email' => $data['email']]);
+            if ($stmt->fetchColumn() > 0) {
+                return ['success' => false, 'error' => 'Email déjà utilisé.'];
+            }
 
-        // Validation mot de passe
-        if (strlen($password) < 8) {
-            return ['success' => false, 'error' => "Le mot de passe doit contenir au moins 8 caractères."];
-        }
-        if (!preg_match('/[A-Z]/', $password)) {
-            return ['success' => false, 'error' => "Le mot de passe doit contenir au moins une majuscule."];
-        }
-        if (!preg_match('/[a-z]/', $password)) {
-            return ['success' => false, 'error' => "Le mot de passe doit contenir au moins une minuscule."];
-        }
-        if (!preg_match('/[0-9]/', $password)) {
-            return ['success' => false, 'error' => "Le mot de passe doit contenir au moins un chiffre."];
-        }
-        if (!preg_match('/[\W_]/', $password)) {
-            return ['success' => false, 'error' => "Le mot de passe doit contenir au moins un caractère spécial."];
-        }
+            // Hash du mot de passe
+            $hashedPassword = password_hash($data['password'], PASSWORD_BCRYPT);
 
-        // Vérifier si l’email existe déjà
-        $sql = "SELECT id_utilisateur FROM utilisateur WHERE email = ?";
-        $stmt = $this->bdd->prepare($sql);
-        $stmt->execute([$email]);
-        if ($stmt->fetch()) {
-            return ['success' => false, 'error' => "Cet email est déjà utilisé."];
-        }
+            // Insertion en base
+            $stmt = $this->bdd->prepare("
+            INSERT INTO utilisateur (prenom, nom, email, mdp, role, rue, cd, ville)
+            VALUES (:prenom, :nom, :email, :mdp, :role, :rue, :cd, :ville)
+        ");
 
-        // Hasher le mot de passe correctement
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $stmt->execute([
+                'prenom' => $data['prenom'],
+                'nom' => $data['nom'],
+                'email' => $data['email'],
+                'mdp' => $hashedPassword,
+                'role' => $data['role'],   // rôle bien pris en compte
+                'rue' => $data['rue'],
+                'cd' => $data['cd'],
+                'ville' => $data['ville']
+            ]);
 
-        // Insérer l’utilisateur en base
-        $sql = "INSERT INTO utilisateur (nom, prenom, email, rue, cd, ville, mdp) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $this->bdd->prepare($sql);
-        $result = $stmt->execute([
-            $data['nom'],
-            $data['prenom'],
-            $email,
-            $data['rue'],
-            $data['code_postal'],
-            $data['ville'],
-            $hashedPassword
-        ]);
-
-        if ($result) {
-            return ['success' => true, 'error' => null];
-        } else {
-            return ['success' => false, 'error' => "Erreur lors de l'inscription."];
+            return ['success' => true, 'error' => ''];
+        } catch (PDOException $e) {
+            return ['success' => false, 'error' => 'Erreur base de données : ' . $e->getMessage()];
         }
     }
+
+
 
 
 
@@ -107,39 +90,56 @@ class UtilisateurRepository
      */
     public function connexion(string $email, string $password)
     {
+        // Nettoyage des entrées
         $email = trim($email);
         $password = trim($password);
 
-        $sql = "SELECT * FROM utilisateur WHERE email = ?";
-        $stmt = $this->bdd->prepare($sql);
-        $stmt->execute([$email]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$user) {
-            return false; // Email non trouvé
+        // Vérifie que les champs ne sont pas vides
+        if (empty($email) || empty($password)) {
+            return false;
         }
 
-        // Vérification mot de passe avec hash
-        if (password_verify($password, $user['mdp'])) {
-            return new Utilisateur(
-                $user['id_utilisateur'],
-                $user['prenom'],
-                $user['nom'],
-                $user['email'],
-                $user['mdp'], // hash stocké
-                $user['role'],
-                $user['rue'],
-                $user['cd'],
-                $user['ville']
-            );
-        } else {
-            var_dump("Mot de passe incorrect");
-            var_dump("Saisi :", $password);
-            var_dump("Hash base :", $user['mdp']);
-            var_dump("password_verify :", password_verify($password, $user['mdp']));
+        try {
+            // Prépare et exécute la requête
+            $sql = "SELECT * FROM utilisateur WHERE email = ?";
+            $stmt = $this->bdd->prepare($sql);
+            $stmt->execute([$email]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            // Si aucun utilisateur trouvé
+            if (!$user) {
+                return false;
+            }
+
+            // Vérifie le mot de passe (haché)
+            if (password_verify($password, $user['mdp'])) {
+
+                // Retourne un objet Utilisateur si le login est valide
+                return new Utilisateur(
+                    $user['id_utilisateur'],
+                    $user['prenom'],
+                    $user['nom'],
+                    $user['email'],
+                    $user['mdp'], // hash stocké
+                    $user['role'],
+                    $user['rue'],
+                    $user['cd'],
+                    $user['ville']
+                );
+
+            } else {
+                // En mode debug uniquement :
+                 var_dump("Mot de passe incorrect", $password, $email);
+                return false;
+            }
+
+        } catch (PDOException $e) {
+            // Log en interne ou retour d’erreur
+            error_log("Erreur connexion utilisateur : " . $e->getMessage());
             return false;
         }
     }
+
 
 
 
