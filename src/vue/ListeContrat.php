@@ -14,7 +14,7 @@ $repo = new ContratRepository($bdd);
 
 if(isset($_GET['delete'])){
     $repo->supprimerContrat((int)$_GET['delete']);
-    header("Location: ListeContrats.php");
+    header("Location: ListeContrat.php");
     exit();
 }
 
@@ -24,7 +24,7 @@ include __DIR__ . '/header.php';
 
 <h2>Liste des contrats</h2>
 
-<a class="btn" href="CreerContrat.php">Créer un contrat</a>
+<a class="btn" href="CreeContrat.php">Créer un contrat</a>
 
 <table>
     <thead>

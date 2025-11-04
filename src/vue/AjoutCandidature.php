@@ -20,6 +20,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prenom = trim($_POST['prenom_candidat'] ?? '');
     $motivation = trim($_POST['motivation'] ?? '');
 
+    if (!empty($_FILES['cv']['name'])) {
+        $uploadDir = __DIR__ . '/../uploads/cv/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        $extension = pathinfo($_FILES['cv']['name'], PATHINFO_EXTENSION);
+        $allowed = ['pdf', 'doc', 'docx'];
+
+        if (in_array(strtolower($extension), $allowed)) {
+            $filename = 'cv_' . $ref_utilisateur . '_' . time() . '.' . $extension;
+            $targetPath = $uploadDir . $filename;
+            if (move_uploaded_file($_FILES['cv']['tmp_name'], $targetPath)) {
+                $cv_path = 'uploads/cv/' . $filename; // chemin relatif pour la BDD
+            }
+        } else {
+            echo "<p style='color:red;'>Format de fichier non autorisé. (PDF, DOC, DOCX uniquement)</p>";
+        }
+    }
+
     if (!empty($nom) && !empty($prenom) && !empty($motivation)) {
         // Crée l'objet Candidature
         $candidature = new Candidature(
@@ -28,7 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'En attente',  // statut par défaut
                 date('Y-m-d'), // date_candidature
                 1,             // ref_offre (à adapter)
-                1              // ref_utilisateur (à adapter)
+                1,              // ref_utilisateur (à adapter)
+                $cv_path
         );
 
         if ($repo->ajouter($candidature)) {

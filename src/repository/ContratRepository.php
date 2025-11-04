@@ -1,6 +1,8 @@
 <?php
 namespace repository; // Doit être en première ligne avant tout require/include
 
+use Contrat;
+
 require_once __DIR__ . '/../bdd/Bdd.php';
 require_once __DIR__ . '/../modele/Contrat.php';
 
@@ -22,7 +24,7 @@ class ContratRepository
     public function findById(int $id) {
         $stmt = $this->bdd->prepare("SELECT * FROM contrat WHERE id_contrat = :id");
         $stmt->execute(['id' => $id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
     public function ajouter(Contrat $contrat): bool {

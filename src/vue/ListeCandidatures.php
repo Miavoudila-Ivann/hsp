@@ -1,4 +1,7 @@
 <?php
+
+use repository\CandidatureRepository;
+
 session_start();
 require_once __DIR__ . '/../bdd/Bdd.php';
 require_once __DIR__ . '/../repository/CandidatureRepository.php';
@@ -47,13 +50,12 @@ include __DIR__ . '/header.php';
             <td><?= htmlspecialchars($c['statut']) ?></td>
             <td>
                 <a href="ModifierCandidature.php?id=<?= $c['id_candidature'] ?>">Modifier</a> |
-                <a href="ListeCandidatures.php?delete=<?= $c['id_candidature'] ?>" onclick="return confirm('Supprimer ?')">Supprimer</a>
             </td>
         </tr>
     <?php endforeach; ?>
     </tbody>
 </table>
 
-<a class="btn" href="../dashboard/index.php">Retour au dashboard</a>
+<a class="btn" href="../vue/admin.php">Retour au dashboard</a>
 
 <?php include __DIR__ . '/footer.php'; ?>

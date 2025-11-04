@@ -9,8 +9,9 @@ class Candidature
     private string $date_candidature;
     private int $ref_offre;
     private int $ref_utilisateur;
+    private ?string $cv_path; // <--- ajouté
 
-    public function __construct(?int $id_candidature, string $motivation, string $statut, string $date_candidature, int $ref_offre, int $ref_utilisateur)
+    public function __construct(?int $id_candidature, string $motivation, string $statut, string $date_candidature, int $ref_offre, int $ref_utilisateur, ?string $cv_path)
     {
         $this->id_candidature = $id_candidature;
         $this->motivation = $motivation;
@@ -18,6 +19,17 @@ class Candidature
         $this->date_candidature = $date_candidature;
         $this->ref_offre = $ref_offre;
         $this->ref_utilisateur = $ref_utilisateur;
+        $this->cv_path = $cv_path;
+    }
+
+    public function getCvPath(): ?string
+    {
+        return $this->cv_path;
+    }
+
+    public function setCvPath(?string $cv_path): void
+    {
+        $this->cv_path = $cv_path;
     }
 
     // --- Getters ---

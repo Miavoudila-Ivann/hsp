@@ -29,7 +29,7 @@ try {
     $id = (int)$_GET['id'];
 
     // Récupération des données de l'établissement à modifier
-    $etablissement = $repo->getEtablissementById($id);
+    $etablissement = $repo->getIdEtablissement($id);
 
     // Si l'établissement n'existe pas
     if (!$etablissement) {

@@ -1,4 +1,7 @@
 <?php
+
+use repository\ContratRepository;
+
 session_start();
 require_once __DIR__ . '/../bdd/Bdd.php';
 require_once __DIR__ . '/../repository/ContratRepository.php';
@@ -61,6 +64,6 @@ include __DIR__ . '/header.php';
     <button type="submit">Modifier</button>
 </form>
 
-<a class="btn" href="ListeContrats.php">Retour</a>
+<a class="btn" href="../vue/ListeContrat.php">Retour</a>
 
 <?php include __DIR__ . '/footer.php'; ?>

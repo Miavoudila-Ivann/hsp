@@ -12,6 +12,7 @@ class EtablissementRepository
 {
 
     private $bdd;
+    private $pdo;
 
     public function __construct(\PDO $bdd) {
         $this->bdd = $bdd;
@@ -38,7 +39,7 @@ class EtablissementRepository
                 WHERE id_etablissement = :id_etablissement";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
-            'id_etablissement' => $etablissement->getIdSpecialite(),
+            'id_etablissement' => $etablissement->getIdEtablissement(),
             'nom_etablissement' => $etablissement->getNomEtablissement(),
             'adress_etablissement' => $etablissement->getAdresseEtablissement(),
             'site_web_etablissement' => $etablissement->getSiteWebEtablissement()
@@ -54,7 +55,7 @@ class EtablissementRepository
     public function findAll(): array
     {
         try {
-            $sql = "SELECT id_etablissement, nom_etablisement, site_web_etablissement FROM etablissement ORDER BY id_etablissement ASC";
+            $sql = "SELECT id_etablissement, nom_etablissement, site_web_etablissement FROM etablissement ORDER BY id_etablissement ASC";
             $stmt = $this->bdd->query($sql);
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (PDOException $e) {

@@ -4,18 +4,16 @@ namespace repository;
 
 use modele\Hopital;
 use PDO;
-
+use PDOException;
 require_once __DIR__ . '/../modele/Hopital.php';
 
 class HopitalRepository
 {
     private PDO $bdd;
 
-    public function __construct(PDO $bdd)
-    {
+    public function __construct(\PDO $bdd) {
         $this->bdd = $bdd;
     }
-
     public function creerHopital(Hopital $hopital): bool
     {
         $req = $this->bdd->prepare('
@@ -52,5 +50,17 @@ class HopitalRepository
     {
         $req = $this->bdd->prepare('DELETE FROM hopital WHERE id_hopital = :id_hopital');
         return $req->execute(['id_hopital' => $id_hopital]);
+    }
+
+    public function findAll(): array
+    {
+        try {
+            $sql = "SELECT id_hopital, nom, adresse_hopital, ville_hopital FROM hopital ORDER BY id_hopital ASC";
+            $stmt = $this->bdd->query($sql);
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Erreur findAll hopitaux : " . $e->getMessage());
+            return [];
+        }
     }
 }
