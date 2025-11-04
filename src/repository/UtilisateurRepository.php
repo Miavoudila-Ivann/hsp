@@ -134,7 +134,7 @@ class UtilisateurRepository
 
             } else {
                 // En mode debug uniquement :
-                 var_dump("Mot de passe incorrect", $password, $email);
+                 //var_dump("Mot de passe incorrect", $password, $email);
                 return false;
             }
 
