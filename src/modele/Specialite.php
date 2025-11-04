@@ -1,49 +1,17 @@
 <?php
-
-class Specialite
-{
-    private $idSpecialite;
+class Specialite {
+    private $id_specialite;
     private $libelle;
 
-    /**
-     * @param $idSpecialite
-     * @param $libelle
-     */
-    public function __construct($idSpecialite, $libelle)
-    {
-        $this->idSpecialite = $idSpecialite;
+    public function __construct($libelle, $id_specialite = null) {
+        $this->id_specialite = $id_specialite;
         $this->libelle = $libelle;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getIdSpecialite()
-    {
-        return $this->idSpecialite;
-    }
+    public function getIdSpecialite() { return $this->id_specialite; }
+    public function getLibelle() { return $this->libelle; }
 
-    /**
-     * @param mixed $idSpecialite
-     */
-    public function setIdSpecialite($idSpecialite)
-    {
-        $this->idSpecialite = $idSpecialite;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLibelle()
-    {
-        return $this->libelle;
-    }
-
-    /**
-     * @param mixed $libelle
-     */
-    public function setLibelle($libelle)
-    {
-        $this->libelle = $libelle;
-    }
+    public function setIdSpecialite($id) { $this->id_specialite = $id; }
+    public function setLibelle($libelle) { $this->libelle = $libelle; }
 }
+?>
