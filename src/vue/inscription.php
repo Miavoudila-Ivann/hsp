@@ -101,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <label>Mot de passe :</label>
         <input type="password" id="password" name="password" required>
         <div class="info" id="msg">
-            Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.
+            Le mot de passe doit contenir au moins 12 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.
         </div>
 
         <div class="checkbox-rgpd">
@@ -147,7 +147,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         const pwd = this.value;
         let text = "";
 
-        if (pwd.length < 8) text += "❌ 8 caractères minimum<br>";
+        if (pwd.length < 12) text += "❌ 12 caractères minimum<br>";
         if (!/[A-Z]/.test(pwd)) text += "❌ 1 majuscule<br>";
         if (!/[a-z]/.test(pwd)) text += "❌ 1 minuscule<br>";
         if (!/[0-9]/.test(pwd)) text += "❌ 1 chiffre<br>";

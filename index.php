@@ -36,46 +36,14 @@ $established_year = 1985;
 
 // Services disponibles
 $services = [
-        [
-                'icon' => '🚨',
-                'title' => 'Urgences 24/7',
-                'description' => "Service d'urgence disponible jour et nuit avec des médecins spécialisés."
-        ],
-        [
-                'icon' => '🩺',
-                'title' => 'Consultations',
-                'description' => 'Consultations médicales générales et spécialisées sur rendez-vous.'
-        ],
-        [
-                'icon' => '❤️',
-                'title' => 'Cardiologie',
-                'description' => 'Service de cardiologie équipé des technologies les plus avancées.'
-        ],
-        [
-                'icon' => '👶',
-                'title' => 'Pédiatrie',
-                'description' => 'Soins dédiés aux enfants avec une équipe bienveillante et expérimentée.'
-        ],
-        [
-                'icon' => '🦴',
-                'title' => 'Orthopédie',
-                'description' => 'Traitement des pathologies osseuses et articulaires.'
-        ],
-        [
-                'icon' => '🧠',
-                'title' => 'Neurologie',
-                'description' => 'Diagnostic et traitement des maladies du système nerveux.'
-        ],
-        [
-                'icon' => '🔬',
-                'title' => 'Laboratoire',
-                'description' => 'Analyses médicales avec résultats rapides et précis.'
-        ],
-        [
-                'icon' => '💉',
-                'title' => 'Vaccination',
-                'description' => 'Centre de vaccination pour tous les âges.'
-        ]
+        ['icon' => '🚨', 'title' => 'Urgences 24/7', 'description' => "Service d'urgence disponible jour et nuit avec des médecins spécialisés."],
+        ['icon' => '🩺', 'title' => 'Consultations', 'description' => 'Consultations médicales générales et spécialisées sur rendez-vous.'],
+        ['icon' => '❤️', 'title' => 'Cardiologie', 'description' => 'Service de cardiologie équipé des technologies les plus avancées.'],
+        ['icon' => '👶', 'title' => 'Pédiatrie', 'description' => 'Soins dédiés aux enfants avec une équipe bienveillante et expérimentée.'],
+        ['icon' => '🦴', 'title' => 'Orthopédie', 'description' => 'Traitement des pathologies osseuses et articulaires.'],
+        ['icon' => '🧠', 'title' => 'Neurologie', 'description' => 'Diagnostic et traitement des maladies du système nerveux.'],
+        ['icon' => '🔬', 'title' => 'Laboratoire', 'description' => 'Analyses médicales avec résultats rapides et précis.'],
+        ['icon' => '💉', 'title' => 'Vaccination', 'description' => 'Centre de vaccination pour tous les âges.']
 ];
 
 // Statistiques
@@ -88,21 +56,9 @@ $stats = [
 
 // Points forts
 $features = [
-        [
-                'icon' => '🏆',
-                'title' => 'Excellence Reconnue',
-                'description' => 'Certifications nationales et internationales'
-        ],
-        [
-                'icon' => '👥',
-                'title' => "Équipe d'Excellence",
-                'description' => 'Plus de 200 professionnels hautement qualifiés'
-        ],
-        [
-                'icon' => '⚡',
-                'title' => 'Technologie de Pointe',
-                'description' => 'Équipements médicaux les plus avancés'
-        ]
+        ['icon' => '🏆', 'title' => 'Excellence Reconnue', 'description' => 'Certifications nationales et internationales'],
+        ['icon' => '👥', 'title' => "Équipe d'Excellence", 'description' => 'Plus de 200 professionnels hautement qualifiés'],
+        ['icon' => '⚡', 'title' => 'Technologie de Pointe', 'description' => 'Équipements médicaux les plus avancés']
 ];
 
 // Informations de contact
@@ -147,6 +103,12 @@ $hours = [
                 <a href="src/vue/ListeEtablissement.php" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Etablissements</a>
                 <a href="#apropos" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">À Propos</a>
                 <a href="#contact" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Contact</a>
+
+                <!-- ✅ Lien vers le profil -->
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <li class="nav-item"><a class="nav-link" href="vue/Profile.php">Profil</a></li>
+                <?php endif; ?>
+
                 <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin"): ?>
                     <a href="src/vue/ListeUtilisateurs.php" class="text-gray-700 hover:text-red-600 transition-colors font-medium">
                         👥 Liste des utilisateurs
@@ -155,6 +117,7 @@ $hours = [
                         <button type="submit">👥Accéder au Dashboard</button>
                     </form>
                 <?php endif; ?>
+
                 <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "medecin"): ?>
                     <a href="src/vue/ListeUtilisateurs.php" class="text-gray-700 hover:text-red-600 transition-colors font-medium">
                         👥 Liste des utilisateurs
@@ -162,7 +125,6 @@ $hours = [
                 <?php endif; ?>
 
                 <?php if (isset($_SESSION["id"])): ?>
-                    <!-- Si connecté -->
                     <div class="flex items-center space-x-4 bg-gray-100 px-4 py-2 rounded-lg">
                         <div class="text-right">
                             <div class="font-semibold text-gray-900">
@@ -177,7 +139,6 @@ $hours = [
                         </a>
                     </div>
                 <?php else: ?>
-                    <!-- Si non connecté -->
                     <a href="src/vue/inscription.php" class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-6 py-2.5 rounded-lg hover:shadow-lg transition-all duration-300 font-medium">
                         Inscription / Connexion
                     </a>
@@ -200,7 +161,7 @@ $hours = [
             <a href="#contact" class="block text-gray-700 hover:text-blue-600 transition-colors py-2">Contact</a>
         </div>
     </div>
-</nav>
+</nav
 
 <!-- Hero Section -->
 <section id="accueil" class="pt-20 bg-gradient-to-br from-blue-50 via-white to-cyan-50">
