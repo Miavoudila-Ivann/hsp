@@ -2,19 +2,18 @@
 
 namespace repository;
 
-use Bdd;
-use modele\Evenement;
-
 require_once __DIR__ . '/../modele/Evenement.php';
 require_once __DIR__ . '/../bdd/Bdd.php';
 
+use \PDO;
+use PDOException;
+use modele\Evenement;
 class EvenementRepository
 {
-    private $bdd;
+    private PDO $bdd;
 
-    public function __construct()
-    {
-        $this->bdd = new Bdd();
+    public function __construct(\PDO $bdd) {
+        $this->bdd = $bdd;
     }
 
     // Méthode pour créer un événement
@@ -27,9 +26,9 @@ class EvenementRepository
 
         return $req->execute([
             'id_evenement' => $evenement->getIdEvenement(),
-            'date_evenement' => $evenement->getdateEvenement(),
+            'date_evenement' => $evenement->getDateEvenement(),
             'description' => $evenement->getDescription(),
-            'lieu' => $evenement->getlieu(),
+            'lieu' => $evenement->getLieu(),
             'nb_place' => $evenement->getNbPlace(),
             'titre' => $evenement->getTitre(),
             'type_evenement' => $evenement->getTypeEvenement()
@@ -78,5 +77,16 @@ class EvenementRepository
         }
 
         return null; // Si l'événement n'est pas trouvé, retourne null
+    }
+    public function findAll(): array
+    {
+        try {
+            $sql = "SELECT id_evenement, titre, description, type_evenement, lieu ,nb_place, date_evenement FROM evenement ORDER BY id_evenement ASC";
+            $stmt = $this->bdd->query($sql);
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Erreur findAll évenement : " . $e->getMessage());
+            return [];
+        }
     }
 }

@@ -9,16 +9,25 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 
 // Inclusion des fichiers
 require_once __DIR__ . '/../bdd/Bdd.php';
+require_once __DIR__ . '/../repository/EvenementRepository.php';
+require_once __DIR__ . '/../repository/EtablissementRepository.php';
 require_once __DIR__ . '/../repository/UtilisateurRepository.php';
 require_once __DIR__ . '/../repository/CandidatureRepository.php';
 require_once __DIR__ . '/../repository/ContratRepository.php';
+
+require_once __DIR__ . '/../modele/Evenement.php';
 require_once __DIR__ . '/../modele/Utilisateur.php';
 require_once __DIR__ . '/../modele/Candidature.php';
 require_once __DIR__ . '/../modele/Contrat.php';
+require_once __DIR__ . '/../modele/Etablissement.php';
 
+
+use modele\Evenement;
+use repository\EtablissementRepository;
 use repository\UtilisateurRepository;
 use repository\CandidatureRepository;
 use repository\ContratRepository;
+use repository\EvenementRepository;
 
 $database = new Bdd();
 $bdd = $database->getBdd();
@@ -27,11 +36,15 @@ $bdd = $database->getBdd();
 $utilisateurRepo = new UtilisateurRepository($bdd);
 $candidatureRepo = new CandidatureRepository($bdd);
 $contratRepo = new ContratRepository($bdd);
+$etablissementRepo = new EtablissementRepository($bdd);
+$evenementRepo = new EvenementRepository($bdd);
 
 // Récupération des données
 $utilisateurs = $utilisateurRepo->findAll();
 $candidatures = $candidatureRepo->findAll();
 $contrats = $contratRepo->findAll();
+$etablissement = $etablissementRepo->findAll();
+$evenement = $evenementRepo->findAll();
 
 include __DIR__ . '/header.php';
 ?>
@@ -101,4 +114,44 @@ include __DIR__ . '/header.php';
     </table>
 </section>
 
+<section>
+    <h2>Liste Etablissement</h2>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr><th>ID</th><th>Etablissement</th><th>Nom Etablissement</th><th>Adresse Etablissement</th><th>Site web de Etablissement</th></tr>
+        <?php foreach($etablissement as $ct): ?>
+            <tr>
+                <td><?= $ct['id_etablissement'] ?? '' ?></td>
+                <td><?= htmlspecialchars($ct['nom_etablissement'] ?? '') ?></td>
+                <td><?= $ct['adresse_etablissement'] ?? '' ?></td>
+                <td><?= $ct['site_web_etablissement'] ?? '' ?></td>
+                <td>
+                    <a href="../vue/modifierEtablissement.php?id=<?= $ct['id_etablissement'] ?? '' ?>">Modifier</a>
+                    <a href="../vue/ListeEtablissement.php?delete=<?= $ct['id_etablissement'] ?? '' ?>" onclick="return confirm('Supprimer cette établissement ?')">Supprimer</a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+</section>
+
+<section>
+    <h2>Liste Evenement</h2>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr><th>ID</th><th>Evenement</th><th>Titre</th><th>Description</th><th>Type évenement</th><th>Lieu</th><th>nombre de place</th><th>Date de l'évenement</th></tr>
+        <?php foreach($etablissement as $ct): ?>
+            <tr>
+                <td><?= $ct['id_evenement'] ?? '' ?></td>
+                <td><?= htmlspecialchars($ct['titre'] ?? '') ?></td>
+                <td><?= $ct['description'] ?? '' ?></td>
+                <td><?= $ct['type_evenement'] ?? '' ?></td>
+                <td><?= $ct['lieu'] ?? '' ?></td>
+                <td><?= $ct['nb_place'] ?? '' ?></td>
+                <td><?= $ct['date_evenement'] ?? '' ?></td>
+                <td>
+                    <a href="../vue/modifierEvenement.php?id=<?= $ct['id_evenement'] ?? '' ?>">Modifier</a>
+                    <a href="../vue/ListeEvenement.php?delete=<?= $ct['id_evenement'] ?? '' ?>" onclick="return confirm('Supprimer cette établissement ?')">Supprimer</a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+</section>
 <?php include __DIR__ . '/footer.php'; ?>

@@ -2,6 +2,8 @@
 namespace repository;
 use Bdd;
 use modele\Etablissement;
+use PDOException;
+
 
 require_once __DIR__ . '/../modele/Etablissement.php';
 require_once __DIR__ . '/../bdd/Bdd.php';
@@ -11,9 +13,8 @@ class EtablissementRepository
 
     private $bdd;
 
-    public function __construct()
-    {
-        $this->bdd = new Bdd();
+    public function __construct(\PDO $bdd) {
+        $this->bdd = $bdd;
     }
 
     public function creerEtablissement(Etablissement $etablissement)
@@ -49,5 +50,18 @@ class EtablissementRepository
         $req = $this->bdd->getBdd()->prepare('DELETE FROM etablissement WHERE id_etablissement = :id_etablissement');
         return $req->execute(['id_etablissement' => $id_etablissement]);
     }
+
+    public function findAll(): array
+    {
+        try {
+            $sql = "SELECT id_etablissement, nom_etablisement, site_web_etablissement FROM etablissement ORDER BY id_etablissement ASC";
+            $stmt = $this->bdd->query($sql);
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Erreur findAll établissement : " . $e->getMessage());
+            return [];
+        }
+    }
+
 
 }
