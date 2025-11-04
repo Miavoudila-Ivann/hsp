@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : dim. 02 nov. 2025 à 14:47
--- Version du serveur : 8.3.0
--- Version de PHP : 8.2.18
+-- Généré le : mar. 04 nov. 2025 à 08:51
+-- Version du serveur : 9.1.0
+-- Version de PHP : 8.3.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -55,6 +55,23 @@ CREATE TABLE IF NOT EXISTS `contact` (
   `status` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
   PRIMARY KEY (`id_contact`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `contrat`
+--
+
+DROP TABLE IF EXISTS `contrat`;
+CREATE TABLE IF NOT EXISTS `contrat` (
+  `id_contrat` int NOT NULL AUTO_INCREMENT,
+  `date_debut` date NOT NULL,
+  `date_fin` date DEFAULT NULL,
+  `salaire` double NOT NULL,
+  `ref_post` int NOT NULL,
+  `ref_candidature` int NOT NULL,
+  PRIMARY KEY (`id_contrat`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -252,7 +269,7 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   `role` enum('admin','user','medecin') CHARACTER SET latin2 COLLATE latin2_bin DEFAULT 'user',
   PRIMARY KEY (`id_utilisateur`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 
 --
 -- Déchargement des données de la table `utilisateur`
@@ -260,7 +277,8 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
 
 INSERT INTO `utilisateur` (`id_utilisateur`, `nom`, `prenom`, `email`, `rue`, `cd`, `ville`, `mdp`, `role`) VALUES
 (17, 'paparadzi', 'broo', 'panormalfakeee@gmail.com', '28', 93200, 'ST-Denis', '$2y$10$XXVSSjYCQEJOtrvbm5Rw5uJAOc9zo1YotJrEDw8xS5cnNZwXZFWLG', 'medecin'),
-(18, 'Rodriguez', 'Escobar', 'panormalfake@gmail.com', '28', 93200, 'ST-Denis', '$2y$10$ES8QUhoZuOF.DMHhj7gI2uBN.KLCYETJZnrbowavEQXKxL0ETCYlK', 'medecin');
+(18, 'Rodriguez', 'Escobar', 'panormalfake@gmail.com', '28', 93200, 'ST-Denis', '$2y$10$ES8QUhoZuOF.DMHhj7gI2uBN.KLCYETJZnrbowavEQXKxL0ETCYlK', 'medecin'),
+(19, 'Toujini', 'Mehdi', 'i.touzanine@lprs.fr', '13', 93200, 'Dugny', '$2y$10$9j/vIgWi3RFYVHFnGiCHneHvZK6xIYyaRaCVjWxLVpw/Um6iWgLJa', 'admin');
 
 --
 -- Contraintes pour les tables déchargées
