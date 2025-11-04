@@ -1,4 +1,7 @@
 <?php
+
+use repository\UtilisateurRepository;
+
 session_start();
 require_once __DIR__ . '/../bdd/Bdd.php';
 require_once __DIR__ . '/../repository/UtilisateurRepository.php';

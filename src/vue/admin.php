@@ -55,8 +55,8 @@ include __DIR__ . '/header.php';
                 <td><?= htmlspecialchars($u['email'] ?? '') ?></td>
                 <td><?= htmlspecialchars($u['role'] ?? '') ?></td>
                 <td>
-                    <a href="../utilisateur/ModifierUtilisateur.php?email=<?= urlencode($u['email'] ?? '') ?>">Modifier</a>
-                    <a href="../utilisateur/ListeUtilisateurs.php?delete=<?= $u['id_utilisateur'] ?? '' ?>" onclick="return confirm('Voulez-vous supprimer cet utilisateur ?')">Supprimer</a>
+                    <a href="../vue/ModifierUtilisateur.php?email=<?= urlencode($u['email'] ?? '') ?>">Modifier</a>
+                    <a href="../vue/ListeUtilisateurs.php?delete=<?= $u['id_utilisateur'] ?? '' ?>" onclick="return confirm('Voulez-vous supprimer cet utilisateur ?')">Supprimer</a>
                 </td>
             </tr>
         <?php endforeach; ?>
