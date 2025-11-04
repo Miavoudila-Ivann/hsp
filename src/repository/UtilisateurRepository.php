@@ -3,9 +3,8 @@ namespace repository;
 require_once __DIR__ . '/../bdd/Bdd.php';
 require_once __DIR__ . '/../modele/Utilisateur.php';
 
-namespace repository;
-
 use \PDO;
+use PDOException;
 use \Utilisateur; // si ta classe Utilisateur est dans le namespace global
 
 class UtilisateurRepository
@@ -133,7 +132,6 @@ class UtilisateurRepository
                 );
 
             } else {
-                // En mode debug uniquement :
                  //var_dump("Mot de passe incorrect", $password, $email);
                 return false;
             }
