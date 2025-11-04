@@ -1,5 +1,5 @@
 <?php
-class   Bdd {
+class Bdd {
     private $bdd;
 
     public function __construct($host = 'localhost', $dbname = 'hsp', $username = 'root', $password = '') {

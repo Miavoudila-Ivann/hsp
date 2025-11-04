@@ -1,28 +1,30 @@
 <?php
+// ✅ Chemin correct : deux ".." pour remonter de "traitement/" vers "hsp/", puis entrer dans "src/"
 require_once '../../src/bdd/Bdd.php';
 require_once '../../src/modele/Medecin.php';
 require_once '../../src/repository/MedecinRepository.php';
 
-$database = new Bdd();
-$bdd = $database->getBdd();
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ok'])) {
+    $ref_specialite = $_POST['ref_specialite'] ?? null;
+    $ref_hopital = $_POST['ref_hopital'] ?? null;
+    $ref_etablissement = $_POST['ref_etablissement'] ?? null;
 
-if (isset($_POST['ok'])) {
-    extract($_POST);
+    if ($ref_specialite && $ref_hopital && $ref_etablissement) {
+        $db = new Bdd();
+        $repo = new MedecinRepository($db->getBdd());
+        $medecin = new Medecin($ref_specialite, $ref_hopital, $ref_etablissement);
 
-    if (!empty($id_medecin) && !empty($ref_specialite) && !empty($ref_hopital) && !empty($ref_etablissement)) {
-        $medecin = new Medecin($id_medecin, $ref_specialite, $ref_hopital, $ref_etablissement);
-        $repo = new MedecinRepository($bdd);
-
-        $result = $repo->ajouter($medecin);
-
-        if ($result) {
+        if ($repo->ajouter($medecin)) {
             header('Location: ../../vue/ListeMedecin.php');
             exit();
         } else {
-            echo "Erreur lors de l'ajout.";
+            die("Erreur lors de l'ajout.");
         }
     } else {
-        echo "Tous les champs sont obligatoires.";
+        die("Tous les champs sont obligatoires.");
     }
+} else {
+    header('Location: ../../vue/CreeMedecin.php');
+    exit();
 }
 ?>

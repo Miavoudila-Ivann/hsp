@@ -2,20 +2,19 @@
 require_once '../../src/bdd/Bdd.php';
 require_once '../../src/repository/SpecialiteRepository.php';
 
-$database = new Bdd();
-$bdd = $database->getBdd();
+if (isset($_GET['id_specialite'])) {
+    $id = $_GET['id_specialite'];
+    $db = new Bdd();
+    $repo = new SpecialiteRepository($db->getBdd());
 
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
-
-    $repo = new SpecialiteRepository($bdd);
-    $result = $repo->supprimer($id);
-
-    if ($result) {
+    if ($repo->supprimer($id)) {
         header('Location: ../../vue/ListeSpecialite.php');
         exit();
     } else {
-        echo "Erreur lors de la suppression.";
+        die("Erreur lors de la suppression.");
     }
+} else {
+    header('Location: ../../vue/ListeSpecialite.php');
+    exit();
 }
 ?>

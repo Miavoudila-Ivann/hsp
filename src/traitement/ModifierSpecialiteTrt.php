@@ -3,26 +3,26 @@ require_once '../../src/bdd/Bdd.php';
 require_once '../../src/modele/Specialite.php';
 require_once '../../src/repository/SpecialiteRepository.php';
 
-$database = new Bdd();
-$bdd = $database->getBdd();
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ok'])) {
+    $id = $_POST['id_specialite'] ?? null;
+    $libelle = trim($_POST['libelle'] ?? '');
 
-if (isset($_POST['ok'])) {
-    extract($_POST);
+    if ($id && !empty($libelle)) {
+        $db = new Bdd();
+        $repo = new SpecialiteRepository($db->getBdd());
+        $specialite = new Specialite($libelle, $id);
 
-    if (!empty($idSpecialite) && !empty($libelle)) {
-        $specialite = new Specialite($idSpecialite, $libelle);
-        $repo = new SpecialiteRepository($bdd);
-
-        $result = $repo->modifier($specialite);
-
-        if ($result) {
+        if ($repo->modifier($specialite)) {
             header('Location: ../../vue/ListeSpecialite.php');
             exit();
         } else {
-            echo "Erreur lors de la modification.";
+            die("Erreur lors de la modification.");
         }
     } else {
-        echo "Tous les champs sont obligatoires.";
+        die("Données manquantes.");
     }
+} else {
+    header('Location: ../../vue/ListeSpecialite.php');
+    exit();
 }
 ?>
