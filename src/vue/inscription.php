@@ -23,7 +23,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             'cd' => trim($_POST["cd"] ?? ''),
             'ville' => trim($_POST["ville"] ?? ''),
             'password' => trim($_POST["password"] ?? ''),
-            'role' => trim($_POST["role"] ?? 'user') // ✅ ajout du rôle
     ];
 
     if (!$data['nom'] || !$data['prenom'] || !$data['email'] || !$data['rue'] || !$data['cd'] || !$data['ville'] || !$data['password']) {
@@ -118,24 +117,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </label>
         </div>
 
-        <label>Rôle :</label>
-        <div class="checkbox-group">
-            <div>
-                <input type="radio" id="role_user" name="role" value="user" required>
-                <label for="role_user">Utilisateur</label>
-            </div>
-            <div>
-                <input type="radio" id="role_medecin" name="role" value="medecin">
-                <label for="role_medecin">Médecin</label>
-            </div>
-            <div>
-                <input type="radio" id="role_admin" name="role" value="admin">
-                <label for="role_admin">Admin</label>
-            </div>
-        </div>
-
         <button type="submit">S'inscrire</button><br/><br/>
-        <button type="submit" href="Connexion.php">Se connecter</a></button>
+         <a href="Connexion.php">Se connecter</a>
     </form>
 </div>
 

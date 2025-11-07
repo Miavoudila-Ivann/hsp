@@ -40,6 +40,8 @@ include __DIR__ . '/header.php';
         <th>Rôle</th>
         <th>Ville</th>
         <th>Actions</th>
+        <th>Statut</th>
+
     </tr>
     </thead>
     <tbody>
@@ -51,6 +53,8 @@ include __DIR__ . '/header.php';
             <td><?= htmlspecialchars($u['email']) ?></td>
             <td><?= htmlspecialchars($u['role']) ?></td>
             <td><?= htmlspecialchars($u['ville']) ?></td>
+            <td><?= htmlspecialchars($u['status'] ?? '') ?></td>
+
             <td class="actions">
                 <a class="btn-modifier" href="ModifierUtilisateur.php?email=<?= urlencode($u['email']) ?>">Modifier</a>
                 <a class="btn-supprimer" href="ListeUtilisateurs.php?delete=<?= $u['id_utilisateur'] ?>" onclick="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?')">Supprimer</a>

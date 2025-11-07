@@ -1,5 +1,5 @@
 <?php
-
+namespace repository;
 class OffreRepository {
     private $bdd;
 
@@ -43,5 +43,23 @@ class OffreRepository {
         $stmt = $this->bdd->prepare("DELETE FROM offre WHERE id_offre = ?");
         return $stmt->execute([$id]);
     }
+
+    public function findAllWithEntreprise(): array {
+        try {
+            $stmt = $this->bdd->query('
+            SELECT id_offre, titre, ref_entreprise
+            FROM offre
+            ORDER BY date_publication DESC
+        ');
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            error_log('Erreur findAllWithEntreprise : ' . $e->getMessage());
+            return [];
+        }
+    }
+
+
+
+
 }
 ?>

@@ -37,8 +37,8 @@ class UtilisateurRepository
 
             // Insertion en base
             $stmt = $this->bdd->prepare("
-            INSERT INTO utilisateur (prenom, nom, email, mdp, role, rue, cd, ville)
-            VALUES (:prenom, :nom, :email, :mdp, :role, :rue, :cd, :ville)
+            INSERT INTO utilisateur (prenom, nom, email, mdp, role, rue, cd, ville password, status)
+            VALUES (:prenom, :nom, :email, :mdp, :role, :rue, :cd, :ville :password, 'Attente')
         ");
 
             $stmt->execute([
@@ -46,10 +46,10 @@ class UtilisateurRepository
                 'nom' => $data['nom'],
                 'email' => $data['email'],
                 'mdp' => $hashedPassword,
-                'role' => $data['role'],   // rôle bien pris en compte
                 'rue' => $data['rue'],
                 'cd' => $data['cd'],
-                'ville' => $data['ville']
+                'ville' => $data['ville'],
+                ':password' => password_hash($data['password'], PASSWORD_DEFAULT),
             ]);
 
             return ['success' => true, 'error' => ''];
@@ -146,14 +146,17 @@ class UtilisateurRepository
     public function findAll(): array
     {
         try {
-            $sql = "SELECT id_utilisateur, nom, prenom, email, role, ville FROM utilisateur ORDER BY id_utilisateur ASC";
+            $sql = "SELECT id_utilisateur, nom, prenom, email, role, ville, status 
+                FROM utilisateur 
+                ORDER BY id_utilisateur ASC";
             $stmt = $this->bdd->query($sql);
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("Erreur findAll utilisateurs : " . $e->getMessage());
+            error_log('Erreur findAll utilisateurs : ' . $e->getMessage());
             return [];
         }
     }
+
 
 
 
@@ -164,15 +167,17 @@ class UtilisateurRepository
     public function modifierUtilisateur(Utilisateur $utilisateur)
     {
         $req = $this->bdd->prepare('
-            UPDATE utilisateur
-            SET prenom = :prenom,
-                nom = :nom,
-                email = :email,
-                rue = :rue,
-                cd = :cd,
-                ville = :ville
-            WHERE id_utilisateur = :id_utilisateur
-        ');
+        UPDATE utilisateur
+        SET prenom = :prenom,
+            nom = :nom,
+            email = :email,
+            rue = :rue,
+            cd = :cd,
+            ville = :ville,
+            role = :role,
+            status = :status
+        WHERE id_utilisateur = :id_utilisateur
+    ');
 
         return $req->execute([
             ':id_utilisateur' => $utilisateur->getIdUtilisateur(),
@@ -181,9 +186,13 @@ class UtilisateurRepository
             ':email'  => $utilisateur->getEmail(),
             ':rue'    => $utilisateur->getRue() ?? '',
             ':cd'     => $utilisateur->getCd() ?? 0,
-            ':ville'  => $utilisateur->getVille() ?? ''
+            ':ville'  => $utilisateur->getVille() ?? '',
+            ':role'   => $utilisateur->getRole() ?? 'user',
+            ':status' => $utilisateur->getStatus() ?? 'Attente',
+
         ]);
     }
+
 
     /**
      * Suppression d’un utilisateur
