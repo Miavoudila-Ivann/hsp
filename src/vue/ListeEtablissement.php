@@ -4,7 +4,7 @@ require_once '../../src/repository/EtablissementRepository.php';
 require_once '../../src/modele/Etablissement.php';
 
 use repository\EtablissementRepository;
-
+include __DIR__ . '/header.php';
 $pdo = (new \Bdd())->getBdd();
 $repo = new EtablissementRepository($pdo);
 $etablissements = $pdo->query('SELECT * FROM etablissement')->fetchAll(PDO::FETCH_ASSOC);
@@ -51,7 +51,6 @@ $etablissements = $pdo->query('SELECT * FROM etablissement')->fetchAll(PDO::FETC
         <th>Nom de l'établissement</th>
         <th>Adresse</th>
         <th>Site Web</th>
-        <th>Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -61,14 +60,10 @@ $etablissements = $pdo->query('SELECT * FROM etablissement')->fetchAll(PDO::FETC
             <td><?= htmlspecialchars($etablissement['nom_etablissement']) ?></td>
             <td><?= htmlspecialchars($etablissement['adresse_etablissement']) ?></td>
             <td><?= htmlspecialchars($etablissement['site_web_etablissement']) ?></td>
-            <td>
-                <a class="button" href="ModifierEtablissement.php?id=<?= $etablissement['id_etablissement'] ?>">Modifier</a>
-                <a class="button delete" href="SupprimerEtablissement.php?id=<?= $etablissement['id_etablissement'] ?>" onclick="return confirm('Voulez-vous vraiment supprimer cet établissement ?');">Supprimer</a>
-                <a class="button" href="CreeEtablissement.php">Ajouter</a>
-            </td>
         </tr>
     <?php endforeach; ?>
     </tbody>
 </table>
 </body>
 </html>
+<?php include __DIR__ . '/footer.php'; ?>
