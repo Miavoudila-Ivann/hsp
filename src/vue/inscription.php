@@ -134,8 +134,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
         </div>
 
-        <button type="submit">S'inscrire</button>
-        <a href="Connexion.php">Se connecter</a>
+        <button type="submit">S'inscrire</button><br/><br/>
+        <button type="submit" href="Connexion.php">Se connecter</a></button>
     </form>
 </div>
 
