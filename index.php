@@ -116,6 +116,12 @@ $hours = [
                     <form action="src/vue/admin.php" method="get">
                         <button type="submit">👥Accéder au Dashboard</button>
                     </form>
+                    <form action="src/vue/AjouterOffre.php" method="get">
+                        <button type="submit">👥Ajouté une offre</button>
+                    </form>
+                    <form action="src/vue/AjouterEntreprise.php" method="get">
+                        <button type="submit">👥Ajouté une entreprise</button>
+                    </form>
                 <?php endif; ?>
 
                 <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "medecin"): ?>
