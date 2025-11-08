@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -106,8 +105,8 @@ $hours = [
                 <a href="#contact" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Contact</a>
 
                 <!-- ✅ Lien vers le profil -->
-                <?php if (isset($_SESSION['user_id'])): ?>
-                    <li class="nav-item"><a class="nav-link" href="vue/Profile.php">Profil</a></li>
+                <?php if (isset($_SESSION['id_utilisateur'])): ?>
+                    <li class="nav-item"><a class="nav-link" href="src/vue/Profil.php">Profil</a></li>
                 <?php endif; ?>
 
                 <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin"): ?>
@@ -125,7 +124,7 @@ $hours = [
                     </a>
                 <?php endif; ?>
 
-                <?php if (isset($_SESSION["id"])): ?>
+                <?php if (isset($_SESSION["id_utilisateur"])): ?>
                     <div class="flex items-center space-x-4 bg-gray-100 px-4 py-2 rounded-lg">
                         <div class="text-right">
                             <div class="font-semibold text-gray-900">
@@ -143,6 +142,7 @@ $hours = [
                     <a href="src/vue/inscription.php" class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-6 py-2.5 rounded-lg hover:shadow-lg transition-all duration-300 font-medium">
                         Inscription / Connexion
                     </a>
+
                 <?php endif; ?>
             </div>
 
