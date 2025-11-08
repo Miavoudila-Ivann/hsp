@@ -37,9 +37,9 @@ class UtilisateurRepository
 
             // Insertion en base
             $stmt = $this->bdd->prepare("
-            INSERT INTO utilisateur (prenom, nom, email, mdp, role, rue, cd, ville password, status)
-            VALUES (:prenom, :nom, :email, :mdp, :role, :rue, :cd, :ville :password, 'Attente')
-        ");
+    INSERT INTO utilisateur (prenom, nom, email, mdp, rue, cd, ville, status)
+    VALUES (:prenom, :nom, :email, :mdp, :rue, :cd, :ville, 'Attente')
+");
 
             $stmt->execute([
                 'prenom' => $data['prenom'],
@@ -49,8 +49,8 @@ class UtilisateurRepository
                 'rue' => $data['rue'],
                 'cd' => $data['cd'],
                 'ville' => $data['ville'],
-                ':password' => password_hash($data['password'], PASSWORD_DEFAULT),
             ]);
+
 
             return ['success' => true, 'error' => ''];
         } catch (PDOException $e) {
