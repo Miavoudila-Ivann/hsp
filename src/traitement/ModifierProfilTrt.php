@@ -1,34 +1,33 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['id_utilisateur'])) {
     echo "Utilisateur non connecté.";
     exit();
 }
 
 require_once '../../src/bdd/Bdd.php';
+require_once '../../src/modele/Utilisateur.php';
+
 
 $database = new Bdd();
 $bdd = $database->getBdd();
 
-if (isset($_POST['ok'])) {
-    $prenom = isset($_POST['prenom']) && !empty($_POST['prenom']) ? $_POST['prenom'] : null;
-    $nom = isset($_POST['nom']) && !empty($_POST['nom']) ? $_POST['nom'] : null;
-    $email = isset($_POST['email']) && !empty($_POST['email']) ? $_POST['email'] : null;
-    $mdp = isset($_POST['mdp']) && !empty($_POST['mdp']) ? $_POST['mdp'] : null;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $prenom = !empty($_POST['prenom']) ? $_POST['prenom'] : null;
+    $nom = !empty($_POST['nom']) ? $_POST['nom'] : null;
+    $email = !empty($_POST['email']) ? $_POST['email'] : null;
+    $mdp = !empty($_POST['mdp']) ? $_POST['mdp'] : null;
 
-
-    $idUtilisateur = $_SESSION['user_id'];
-
+    $idUtilisateur = $_SESSION['id_utilisateur'];
 
     if ($prenom) $_SESSION['prenom'] = $prenom;
     if ($nom) $_SESSION['nom'] = $nom;
-    if ($email) $_SESSION['email'] = $email;
+    if ($email) $_SESSION['user'] = $email;
 
     if ($mdp) {
         $mdp = password_hash($mdp, PASSWORD_BCRYPT);
     }
-
 
     $updateFields = [];
     $params = ['id_utilisateur' => $idUtilisateur];
@@ -58,17 +57,11 @@ if (isset($_POST['ok'])) {
         exit();
     }
 
-
     $req = "UPDATE utilisateur SET " . implode(", ", $updateFields) . " WHERE id_utilisateur = :id_utilisateur";
-    // implode tableau en chaine de caractère
-
-
     $stmt = $bdd->prepare($req);
 
     if ($stmt->execute($params)) {
-        echo "Mise à jour réussie!";
-
-        header('Location: ../../vue/Profil.php');
+        header('Location: ../vue/Profil.php');
         exit();
     } else {
         echo "Une erreur est survenue lors de la mise à jour.";
@@ -76,3 +69,4 @@ if (isset($_POST['ok'])) {
 } else {
     echo "Formulaire non soumis.";
 }
+?>

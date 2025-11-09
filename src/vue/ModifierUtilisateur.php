@@ -38,6 +38,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $utilisateur->setRue($_POST['rue'] ?? '');
     $utilisateur->setCd($_POST['cd'] ?? 0);
     $utilisateur->setVille($_POST['ville'] ?? '');
+    $utilisateur->setRole($_POST['role'] ?? '');
+    $utilisateur->setStatus($_POST['status'] ?? 'Attente');
+
 
     if ($repo->modifierUtilisateur($utilisateur)) {
         $success = "Utilisateur modifié avec succès !";
@@ -149,6 +152,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <label>Ville :
         <input type="text" name="ville" value="<?= htmlspecialchars($utilisateur->getVille()) ?>">
     </label>
+    <label>Status :</label>
+    <div class="checkbox-group">
+        <div style="display: inline-block; margin-right: 20px;">
+            <input type="radio" id="status_attente" name="status" value="Attente" <?= $utilisateur->getStatus() === 'Attente' ? 'checked' : '' ?> required>
+            <label for="status_attente">En attente</label>
+        </div>
+        <div style="display: inline-block; margin-right: 20px;">
+            <input type="radio" id="status_accepter" name="status" value="accepter" <?= $utilisateur->getStatus() === 'accepter' ? 'checked' : '' ?>>
+            <label for="status_accepter">Accepter</label>
+        </div>
+        <div style="display: inline-block;">
+            <input type="radio" id="status_refuser" name="status" value="refuser" <?= $utilisateur->getStatus() === 'refuser' ? 'checked' : '' ?>>
+            <label for="status_refuser">Refuser</label>
+        </div>
+    </div>
+
+    <label>Rôle :</label>
+    <div class="checkbox-group">
+        <div style="display: inline-block; margin-right: 20px;">
+            <input type="radio" id="role_user" name="role" value="user" <?= $utilisateur->getRole() === 'user' ? 'checked' : '' ?> required>
+            <label for="role_user">Utilisateur</label>
+        </div>
+        <div style="display: inline-block; margin-right: 20px;">
+            <input type="radio" id="role_medecin" name="role" value="medecin" <?= $utilisateur->getRole() === 'medecin' ? 'checked' : '' ?>>
+            <label for="role_medecin">Médecin</label>
+        </div>
+        <div style="display: inline-block;">
+            <input type="radio" id="role_admin" name="role" value="admin" <?= $utilisateur->getRole() === 'admin' ? 'checked' : '' ?>>
+            <label for="role_admin">Admin</label>
+        </div>
+    </div>
+
+
     <button type="submit">Modifier</button>
 </form>
 

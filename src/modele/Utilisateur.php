@@ -9,9 +9,10 @@ class Utilisateur {
     private $rue;
     private $cd;
     private $ville;
+    private $status;
 
 
-    public function __construct($id_utilisateur = null, $prenom = null, $nom = null, $email = null, $mdp = null, $role = null, $rue = null, $cd = null, $ville = null) {
+    public function __construct($id_utilisateur = null, $prenom = null, $nom = null, $email = null, $mdp = null, $role = null, $rue = null, $cd = null, $ville = null, $status = null) {
         $this->id_utilisateur = $id_utilisateur;
         $this->prenom = $prenom;
         $this->nom = $nom;
@@ -21,6 +22,7 @@ class Utilisateur {
         $this->rue = $rue;
         $this->cd = $cd;
         $this->ville = $ville;
+        $this->status = $status;
     }
 
 
@@ -55,7 +57,11 @@ class Utilisateur {
     public function getVille() {
         return $this->ville;
     }
+    public function getStatus() {
 
+        return $this->status;
+
+    }
 
     public function setIdUtilisateur($id_utilisateur) {
         $this->id_utilisateur = $id_utilisateur;
@@ -83,6 +89,10 @@ class Utilisateur {
     }
     public function setVille($ville) {
         $this->ville = $ville;
+    }
+    public function setStatus($status) {
+
+        $this->status = $status;
     }
 }
 ?>

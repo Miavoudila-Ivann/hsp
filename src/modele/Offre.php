@@ -1,5 +1,5 @@
 <?php
-
+namespace modele;
 class Offre {
     private $id_offre;
     private $titre;
@@ -12,18 +12,19 @@ class Offre {
     private $ref_entreprise;
     private $date_publication;
 
-    public function __construct($id_offre, $titre, $description, $mission, $salaire, $type_offre, $etat, $ref_utilisateur, $ref_entreprise, $date_publication) {
-        $this->id_offre = $id_offre;
-        $this->titre = $titre;
-        $this->description = $description;
-        $this->mission = $mission;
-        $this->salaire = $salaire;
-        $this->type_offre = $type_offre;
-        $this->etat = $etat;
-        $this->ref_utilisateur = $ref_utilisateur;
-        $this->ref_entreprise = $ref_entreprise;
-        $this->date_publication = $date_publication;
+    public function __construct(array $data) {
+        $this->id_offre = $data['id_offre'];
+        $this->titre = $data['titre'];
+        $this->description = $data['description'];
+        $this->mission = $data['mission'];
+        $this->salaire = $data['salaire'];
+        $this->type_offre = $data['type_offre'];
+        $this->etat = $data['etat'];
+        $this->ref_utilisateur = $data['ref_utilisateur'];
+        $this->ref_entreprise = $data['ref_entreprise'];
+        $this->date_publication = $data['date_publication'];
     }
+
 
     // Getters (à faire pour chaque attribut, pareil pour les setters)
 

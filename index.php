@@ -104,31 +104,26 @@ $hours = [
                 <a href="#apropos" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">À Propos</a>
                 <a href="#contact" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Contact</a>
 
-                <!-- ✅ Si connecté -->
-                <?php if (isset($_SESSION['id'])): ?>
-                    <a href="src/vue/Profil.php" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">
-                        Profil
-                    </a>
+                <!-- ✅ Lien vers le profil -->
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <li class="nav-item"><a class="nav-link" href="vue/Profile.php">Profil</a></li>
                 <?php endif; ?>
 
-                <!-- ✅ Si admin -->
                 <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin"): ?>
                     <a href="src/vue/ListeUtilisateurs.php" class="text-gray-700 hover:text-red-600 transition-colors font-medium">
                         👥 Liste des utilisateurs
                     </a>
                     <form action="src/vue/admin.php" method="get">
-                        <button type="submit" class="text-gray-700 hover:text-red-600 font-medium">👥 Accéder au Dashboard</button>
+                        <button type="submit">👥Accéder au Dashboard</button>
                     </form>
                 <?php endif; ?>
 
-                <!-- ✅ Si médecin -->
                 <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "medecin"): ?>
                     <a href="src/vue/ListeUtilisateurs.php" class="text-gray-700 hover:text-red-600 transition-colors font-medium">
                         👥 Liste des utilisateurs
                     </a>
                 <?php endif; ?>
 
-                <!-- ✅ Bloc utilisateur connecté -->
                 <?php if (isset($_SESSION["id"])): ?>
                     <div class="flex items-center space-x-4 bg-gray-100 px-4 py-2 rounded-lg">
                         <div class="text-right">
@@ -139,52 +134,16 @@ $hours = [
                                 <?= htmlspecialchars($_SESSION["role"]) ?>
                             </div>
                         </div>
-                        <a href="src/vue/Deconnexion.php" class="text-red-500 hover:text-red-700 font-medium">
+                        <a href="src/vue/deconnexion.php" class="text-red-500 hover:text-red-700 font-medium">
                             Déconnexion
                         </a>
                     </div>
-
-                    <!-- ✅ Bloc Rejoins Nous (si non connecté) -->
                 <?php else: ?>
-                    <div class="relative" id="dropdownContainer">
-                        <button id="dropdownButton" class="text-gray-700 hover:text-blue-600 font-medium focus:outline-none flex items-center">
-                            Rejoins Nous
-                            <svg class="ml-1 w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-
-                        <ul id="dropdownMenu" class="absolute hidden bg-white border rounded-lg shadow-lg mt-2 w-40">
-                            <li>
-                                <a href="src/vue/Connexion.php" class="block px-4 py-2 hover:bg-blue-100 text-gray-700">Connexion</a>
-                            </li>
-                            <li>
-                                <a href="src/vue/Inscription.php" class="block px-4 py-2 hover:bg-blue-100 text-gray-700">Inscription</a>
-                            </li>
-                        </ul>
-                    </div>
+                    <a href="src/vue/inscription.php" class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-6 py-2.5 rounded-lg hover:shadow-lg transition-all duration-300 font-medium">
+                        Inscription / Connexion
+                    </a>
                 <?php endif; ?>
             </div>
-
-            <!-- ✅ Script pour gérer le menu déroulant -->
-            <script>
-                const dropdownButton = document.getElementById('dropdownButton');
-                const dropdownMenu = document.getElementById('dropdownMenu');
-                const dropdownContainer = document.getElementById('dropdownContainer');
-
-                if (dropdownButton) {
-                    dropdownButton.addEventListener('click', () => {
-                        dropdownMenu.classList.toggle('hidden');
-                    });
-
-                    document.addEventListener('click', (e) => {
-                        if (!dropdownContainer.contains(e.target)) {
-                            dropdownMenu.classList.add('hidden');
-                        }
-                    });
-                }
-            </script>
-
 
             <!-- Mobile Menu Button -->
             <button id="mobile-menu-btn" class="md:hidden p-2">

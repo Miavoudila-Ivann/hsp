@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['id'])) {
-    header("Location: ../../vue/Connexion.php");
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
     exit;
 }
 
@@ -97,31 +97,13 @@ if (!isset($_SESSION['id'])) {
         <input type="text" id="prenom" name="prenom" value="<?php echo htmlspecialchars($_SESSION['prenom']); ?>" required>
 
         <label for="email">Email :</label>
-        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($_SESSION['email'] ?? ''); ?>" required>
+        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($_SESSION['email']); ?>" required>
 
         <label for="mdp">Nouveau mot de passe :</label>
         <input type="password" id="mdp" name="mdp" placeholder="Entrez un nouveau mot de passe (laisser vide si inchangé)">
 
-        <script>
-            const pwdInput = document.getElementById('password');
-            const msg = document.getElementById('msg');
-
-            pwdInput.addEventListener('input', function() {
-                const pwd = this.value;
-                let text = "";
-
-                if (pwd.length < 12) text += "❌ 12 caractères minimum<br>";
-                if (!/[A-Z]/.test(pwd)) text += "❌ 1 majuscule<br>";
-                if (!/[a-z]/.test(pwd)) text += "❌ 1 minuscule<br>";
-                if (!/[0-9]/.test(pwd)) text += "❌ 1 chiffre<br>";
-                if (!/[\W_]/.test(pwd)) text += "❌ 1 caractère spécial<br>";
-
-                msg.innerHTML = text || "✅ Mot de passe sécurisé";
-            });
-        </script>
-
         <div class="role-info">
-            <strong>ID :</strong> <?php echo $_SESSION['id']; ?><br>
+            <strong>ID :</strong> <?php echo $_SESSION['user_id']; ?><br>
             <strong>Rôle :</strong> <?php echo htmlspecialchars($_SESSION['role']); ?>
         </div>
 
@@ -129,9 +111,9 @@ if (!isset($_SESSION['id'])) {
     </form>
 
     <div class="form-footer">
-        <a href="../traitement/Deconnexion.php">Déconnexion</a>
+        <a href="../src/traitement/Déconnexion.php">Déconnexion</a>
     </div>
-    <a href="../../index.php">Retour à l'acceuil</a>
+    <a href="../Index.php">Retour à l'acceuil</a>
 </div>
 
 </body>

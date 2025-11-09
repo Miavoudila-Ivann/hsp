@@ -30,7 +30,7 @@ use repository\CandidatureRepository;
 use repository\ContratRepository;
 use repository\EvenementRepository;
 
-$database = new Bdd();
+$database = new \Bdd();
 $bdd = $database->getBdd();
 
 // Création des repositories
@@ -57,7 +57,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['modifier_statut'])) {
     exit();
 }
 
-// Récupération des données
+// === GESTION DES UTILISATEURS EN ATTENTE ===
+
+// Approuver un utilisateur
+if (isset($_POST['accepter']) && isset($_POST['id_utilisateur'])) {
+    $id = (int) $_POST['id_utilisateur'];
+    $stmt = $bdd->prepare("UPDATE utilisateur SET status = 'accepter' WHERE id_utilisateur = ?");
+    $stmt->execute([$id]);
+}
+
+// Refuser un utilisateur
+if (isset($_POST['refuser']) && isset($_POST['id_utilisateur'])) {
+    $id = (int) $_POST['id_utilisateur'];
+    $stmt = $bdd->prepare("UPDATE utilisateur SET status = 'refuser' WHERE id_utilisateur = ?");
+    $stmt->execute([$id]);
+}
+
+// Récupération des utilisateurs en attente
+$stmt = $bdd->query("SELECT * FROM utilisateur WHERE status = 'attente'");
+$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Récupération de toutes les données
 $utilisateurs = $utilisateurRepo->findAll();
 $candidatures = $candidatureRepo->findAll();
 $contrats = $contratRepo->findAll();
@@ -81,16 +101,26 @@ include __DIR__ . '/header.php';
 <section>
     <h2>Utilisateurs</h2>
     <table border="1" cellpadding="5" cellspacing="0">
-        <tr><th>ID</th><th>Nom</th><th>Email</th><th>Rôle</th><th>Actions</th></tr>
+        <tr>
+            <th>ID</th><th>Nom</th><th>Email</th><th>Rôle</th><th>Status</th><th>Actions</th>
+        </tr>
         <?php foreach($utilisateurs as $u): ?>
             <tr>
-                <td><?= $u['id_utilisateur'] ?? '' ?></td>
+                <td><?= htmlspecialchars($u['id_utilisateur'] ?? '') ?></td>
                 <td><?= htmlspecialchars($u['nom'] ?? '') ?></td>
                 <td><?= htmlspecialchars($u['email'] ?? '') ?></td>
                 <td><?= htmlspecialchars($u['role'] ?? '') ?></td>
+                <td><?= htmlspecialchars($u['status'] ?? '') ?></td>
                 <td>
-                    <a href="../vue/ModifierUtilisateur.php?email=<?= urlencode($u['email'] ?? '') ?>">Modifier</a>
-                    <a href="../vue/ListeUtilisateurs.php?delete=<?= $u['id_utilisateur'] ?? '' ?>" onclick="return confirm('Voulez-vous supprimer cet utilisateur ?')">Supprimer</a>
+                    <?php if ($u['status'] === 'attente'): ?>
+                        <form method="post" style="display:inline;">
+                            <input type="hidden" name="id_utilisateur" value="<?= htmlspecialchars($u['id_utilisateur']) ?>">
+                            <button type="submit" name="accepter">✅ Approuver</button>
+                            <button type="submit" name="refuser" style="margin-left:5px;">❌ Refuser</button>
+                        </form>
+                    <?php endif; ?>
+                    <a href="../vue/ModifierUtilisateur.php?email=<?= urlencode($u['email'] ?? '') ?>"> Modifier</a>    |
+                    <a href="../vue/ListeUtilisateurs.php?delete=<?= htmlspecialchars($u['id_utilisateur'] ?? '') ?>" onclick="return confirm('Voulez-vous supprimer cet utilisateur ?')"> Supprimer</a>
                 </td>
             </tr>
         <?php endforeach; ?>
@@ -104,7 +134,7 @@ include __DIR__ . '/header.php';
         <tr><th>ID</th><th>Utilisateur</th><th>Motivation</th><th>CV</th><th>Statut</th><th>Date</th><th>Action</th></tr>
         <?php foreach($candidatures as $c): ?>
             <tr>
-                <td><?= $c['id_candidature'] ?? '' ?></td>
+                <td><?= htmlspecialchars($c['id_candidature'] ?? '') ?></td>
                 <td><?= htmlspecialchars($c['ref_utilisateur'] ?? '') ?></td>
                 <td><?= htmlspecialchars($c['motivation'] ?? '') ?></td>
                 <td>
@@ -116,22 +146,21 @@ include __DIR__ . '/header.php';
                 </td>
                 <td>
                     <form method="POST" style="display:inline;">
-                        <input type="hidden" name="id_candidature" value="<?= $c['id_candidature'] ?>">
+                        <input type="hidden" name="id_candidature" value="<?= htmlspecialchars($c['id_candidature']) ?>">
                         <select name="statut">
-                            <option value="en attente" <?= $c['statut'] === 'en attente' ? 'selected' : '' ?>>En attente</option>
-                            <option value="acceptée" <?= $c['statut'] === 'acceptée' ? 'selected' : '' ?>>Acceptée</option>
-                            <option value="refusée" <?= $c['statut'] === 'refusée' ? 'selected' : '' ?>>Refusée</option>
+                            <option value="en attente" <?= ($c['statut'] ?? '') === 'en attente' ? 'selected' : '' ?>>En attente</option>
+                            <option value="acceptée" <?= ($c['statut'] ?? '') === 'acceptée' ? 'selected' : '' ?>>Acceptée</option>
+                            <option value="refusée" <?= ($c['statut'] ?? '') === 'refusée' ? 'selected' : '' ?>>Refusée</option>
                         </select>
                         <button type="submit" name="modifier_statut">✔️</button>
                     </form>
                 </td>
                 <td><?= htmlspecialchars($c['date_candidature'] ?? '') ?></td>
                 <td>
-                    <a href="?delete_candidature=<?= $c['id_candidature'] ?>" onclick="return confirm('Supprimer cette candidature ?')">🗑️ Supprimer</a>
+                    <a href="?delete_candidature=<?= htmlspecialchars($c['id_candidature']) ?>" onclick="return confirm('Supprimer cette candidature ?')">🗑️ Supprimer</a>
                 </td>
             </tr>
         <?php endforeach; ?>
-
     </table>
 </section>
 
@@ -142,13 +171,13 @@ include __DIR__ . '/header.php';
         <tr><th>ID</th><th>Utilisateur</th><th>Date début</th><th>Date fin</th><th>Actions</th></tr>
         <?php foreach($contrats as $ct): ?>
             <tr>
-                <td><?= $ct['id_contrat'] ?? '' ?></td>
+                <td><?= htmlspecialchars($ct['id_contrat'] ?? '') ?></td>
                 <td><?= htmlspecialchars($ct['utilisateur_nom'] ?? '') ?></td>
-                <td><?= $ct['date_debut'] ?? '' ?></td>
-                <td><?= $ct['date_fin'] ?? '' ?></td>
+                <td><?= htmlspecialchars($ct['date_debut'] ?? '') ?></td>
+                <td><?= htmlspecialchars($ct['date_fin'] ?? '') ?></td>
                 <td>
-                    <a href="../vue/ModifierContrat.php?id=<?= $ct['id_contrat'] ?? '' ?>">Modifier</a>
-                    <a href="../vue/ListeContrat.php?delete=<?= $ct['id_contrat'] ?? '' ?>" onclick="return confirm('Supprimer ce contrat ?')">Supprimer</a>
+                    <a href="../vue/ModifierContrat.php?id=<?= htmlspecialchars($ct['id_contrat'] ?? '') ?>">Modifier</a> |
+                    <a href="../vue/ListeContrat.php?delete=<?= htmlspecialchars($ct['id_contrat'] ?? '') ?>" onclick="return confirm('Supprimer ce contrat ?')">Supprimer</a>
                 </td>
             </tr>
         <?php endforeach; ?>
@@ -157,18 +186,18 @@ include __DIR__ . '/header.php';
 
 <!-- ===================== ETABLISSEMENTS ===================== -->
 <section>
-    <h2>Etablissements</h2>
+    <h2>Établissements</h2>
     <table border="1" cellpadding="5" cellspacing="0">
         <tr><th>ID</th><th>Nom</th><th>Adresse</th><th>Site Web</th><th>Actions</th></tr>
         <?php foreach($etablissements as $e): ?>
             <tr>
-                <td><?= $e['id_etablissement'] ?? '' ?></td>
+                <td><?= htmlspecialchars($e['id_etablissement'] ?? '') ?></td>
                 <td><?= htmlspecialchars($e['nom_etablissement'] ?? '') ?></td>
-                <td><?= $e['adresse_etablissement'] ?? '' ?></td>
-                <td><?= $e['site_web_etablissement'] ?? '' ?></td>
+                <td><?= htmlspecialchars($e['adresse_etablissement'] ?? '') ?></td>
+                <td><?= htmlspecialchars($e['site_web_etablissement'] ?? '') ?></td>
                 <td>
-                    <a href="../vue/modifierEtablissement.php?id=<?= $e['id_etablissement'] ?? '' ?>">Modifier</a>
-                    <a href="../vue/ListeEtablissement.php?delete=<?= $e['id_etablissement'] ?? '' ?>" onclick="return confirm('Supprimer cet établissement ?')">Supprimer</a>
+                    <a href="../vue/modifierEtablissement.php?id=<?= htmlspecialchars($e['id_etablissement'] ?? '') ?>">Modifier</a> |
+                    <a href="../vue/ListeEtablissement.php?delete=<?= htmlspecialchars($e['id_etablissement'] ?? '') ?>" onclick="return confirm('Supprimer cet établissement ?')">Supprimer</a>
                 </td>
             </tr>
         <?php endforeach; ?>
@@ -182,16 +211,16 @@ include __DIR__ . '/header.php';
         <tr><th>ID</th><th>Titre</th><th>Description</th><th>Type</th><th>Lieu</th><th>Places</th><th>Date</th><th>Actions</th></tr>
         <?php foreach($evenements as $ev): ?>
             <tr>
-                <td><?= $ev['id_evenement'] ?? '' ?></td>
+                <td><?= htmlspecialchars($ev['id_evenement'] ?? '') ?></td>
                 <td><?= htmlspecialchars($ev['titre'] ?? '') ?></td>
                 <td><?= htmlspecialchars($ev['description'] ?? '') ?></td>
-                <td><?= $ev['type_evenement'] ?? '' ?></td>
-                <td><?= $ev['lieu'] ?? '' ?></td>
-                <td><?= $ev['nb_place'] ?? '' ?></td>
-                <td><?= $ev['date_evenement'] ?? '' ?></td>
+                <td><?= htmlspecialchars($ev['type_evenement'] ?? '') ?></td>
+                <td><?= htmlspecialchars($ev['lieu'] ?? '') ?></td>
+                <td><?= htmlspecialchars($ev['nb_place'] ?? '') ?></td>
+                <td><?= htmlspecialchars($ev['date_evenement'] ?? '') ?></td>
                 <td>
-                    <a href="../vue/modifierEvenement.php?id=<?= $ev['id_evenement'] ?? '' ?>">Modifier</a>
-                    <a href="../vue/ListeEvenement.php?delete=<?= $ev['id_evenement'] ?? '' ?>" onclick="return confirm('Supprimer cet événement ?')">Supprimer</a>
+                    <a href="../vue/modifierEvenement.php?id=<?= htmlspecialchars($ev['id_evenement'] ?? '') ?>">Modifier</a> |
+                    <a href="../vue/ListeEvenement.php?delete=<?= htmlspecialchars($ev['id_evenement'] ?? '') ?>" onclick="return confirm('Supprimer cet événement ?')">Supprimer</a>
                 </td>
             </tr>
         <?php endforeach; ?>
@@ -205,13 +234,13 @@ include __DIR__ . '/header.php';
         <tr><th>ID</th><th>Nom</th><th>Adresse</th><th>Ville</th><th>Actions</th></tr>
         <?php foreach($hopitaux as $h): ?>
             <tr>
-                <td><?= $h['id_hopital'] ?? '' ?></td>
+                <td><?= htmlspecialchars($h['id_hopital'] ?? '') ?></td>
                 <td><?= htmlspecialchars($h['nom'] ?? '') ?></td>
-                <td><?= $h['adresse_hopital'] ?? '' ?></td>
-                <td><?= $h['ville_hopital'] ?? '' ?></td>
+                <td><?= htmlspecialchars($h['adresse_hopital'] ?? '') ?></td>
+                <td><?= htmlspecialchars($h['ville_hopital'] ?? '') ?></td>
                 <td>
-                    <a href="../vue/ModifierHopital.php?id=<?= $h['id_hopital'] ?? '' ?>">Modifier</a>
-                    <a href="../vue/ListeHopital.php?delete=<?= $h['id_hopital'] ?? '' ?>" onclick="return confirm('Supprimer cet hôpital ?')">Supprimer</a>
+                    <a href="../vue/ModifierHopital.php?id=<?= htmlspecialchars($h['id_hopital'] ?? '') ?>">Modifier</a> |
+                    <a href="../vue/ListeHopital.php?delete=<?= htmlspecialchars($h['id_hopital'] ?? '') ?>" onclick="return confirm('Supprimer cet hôpital ?')">Supprimer</a>
                 </td>
             </tr>
         <?php endforeach; ?>

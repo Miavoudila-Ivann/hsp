@@ -1,20 +1,32 @@
 <?php
+// SupprimerEntrepriseTrt.php
+session_start();
+
 require_once '../../src/bdd/Bdd.php';
 require_once '../../src/repository/EntrepriseRepository.php';
+
+use repository\EntrepriseRepository;
+
+// Vérifie que l'ID est fourni
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    header('Location: ListeEntreprise.php');
+    exit;
+}
+
+$id = (int)$_GET['id'];
 
 $database = new Bdd();
 $bdd = $database->getBdd();
 
-if (isset($_GET['id'])) {
-    $id_entreprise = $_GET['id'];
-    $repo = new EntrepriseRepository($bdd);
+$repo = new EntrepriseRepository($bdd);
 
-    $result = $repo->supprimer($id_entreprise);
-
-    if ($result) {
-        header('Location: ../../vue/ListeEntreprise.php');
-        exit();
-    } else {
-        echo "Erreur lors de la suppression de l'entreprise.";
-    }
+if ($repo->supprimerEntreprise($id)) {
+    // Succès
+    header('Location: ../vue/ListeEntreprise.php?success=1');
+    exit;
+} else {
+    // Erreur
+    header('Location: ../vue/ListeEntreprise.php?error=1');
+    exit;
 }
+?>

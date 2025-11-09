@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mar. 04 nov. 2025 à 08:51
--- Version du serveur : 9.1.0
--- Version de PHP : 8.3.14
+-- Généré le : sam. 08 nov. 2025 à 15:40
+-- Version du serveur : 8.3.0
+-- Version de PHP : 8.2.18
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -35,10 +35,18 @@ CREATE TABLE IF NOT EXISTS `candidature` (
   `date_candidature` date NOT NULL,
   `ref_offre` int NOT NULL,
   `ref_utilisateur` int NOT NULL,
+  `cv_path` varchar(255) COLLATE latin2_bin DEFAULT NULL,
   PRIMARY KEY (`id_candidature`),
   KEY `ref_offre_candidature` (`ref_offre`),
   KEY `ref_utilisateur_candidature` (`ref_utilisateur`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+
+--
+-- Déchargement des données de la table `candidature`
+--
+
+INSERT INTO `candidature` (`id_candidature`, `motivation`, `statut`, `date_candidature`, `ref_offre`, `ref_utilisateur`, `cv_path`) VALUES
+(1, 'je veut travailler a la place de janine', 'acceptée', '2025-11-07', 1, 19, 'uploads/cv/cv_19_1762540757.pdf');
 
 -- --------------------------------------------------------
 
@@ -88,7 +96,15 @@ CREATE TABLE IF NOT EXISTS `entreprise` (
   `cd_entreprise` int NOT NULL,
   `site_web` varchar(100) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
   PRIMARY KEY (`id_entreprise`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+
+--
+-- Déchargement des données de la table `entreprise`
+--
+
+INSERT INTO `entreprise` (`id_entreprise`, `nom_entreprise`, `rue_entreprise`, `ville_entreprise`, `cd_entreprise`, `site_web`) VALUES
+(1, 'Thales', '12', 'Paris', 75003, 'https://authenticate.riotgames.com/?client_id=riot-client&code_challenge=FmLlnI30Qxle0uing4qOzQMJxAp'),
+(3, 'McDonald\'s', '34', 'Luxamburg', 2440, 'https://music.youtube.com/playlist?list=PLtks0zrHykZG_AiHf1RLRljuFKBMI1g2W');
 
 -- --------------------------------------------------------
 
@@ -189,19 +205,26 @@ CREATE TABLE IF NOT EXISTS `medecin` (
 DROP TABLE IF EXISTS `offre`;
 CREATE TABLE IF NOT EXISTS `offre` (
   `id_offre` int NOT NULL AUTO_INCREMENT,
-  `titre` int NOT NULL,
-  `description` int NOT NULL,
-  `mission` int NOT NULL,
-  `salaire` int NOT NULL,
-  `type_offre` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  `etat` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  `ref_utilisateur` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  `ref_entreprise` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
+  `titre` varchar(150) COLLATE latin2_bin NOT NULL,
+  `description` varchar(255) CHARACTER SET latin2 COLLATE latin2_bin DEFAULT NULL,
+  `mission` varchar(255) COLLATE latin2_bin NOT NULL,
+  `salaire` double NOT NULL,
+  `type_offre` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin DEFAULT NULL,
+  `etat` enum('activer','desactiver') CHARACTER SET latin2 COLLATE latin2_bin NOT NULL DEFAULT 'desactiver',
+  `ref_utilisateur` int NOT NULL,
+  `ref_entreprise` int NOT NULL,
   `date_publication` date NOT NULL,
   PRIMARY KEY (`id_offre`),
   KEY `ref_utilisateur_offre` (`ref_utilisateur`),
   KEY `ref_entreprise_offre` (`ref_entreprise`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+
+--
+-- Déchargement des données de la table `offre`
+--
+
+INSERT INTO `offre` (`id_offre`, `titre`, `description`, `mission`, `salaire`, `type_offre`, `etat`, `ref_utilisateur`, `ref_entreprise`, `date_publication`) VALUES
+(1, 'Alternance Technicien Support (H/F)', 'on recrute pas mais on fais juste semblant devant nos supérieur personne ne va ?tre pris parce que vous ?tes pas le fils on cousin du directeur ', '- Brancher des truc en balle\r\n- régler les probl?mes de Janine (elle veut pas prendre sa retraite)\r\n- ?tre présent ', 5580, 'informatique', '', 18, 1, '2025-11-21');
 
 -- --------------------------------------------------------
 
@@ -266,29 +289,26 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   `cd` int NOT NULL,
   `ville` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
   `mdp` varchar(255) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  `role` enum('admin','user','medecin') CHARACTER SET latin2 COLLATE latin2_bin DEFAULT 'user',
+  `role` enum('admin','user','medecin','attente de confirmation') CHARACTER SET latin2 COLLATE latin2_bin DEFAULT 'attente de confirmation',
+  `status` enum('Attente','accepter','refuser') COLLATE latin2_bin DEFAULT 'Attente',
   PRIMARY KEY (`id_utilisateur`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 
 --
 -- Déchargement des données de la table `utilisateur`
 --
 
-INSERT INTO `utilisateur` (`id_utilisateur`, `nom`, `prenom`, `email`, `rue`, `cd`, `ville`, `mdp`, `role`) VALUES
-(17, 'paparadzi', 'broo', 'panormalfakeee@gmail.com', '28', 93200, 'ST-Denis', '$2y$10$XXVSSjYCQEJOtrvbm5Rw5uJAOc9zo1YotJrEDw8xS5cnNZwXZFWLG', 'medecin'),
-(18, 'Rodriguez', 'Escobar', 'panormalfake@gmail.com', '28', 93200, 'ST-Denis', '$2y$10$ES8QUhoZuOF.DMHhj7gI2uBN.KLCYETJZnrbowavEQXKxL0ETCYlK', 'medecin'),
-(19, 'Toujini', 'Mehdi', 'i.touzanine@lprs.fr', '13', 93200, 'Dugny', '$2y$10$9j/vIgWi3RFYVHFnGiCHneHvZK6xIYyaRaCVjWxLVpw/Um6iWgLJa', 'admin');
+INSERT INTO `utilisateur` (`id_utilisateur`, `nom`, `prenom`, `email`, `rue`, `cd`, `ville`, `mdp`, `role`, `status`) VALUES
+(18, 'Rodri', 'ROh ROh', 'panormalfake@gmail.com', '28', 92000, 'ST-Denis', '$2y$10$ES8QUhoZuOF.DMHhj7gI2uBN.KLCYETJZnrbowavEQXKxL0ETCYlK', 'user', 'refuser'),
+(19, 'Touzanine', 'Issa', 'issatouzanine@hotmail.fr', '07', 93200, 'ST-Denis', '$2y$10$jaHUSuxJAcIP25jXs6Dt4eL4i3FI8ZUnXgu2Bjgg0qc.alqSX3KCS', 'admin', 'accepter'),
+(20, 'DupontDeLigoness', 'Dody', 'proto@gmail.com', '44', 93200, 'Pierrefitte', '$2y$10$xSq7A.7tq25rF2EUTtE2IeuMb//8eH2qGS0Aop/4yJKz2c5xou5j2', 'user', 'Attente'),
+(21, 'Touzanine', 'Mohamed', 'MohamedTouzanine@gmail.com', '33', 44500, 'Nante', '$2y$10$In/iCMFOBnhKJYTHmmG9reEd/MDDkGAXDN023oR6UP.UirepuOVOq', 'medecin', 'Attente'),
+(22, 'azert', 'azertyu', 'azazaz@proto.fr', '28', 93200, 'ST-Denis', '$2y$10$7CJRZRhK/QQLBn7MvAsbp.nx9l76Ci5iRfwvVAdoDal90Q5l7nS9q', 'attente de confirmation', 'Attente');
 
 --
 -- Contraintes pour les tables déchargées
 --
-
---
--- Contraintes pour la table `candidature`
---
-ALTER TABLE `candidature`
-  ADD CONSTRAINT `candidature_ibfk_1` FOREIGN KEY (`ref_offre`) REFERENCES `offre` (`id_offre`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `medecin`
