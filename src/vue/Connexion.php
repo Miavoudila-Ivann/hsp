@@ -22,12 +22,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $utilisateur = $repo->connexion($email, $password);
 
         if ($utilisateur) {
-            $_SESSION["user"] = $utilisateur->getEmail();
+            $_SESSION["email"] = $utilisateur->getEmail();
             $_SESSION["role"] = $utilisateur->getRole();
             $_SESSION["id"] = $utilisateur->getIdUtilisateur();
             $_SESSION["prenom"] = $utilisateur->getPrenom();
             $_SESSION["nom"] = $utilisateur->getNom();
-            $_SESSION["role"] = $utilisateur->getRole();
 
             header("Location: ../../index.php");
             exit();
