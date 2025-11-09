@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+if (!isset($_SESSION['id_utilisateur'])) {
+    header("Location: Connexion.php");
     exit;
 }
 
@@ -97,13 +97,14 @@ if (!isset($_SESSION['user_id'])) {
         <input type="text" id="prenom" name="prenom" value="<?php echo htmlspecialchars($_SESSION['prenom']); ?>" required>
 
         <label for="email">Email :</label>
-        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($_SESSION['email']); ?>" required>
+        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($_SESSION['email'] ?? ''); ?>" required>
+
 
         <label for="mdp">Nouveau mot de passe :</label>
         <input type="password" id="mdp" name="mdp" placeholder="Entrez un nouveau mot de passe (laisser vide si inchangé)">
 
         <div class="role-info">
-            <strong>ID :</strong> <?php echo $_SESSION['user_id']; ?><br>
+            <strong>ID :</strong> <?php echo $_SESSION['id_utilisateur']; ?><br>
             <strong>Rôle :</strong> <?php echo htmlspecialchars($_SESSION['role']); ?>
         </div>
 
@@ -111,7 +112,7 @@ if (!isset($_SESSION['user_id'])) {
     </form>
 
     <div class="form-footer">
-        <a href="../src/traitement/Déconnexion.php">Déconnexion</a>
+        <a href="../vue/Deconnexion.php">Déconnexion</a>
     </div>
     <a href="../Index.php">Retour à l'acceuil</a>
 </div>

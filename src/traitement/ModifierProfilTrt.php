@@ -6,8 +6,8 @@ if (!isset($_SESSION['id_utilisateur'])) {
     exit();
 }
 
-require_once '../../src/bdd/Bdd.php';
-require_once '../../src/modele/Utilisateur.php';
+require_once '../bdd/Bdd.php';
+require_once '../modele/Utilisateur.php';
 
 
 $database = new Bdd();
