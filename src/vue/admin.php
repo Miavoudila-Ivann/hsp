@@ -46,14 +46,14 @@ $hopitalRepo = new HopitalRepository($bdd);
 // Suppression candidature
 if (isset($_GET['delete_candidature'])) {
     $candidatureRepo->supprimer((int)$_GET['delete_candidature']);
-    header("Location: DashboardAdmin.php");
+    header("Location: admin.php");
     exit();
 }
 
 // Modification du statut d'une candidature
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['modifier_statut'])) {
     $candidatureRepo->modifierStatut((int)$_POST['id_candidature'], $_POST['statut']);
-    header("Location: DashboardAdmin.php");
+    header("Location: admin.php");
     exit();
 }
 
@@ -147,11 +147,13 @@ include __DIR__ . '/header.php';
                 <td>
                     <form method="POST" style="display:inline;">
                         <input type="hidden" name="id_candidature" value="<?= htmlspecialchars($c['id_candidature']) ?>">
-                        <select name="statut">
-                            <option value="en attente" <?= ($c['statut'] ?? '') === 'en attente' ? 'selected' : '' ?>>En attente</option>
-                            <option value="acceptée" <?= ($c['statut'] ?? '') === 'acceptée' ? 'selected' : '' ?>>Acceptée</option>
-                            <option value="refusée" <?= ($c['statut'] ?? '') === 'refusée' ? 'selected' : '' ?>>Refusée</option>
-                        </select>
+                        <label>
+                            <select name="statut">
+                                <option value="en attente" <?= ($c['statut'] ?? '') === 'en attente' ? 'selected' : '' ?>>En attente</option>
+                                <option value="acceptée" <?= ($c['statut'] ?? '') === 'acceptée' ? 'selected' : '' ?>>Acceptée</option>
+                                <option value="refusée" <?= ($c['statut'] ?? '') === 'refusée' ? 'selected' : '' ?>>Refusée</option>
+                            </select>
+                        </label>
                         <button type="submit" name="modifier_statut">✔️</button>
                     </form>
                 </td>

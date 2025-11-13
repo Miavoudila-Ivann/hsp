@@ -13,6 +13,7 @@ use repository\CandidatureRepository;
 use repository\EntrepriseRepository;
 use repository\OffreRepository;
 
+// Connexion à la BDD
 $database = new \Bdd();
 $bdd = $database->getBdd();
 if (!$bdd) die("Connexion à la BDD échouée !");
@@ -24,9 +25,10 @@ $offreRepo = new OffreRepository($bdd);
 
 // Récupérer toutes les entreprises et offres
 $entreprises = $entrepriseRepo->findAll();
-$offres = $offreRepo->findAllWithEntreprise(); // cette méthode doit retourner ['id_offre','titre','nom_entreprise']
+$offres = $offreRepo->findAll(); // objets Offre
 
-$ref_utilisateur = $_SESSION['id_utilisateur'] ?? $_SESSION['id'] ?? null;
+// Vérification session utilisateur
+$ref_utilisateur = $_SESSION['id_utilisateur'] ?? null;
 if (!$ref_utilisateur) die("Utilisateur non connecté !");
 
 $message = '';
@@ -56,11 +58,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // 🔹 Trouver automatiquement l’entreprise liée à l’offre
+    // Trouver l’entreprise liée à l’offre
     $ref_entreprise = null;
     foreach ($offres as $offre) {
-        if ($offre['id_offre'] == $ref_offre) {
-            $ref_entreprise = $offre['ref_entreprise'] ?? null;
+        if ($offre->getIdOffre() == $ref_offre) {
+            $ref_entreprise = $offre->getRefEntreprise();
             break;
         }
     }
@@ -84,8 +86,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $error = "Tous les champs sont obligatoires.";
     }
-
 }
+
 include __DIR__ . '/header.php';
 ?>
 
@@ -115,14 +117,14 @@ include __DIR__ . '/header.php';
                     <?php
                     $nomEntreprise = '';
                     foreach ($entreprises as $entreprise) {
-                        if ($entreprise->getId() == $offre['ref_entreprise']) {
+                        if ($entreprise->getId() == $offre->getRefEntreprise()) {
                             $nomEntreprise = $entreprise->getNom();
                             break;
                         }
                     }
                     ?>
-                    <option value="<?= htmlspecialchars($offre['id_offre']) ?>">
-                        <?= htmlspecialchars($offre['titre']) ?> (<?= htmlspecialchars($nomEntreprise) ?>)
+                    <option value="<?= htmlspecialchars($offre->getIdOffre()) ?>">
+                        <?= htmlspecialchars($offre->getTitre()) ?> (<?= htmlspecialchars($nomEntreprise) ?>)
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -153,4 +155,3 @@ include __DIR__ . '/header.php';
 </div>
 </body>
 </html>
-<?php include __DIR__ . '/footer.php'; ?>

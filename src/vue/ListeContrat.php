@@ -1,7 +1,11 @@
 <?php
+
+use repository\ContratRepository;
+
 session_start();
 require_once __DIR__ . '/../bdd/Bdd.php';
 require_once __DIR__ . '/../repository/ContratRepository.php';
+require_once __DIR__ . '/../modele/Contrat.php';
 
 if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin'){
     header("Location: ../../index.php");
@@ -13,7 +17,7 @@ $bdd = $database->getBdd();
 $repo = new ContratRepository($bdd);
 
 if(isset($_GET['delete'])){
-    $repo->supprimerContrat((int)$_GET['delete']);
+    $repo->supprimer((int)$_GET['delete']);
     header("Location: ListeContrat.php");
     exit();
 }
@@ -49,12 +53,12 @@ include __DIR__ . '/header.php';
             <td><?= htmlspecialchars($c['salaire']) ?> €</td>
             <td>
                 <a href="ModifierContrat.php?id=<?= $c['id_contrat'] ?>">Modifier</a> |
-                <a href="ListeContrats.php?delete=<?= $c['id_contrat'] ?>" onclick="return confirm('Supprimer ce contrat ?')">Supprimer</a>
+                <a href="ListeContrat.php?delete=<?= $c['id_contrat'] ?>" onclick="return confirm('Supprimer ce contrat ?')">Supprimer</a>
             </td>
         </tr>
     <?php endforeach; ?>
     </tbody>
 </table>
 
-<a class="btn" href="../dashboard/index.php">Retour au dashboard</a>
+<a class="btn" href="../vue/admin.php">Retour au dashboard</a>
 <?php include __DIR__ . '/footer.php'; ?>
