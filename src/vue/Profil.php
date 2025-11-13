@@ -1,5 +1,17 @@
 <?php
+
+use repository\UtilisateurRepository;
+
+
 session_start();
+require_once __DIR__ . '/../bdd/Bdd.php';
+require_once __DIR__ . '/../repository/UtilisateurRepository.php';
+require_once __DIR__ . '/../modele/Utilisateur.php';
+
+$database = new Bdd();
+$bdd = $database->getBdd();
+$repo = new UtilisateurRepository($bdd);
+
 
 if (!isset($_SESSION['id_utilisateur'])) {
     header("Location: Connexion.php");
@@ -89,7 +101,7 @@ if (!isset($_SESSION['id_utilisateur'])) {
 <div class="container">
     <h1>Profil</h1>
 
-    <form action="../src/traitement/ModifierProfilTrt.php" method="POST">
+    <form action="src/traitement/ModifierProfilTrt.php" method="POST">
         <label for="nom">Nom :</label>
         <input type="text" id="nom" name="nom" value="<?php echo htmlspecialchars($_SESSION['nom']); ?>" required>
 
@@ -114,7 +126,7 @@ if (!isset($_SESSION['id_utilisateur'])) {
     <div class="form-footer">
         <a href="../vue/Deconnexion.php">Déconnexion</a>
     </div>
-    <a href="../Index.php">Retour à l'acceuil</a>
+    <a href="hsp/../../../index.php">Retour à l'acceuil</a>
 </div>
 
 </body>
