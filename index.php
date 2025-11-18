@@ -414,55 +414,6 @@ $hours = [
         <div class="relative">
             <div id="eventCarousel"
                  class="flex overflow-x-auto space-x-6 pb-4 snap-x snap-mandatory scroll-smooth">
-                <?php
-                // Connexion à la base de données
-                $host = "localhost";
-                $user = "root";
-                $pass = "";
-                $db   = "hsp";
-
-                $conn = new mysqli($host, $user, $pass, $db);
-
-                // Vérification de la connexion
-                if ($conn->connect_error) {
-                    die("Erreur de connexion : " . $conn->connect_error);
-                }
-
-                // Requête : récupérer tous les événements
-                $sql = "SELECT id_evenement, titre, description, type_evenement, lieu, nb_place, date_evenement 
-        FROM evenement
-        ORDER BY date_evenement ASC";
-
-                $result = $conn->query($sql);
-
-                // S'il y a des résultats, on génère les cartes
-                if ($result->num_rows > 0) {
-                    while($row = $result->fetch_assoc()) {
-
-                        // format date (ex: 2025-06-12 → 12 Juin 2025)
-                        setlocale(LC_TIME, 'fr_FR.UTF-8');
-                        $date_formatee = strftime("%d %B %Y", strtotime($row['date_evenement']));
-
-                        echo '
-        <div class="min-w-[320px] snap-center bg-gradient-to-br from-blue-50 to-cyan-50 border rounded-2xl p-6 shadow hover:shadow-xl transition-all duration-300">
-            <img src="https://images.pexels.com/photos/532792/pexels-photo-532792.jpeg?auto=compress&cs=tinysrgb&w=800"
-                 class="rounded-xl h-48 w-full object-cover mb-4">
-
-            <h3 class="text-xl font-bold text-gray-900 mb-2">' . htmlspecialchars($row['titre']) . '</h3>
-            <p class="text-gray-600 mb-4">
-                ' . htmlspecialchars($row['description']) . '
-            </p>
-
-            <div class="text-blue-600 font-semibold">' . $date_formatee . '</div>
-        </div>
-        ';
-                    }
-                } else {
-                    echo "<p class='text-gray-600'>Aucun événement disponible pour le moment.</p>";
-                }
-
-                $conn->close();
-                ?>
 
                 <!-- ÉVÉNEMENT 1 -->
                 <div class="min-w-[320px] snap-center bg-gradient-to-br from-blue-50 to-cyan-50 border rounded-2xl p-6 shadow hover:shadow-xl transition-all duration-300">
