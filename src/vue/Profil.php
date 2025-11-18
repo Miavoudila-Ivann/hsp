@@ -101,7 +101,7 @@ if (!isset($_SESSION['id_utilisateur'])) {
 <div class="container">
     <h1>Profil</h1>
 
-    <form action="src/traitement/ModifierProfilTrt.php" method="POST">
+    <form action="../traitement/ModifierProfilTrt.php" method="POST">
         <label for="nom">Nom :</label>
         <input type="text" id="nom" name="nom" value="<?php echo htmlspecialchars($_SESSION['nom']); ?>" required>
 

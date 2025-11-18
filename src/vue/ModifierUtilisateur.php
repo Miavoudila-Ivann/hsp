@@ -16,7 +16,7 @@ $bdd = $database->getBdd();
 $repo = new UtilisateurRepository($bdd);
 
 if (!isset($_GET['email'])) {
-    header("Location: ListeUtilisateurs.php");
+    header("Location: admin.php");
     exit();
 }
 
@@ -24,7 +24,7 @@ $email = $_GET['email'];
 $utilisateur = $repo->getUtilisateurParMail($email);
 
 if (!$utilisateur) {
-    header("Location: ListeUtilisateurs.php");
+    header("Location: admin.php");
     exit();
 }
 
@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
 <h2>Modifier utilisateur</h2>
-<a class="back-btn" href="ListeUtilisateurs.php">&larr; Retour à la liste</a>
+<a class="back-btn" href="admin.php">&larr; Retour à la liste</a>
 
 <?php if ($error): ?>
     <div class="message error"><?= htmlspecialchars($error) ?></div>
