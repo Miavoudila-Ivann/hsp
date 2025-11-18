@@ -3,7 +3,6 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Import
 require_once '../../src/bdd/Bdd.php';
 require_once '../../src/repository/EvenementRepository.php';
 require_once '../../src/modele/Evenement.php';
@@ -15,11 +14,12 @@ $message = '';
 $error = '';
 
 try {
+    // Connexion à la base
     $database = new Bdd();
-    $bdd = $database->getBdd();
-
+    $bdd = $database->getBdd(); // doit retourner un objet PDO
     $repo = new EvenementRepository($bdd);
 
+    // Traitement du formulaire
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $titre = trim($_POST['titre'] ?? '');
         $description = trim($_POST['description'] ?? '');
@@ -28,19 +28,19 @@ try {
         $nb_place = trim($_POST['nb_place'] ?? '');
         $date_evenement = trim($_POST['date_evenement'] ?? '');
 
-        if (!empty($titre) && !empty($description) && !empty($type_evenement) && !empty($lieu) && !empty($nb_place) && !empty($date_evenement)) {
+        if ($titre && $description && $type_evenement && $lieu && $nb_place && $date_evenement) {
             $evenement = new Evenement([
-                    'titre' => $titre,
-                    'description' => $description,
-                    'type_evenement' => $type_evenement,
-                    'lieu' => $lieu,
-                    'nb_place' => $nb_place,
-                    'date_evenement' => $date_evenement
+                'titre' => $titre,
+                'description' => $description,
+                'type_evenement' => $type_evenement,
+                'lieu' => $lieu,
+                'nb_place' => $nb_place,
+                'date_evenement' => $date_evenement
             ]);
 
             if ($repo->creerEvenement($evenement)) {
                 $message = 'Événement ajouté avec succès ! Vous allez être redirigé.';
-                echo '<script>setTimeout(function(){ window.location.href = "CreeEvenement.php"; }, 2000);</script>';
+                echo '<script>setTimeout(function(){ window.location.href = "ListeEvenement.php"; }, 2000);</script>';
             } else {
                 $error = "Erreur lors de l'ajout. Veuillez réessayer.";
             }
@@ -48,6 +48,7 @@ try {
             $error = 'Tous les champs sont obligatoires.';
         }
     }
+
 } catch (Exception $e) {
     error_log('Erreur : ' . $e->getMessage());
     $error = "Erreur de connexion à la base de données.";
@@ -60,57 +61,18 @@ try {
     <meta charset="UTF-8">
     <title>Créer un événement</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 20px auto;
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; }
+        .form-section { background: #f9f9f9; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 20px; }
+        label { font-weight: bold; }
+        input[type="text"], input[type="date"], input[type="number"], textarea, select {
+            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;
         }
-        .form-section {
-            background: #f9f9f9;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            font-weight: bold;
-        }
-        input[type="text"],
-        input[type="date"],
-        input[type="number"],
-        textarea,
-        select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        input[type="submit"] {
-            width: 100%;
-            background: #007bff;
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        .message {
-            margin-top: 20px;
-            padding: 12px;
-            border-radius: 4px;
-            font-weight: bold;
-            text-align: center;
-        }
+        input[type="submit"] { width: 100%; background: #007bff; color: white; padding: 12px; border: none; border-radius: 4px; font-size: 16px; }
+        .message { margin-top: 20px; padding: 12px; border-radius: 4px; font-weight: bold; text-align: center; }
         .success { background: #d4edda; color: #155724; }
         .error { background: #f8d7da; color: #721c24; }
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #007bff;
-        }
+        .back-link { display: block; text-align: center; margin-top: 20px; color: #007bff; }
     </style>
 </head>
 <body>
@@ -140,12 +102,13 @@ try {
             <label for="type_evenement">Type d'événement :</label>
             <select name="type_evenement" id="type_evenement" required>
                 <option value="">-- Choisissez un type --</option>
-                <option value="conférence" <?= (($_POST['type_evenement'] ?? '') === 'conférence') ? 'selected' : '' ?>>Conférence</option>
-                <option value="atelier" <?= (($_POST['type_evenement'] ?? '') === 'atelier') ? 'selected' : '' ?>>Atelier</option>
-                <option value="séminaire" <?= (($_POST['type_evenement'] ?? '') === 'séminaire') ? 'selected' : '' ?>>Séminaire</option>
-                <option value="formation" <?= (($_POST['type_evenement'] ?? '') === 'formation') ? 'selected' : '' ?>>Formation</option>
-                <option value="fête" <?= (($_POST['type_evenement'] ?? '') === 'fête') ? 'selected' : '' ?>>Fête</option>
-
+                <?php
+                $types = ['conférence', 'atelier', 'séminaire', 'formation', 'fête'];
+                foreach ($types as $type) {
+                    $selected = (($_POST['type_evenement'] ?? '') === $type) ? 'selected' : '';
+                    echo "<option value=\"$type\" $selected>$type</option>";
+                }
+                ?>
             </select>
         </div>
 
@@ -171,117 +134,4 @@ try {
 </div>
 
 </body>
-</html>
-<?php
-// Activation des erreurs
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-// Import
-require_once '../../src/bdd/Bdd.php';
-require_once '../../src/repository/EvenementRepository.php';
-require_once '../../src/modele/Evenement.php';
-
-$message = '';
-$error = '';
-
-try {
-    $database = new Bdd();
-    $bdd = $database->getBdd();
-
-    $repo = new EvenementRepository($bdd);
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $titre = trim($_POST['titre'] ?? '');
-        $description = trim($_POST['description'] ?? '');
-        $type_evenement = trim($_POST['type_evenement'] ?? '');
-        $lieu = trim($_POST['lieu'] ?? '');
-        $nb_place = trim($_POST['nb_place'] ?? '');
-        $date_evenement = trim($_POST['date_evenement'] ?? '');
-
-        if (!empty($titre) && !empty($description) && !empty($type_evenement) && !empty($lieu) && !empty($nb_place) && !empty($date_evenement)) {
-            $evenement = new Evenement([
-                    'titre' => $titre,
-                    'description' => $description,
-                    'type_evenement' => $type_evenement,
-                    'lieu' => $lieu,
-                    'nb_place' => $nb_place,
-                    'date_evenement' => $date_evenement
-            ]);
-
-            if ($repo->creerEvenement($evenement)) {
-                $message = 'Événement ajouté avec succès ! Vous allez être redirigé.';
-                echo '<script>setTimeout(function(){ window.location.href = "CreeEvenement.php"; }, 2000);</script>';
-            } else {
-                $error = "Erreur lors de l'ajout. Veuillez réessayer.";
-            }
-        } else {
-            $error = 'Tous les champs sont obligatoires.';
-        }
-    }
-} catch (Exception $e) {
-    error_log('Erreur : ' . $e->getMessage());
-    $error = "Erreur de connexion à la base de données.";
-}
-?>
-
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Créer un événement</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 20px auto;
-        }
-        .form-section {
-            background: #f9f9f9;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            font-weight: bold;
-        }
-        input[type="text"],
-        input[type="date"],
-        input[type="number"],
-        textarea,
-        select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        input[type="submit"] {
-            width: 100%;
-            background: #007bff;
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        .message {
-            margin-top: 20px;
-            padding: 12px;
-            border-radius: 4px;
-            font-weight: bold;
-            text-align: center;
-        }
-        .success { background: #d4edda; color: #155724; }
-        .error { background: #f8d7da; color: #721c24; }
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #007bff;
-        }
-    </style>
-</head>
 </html>
