@@ -417,8 +417,6 @@ $hours = [
 
                 <!-- ÉVÉNEMENT 1 -->
                 <div class="min-w-[320px] snap-center bg-gradient-to-br from-blue-50 to-cyan-50 border rounded-2xl p-6 shadow hover:shadow-xl transition-all duration-300">
-                    <img src="https://images.pexels.com/photos/532792/pexels-photo-532792.jpeg?auto=compress&cs=tinysrgb&w=800"
-                         class="rounded-xl h-48 w-full object-cover mb-4">
                     <h3 class="text-xl font-bold text-gray-900 mb-2">Journée Don du Sang</h3>
                     <p class="text-gray-600 mb-4">
                         Participez à notre grande collecte annuelle. Sauvez des vies !
@@ -428,8 +426,6 @@ $hours = [
 
                 <!-- ÉVÉNEMENT 2 -->
                 <div class="min-w-[320px] snap-center bg-gradient-to-br from-blue-50 to-cyan-50 border rounded-2xl p-6 shadow hover:shadow-xl transition-all duration-300">
-                    <img src="https://images.pexels.com/photos/263402/pexels-photo-263402.jpeg?auto=compress&cs=tinysrgb&w=800"
-                         class="rounded-xl h-48 w-full object-cover mb-4">
                     <h3 class="text-xl font-bold text-gray-900 mb-2">Conférence Cardiologie</h3>
                     <p class="text-gray-600 mb-4">
                         Nos experts présenteront les avancées médicales de 2025.
@@ -439,8 +435,6 @@ $hours = [
 
                 <!-- ÉVÉNEMENT 3 -->
                 <div class="min-w-[320px] snap-center bg-gradient-to-br from-blue-50 to-cyan-50 border rounded-2xl p-6 shadow hover:shadow-xl transition-all duration-300">
-                    <img src="https://images.pexels.com/photos/1170979/pexels-photo-1170979.jpeg?auto=compress&cs=tinysrgb&w=800"
-                         class="rounded-xl h-48 w-full object-cover mb-4">
                     <h3 class="text-xl font-bold text-gray-900 mb-2">Semaine Prévention Santé</h3>
                     <p class="text-gray-600 mb-4">
                         Tests gratuits, ateliers et stands d'information.
