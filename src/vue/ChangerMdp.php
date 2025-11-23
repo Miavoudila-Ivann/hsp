@@ -7,11 +7,11 @@ $token = $_GET['token'] ?? '';
 $db = new Bdd();
 $pdo = $db->getBdd();
 
-$sql = $pdo->prepare("SELECT * FROM users WHERE reset_token=? AND reset_expires > NOW()");
+$sql = $pdo->prepare("SELECT * FROM utilisateur WHERE reset_token=? AND reset_expires > NOW()");
 $sql->execute([$token]);
-$user = $sql->fetch();
+$utilisateur = $sql->fetch();
 
-if (!$user) {
+if (!$utilisateur) {
     die("Lien invalide ou expiré.");
 }
 ?>
@@ -29,7 +29,7 @@ if (!$user) {
     <input type="hidden" name="token" value="<?php echo $token; ?>">
 
     <label>Nouveau mot de passe :</label><br>
-    <input type="password" name="password" required><br><br>
+    <input type="password" name="mdp" required><br><br>
 
     <button type="submit">Changer le mot de passe</button>
 </form>

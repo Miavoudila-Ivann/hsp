@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('Europe/Paris');
 
 require __DIR__ . '/../bdd/Bdd.php';
 
@@ -6,25 +7,25 @@ $db = new Bdd();
 $pdo = $db->getBdd();
 
 $token = $_POST['token'] ?? '';
-$password = $_POST['password'] ?? '';
+$mdp = $_POST['mdp'] ?? '';
 
-if (empty($token) || empty($password)) {
+if (empty($token) || empty($mdp)) {
     die("Erreur : données manquantes.");
 }
 
-$sql = $pdo->prepare("SELECT * FROM users WHERE reset_token=? AND reset_expires > NOW()");
+$sql = $pdo->prepare("SELECT * FROM utilisateur WHERE reset_token=? AND reset_expires > NOW()");
 $sql->execute([$token]);
-$user = $sql->fetch();
+$utilisateur = $sql->fetch();
 
-if (!$user) {
+if (!$utilisateur) {
     die("Lien invalide ou expiré.");
 }
 
-$newPass = password_hash($password, PASSWORD_DEFAULT);
+$newMdp = password_hash($mdp, PASSWORD_DEFAULT);
 
-$sql = $pdo->prepare("UPDATE users 
-                      SET password=?, reset_token=NULL, reset_expires=NULL 
+$sql = $pdo->prepare("UPDATE utilisateur 
+                      SET mdp=?, reset_token=NULL, reset_expires=NULL 
                       WHERE reset_token=?");
-$sql->execute([$newPass, $token]);
+$sql->execute([$newMdp, $token]);
 
 echo "Mot de passe mis à jour avec succès.";

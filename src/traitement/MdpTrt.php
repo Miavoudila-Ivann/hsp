@@ -21,21 +21,21 @@ if (empty($email)) {
 // Vérifier que l’email existe
 $sql = $pdo->prepare("SELECT id_utilisateur FROM utilisateur WHERE email = ?");
 $sql->execute([$email]);
-$user = $sql->fetch();
+$utilisateur = $sql->fetch();
 
-if (!$user) {
+if (!$utilisateur) {
     die("Aucun compte trouvé pour cet email.");
 }
 
 // Génération du token sécurisé
 $token = bin2hex(random_bytes(32));
-$expires = date("Y-m-d H:i:s", strtotime("+1 hour"));
+$expires = date("Y-m-d H:i:s", strtotime("+12 hour"));
 
 $sql = $pdo->prepare("UPDATE utilisateur SET reset_token=?, reset_expires=? WHERE email=?");
 $sql->execute([$token, $expires, $email]);
 
 // Lien vers reset
-$resetLink = "http://localhost/hsp/src/vue/ChangerMdp.php?token=$token";
+$resetLink = "http://localhost/Projet_Cours/PHP/hsp/src/vue/ChangerMdp.php?token=$token";
 
 // Envoi mail
 $mail = new PHPMailer(true);
