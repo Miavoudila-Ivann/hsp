@@ -22,7 +22,7 @@
     Conformément au Règlement Général sur la Protection des Données (RGPD),
     vous pouvez demander à consulter, modifier ou supprimer vos informations personnelles
     en nous contactant à l’adresse suivante : <strong>contact@hsp.fr</strong>.<br><br>
-    <a href="inscription.php">S'incrire</a>
+    <a href="Inscription.php">S'incrire</a>
 </p>
 </body>
 </html>

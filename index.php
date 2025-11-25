@@ -112,7 +112,9 @@ $hours = [
 
             <!-- Desktop Menu -->
             <div class="hidden md:flex items-center space-x-8">
+                <?php if (isset($_SESSION['id_utilisateur'])): ?>
                 <a href="src/vue/AjoutCandidature.php" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Candidatures</a>
+                <?php endif; ?>
                 <a href="src/vue/ListeEtablissement.php" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Etablissements</a>
                 <a href="#apropos" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">À Propos</a>
                 <a href="#contact" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Contact</a>
@@ -126,9 +128,6 @@ $hours = [
 
                 <!-- ✅ Si admin -->
                 <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin"): ?>
-                    <a href="src/vue/ListeUtilisateurs.php" class="text-gray-700 hover:text-red-600 transition-colors font-medium">
-                        👥 Liste des utilisateurs
-                    </a>
                     <form action="src/vue/admin.php" method="get">
                         <button type="submit" class="text-gray-700 hover:text-red-600 font-medium">👥 Accéder au Dashboard</button>
                     </form>
@@ -137,7 +136,7 @@ $hours = [
                 <!-- ✅ Si médecin -->
                 <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "medecin"): ?>
                     <a href="src/vue/ListeUtilisateurs.php" class="text-gray-700 hover:text-red-600 transition-colors font-medium">
-                        👥 Liste des utilisateurs
+                        👥 Liste des élèves
                     </a>
                 <?php endif; ?>
 
