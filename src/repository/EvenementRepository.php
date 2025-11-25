@@ -84,15 +84,21 @@ class EvenementRepository
         return null;
     }
 
-    // Méthode pour récupérer tous les événements
-    public function findAll(): array
+    // 🔹 Méthode pour récupérer tous les événements sous forme d'objets Evenement
+    public function getAllEvenements(): array
     {
         try {
-            $sql = "SELECT * FROM evenement ORDER BY id_evenement ASC";
-            $stmt = $this->bdd->query($sql);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt = $this->bdd->query("SELECT * FROM evenement ORDER BY date_evenement DESC");
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $evenements = [];
+            foreach ($rows as $row) {
+                $evenements[] = new Evenement($row);
+            }
+
+            return $evenements;
         } catch (PDOException $e) {
-            error_log("Erreur findAll évenement : " . $e->getMessage());
+            error_log("Erreur lors de la récupération des événements : " . $e->getMessage());
             return [];
         }
     }

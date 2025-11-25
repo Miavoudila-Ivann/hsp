@@ -1,6 +1,19 @@
 <?php
 session_start();
 ?>
+
+<?php
+require_once 'src/bdd/Bdd.php';
+require_once 'src/repository/EvenementRepository.php';
+require_once 'src/modele/Evenement.php';
+
+use repository\EvenementRepository;
+
+$bdd = (new Bdd())->getBdd();
+$evenementRepo = new EvenementRepository($bdd);
+$evenements = $evenementRepo->getAllEvenements();
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
