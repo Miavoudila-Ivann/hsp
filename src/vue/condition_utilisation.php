@@ -50,7 +50,7 @@
     Adresse : 12 Avenue de la Santé, 75014 Paris, France<br>
     Téléphone : +33 1 23 45 67 89<br>
     Email : contact@hopital-sudparis.fr.<br><br>
-    <a href="inscription.php">S'incrire</a>
+    <a href="Inscription.php">S'incrire</a>
 </p>
 </body>
 </html>

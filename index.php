@@ -99,7 +99,9 @@ $hours = [
 
             <!-- Desktop Menu -->
             <div class="hidden md:flex items-center space-x-8">
+                <?php if (isset($_SESSION['id_utilisateur'])): ?>
                 <a href="src/vue/AjoutCandidature.php" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Candidatures</a>
+                <?php endif; ?>
                 <a href="src/vue/ListeEtablissement.php" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Etablissements</a>
                 <a href="#apropos" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">À Propos</a>
                 <a href="#contact" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Contact</a>
