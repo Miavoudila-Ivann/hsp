@@ -310,7 +310,7 @@ VALUES
 (20, 'DupontDeLigoness', 'Dody', 'proto@gmail.com', '44', 93200, 'Pierrefitte', '$2y$10$xSq7A.7tq25rF2EUTtE2IeuMb//8eH2qGS0Aop/4yJKz2c5xou5j2', 'user', 'Attente', NULL, NULL),
 (21, 'Touzanine', 'Mohamed', 'MohamedTouzanine@gmail.com', '33', 44500, 'Nante', '$2y$10$In/iCMFOBnhKJYTHmmG9reEd/MDDkGAXDN023oR6UP.UirepuOVOq', 'medecin', 'Attente', NULL, NULL),
 (22, 'azert', 'azertyu', 'azazaz@proto.fr', '28', 93200, 'ST-Denis', '$2y$10$7CJRZRhK/QQLBn7MvAsbp.nx9l76Ci5iRfwvVAdoDal90Q5l7nS9q', 'attente de confirmation', 'Attente', NULL, NULL),
-(23, 'bave', 'bave', 'e.idbraim@lprs.fr', 'bave', 95200, 'baveville', '$2y$10$gGPwllvH5UNJ4exs6djlzeP95w/wyimb1aQvdRXOYgZggluWXpjke', 'attente de confirmation', 'Attente', '3ea9281dffb816684b41504409621f92f5c6a638cc46b615ba6a347b77d3c264', '2025-11-23 19:17:43');
+(23, 'bave', 'bave', 'e.idbraim@lprs.fr', 'bave', 95200, 'baveville', '$2y$10$gGPwllvH5UNJ4exs6djlzeP95w/wyimb1aQvdRXOYgZggluWXpjke', 'admin', 'Attente', '3ea9281dffb816684b41504409621f92f5c6a638cc46b615ba6a347b77d3c264', '2025-11-23 19:17:43');
 
 --
 -- Contraintes pour les tables déchargées

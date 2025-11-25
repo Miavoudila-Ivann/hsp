@@ -13,7 +13,7 @@ $utilisateur = $sql->fetch();
 
 if (!$utilisateur) {
     die("Lien invalide ou expiré.");
-}
+}include __DIR__ . '/header.php';
 ?>
 
 <!DOCTYPE html>
