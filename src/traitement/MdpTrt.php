@@ -35,7 +35,7 @@ $sql = $pdo->prepare("UPDATE utilisateur SET reset_token=?, reset_expires=? WHER
 $sql->execute([$token, $expires, $email]);
 
 // Lien vers reset
-$resetLink = "http://localhost/Projet_Cours/PHP/hsp/src/vue/ChangerMdp.php?token=$token";
+$resetLink = "http://localhost/hsp/src/vue/ChangerMdp.php?token=$token";
 
 // Envoi mail
 $mail = new PHPMailer(true);
