@@ -36,49 +36,49 @@ $established_year = 1985;
 
 // Services disponibles
 $services = [
-        ['icon' => '🚨', 'title' => 'Urgences 24/7', 'description' => "Service d'urgence disponible jour et nuit avec des médecins spécialisés."],
-        ['icon' => '🩺', 'title' => 'Consultations', 'description' => 'Consultations médicales générales et spécialisées sur rendez-vous.'],
-        ['icon' => '❤️', 'title' => 'Cardiologie', 'description' => 'Service de cardiologie équipé des technologies les plus avancées.'],
-        ['icon' => '👶', 'title' => 'Pédiatrie', 'description' => 'Soins dédiés aux enfants avec une équipe bienveillante et expérimentée.'],
-        ['icon' => '🦴', 'title' => 'Orthopédie', 'description' => 'Traitement des pathologies osseuses et articulaires.'],
-        ['icon' => '🧠', 'title' => 'Neurologie', 'description' => 'Diagnostic et traitement des maladies du système nerveux.'],
-        ['icon' => '🔬', 'title' => 'Laboratoire', 'description' => 'Analyses médicales avec résultats rapides et précis.'],
-        ['icon' => '💉', 'title' => 'Vaccination', 'description' => 'Centre de vaccination pour tous les âges.']
+    ['icon' => '🚨', 'title' => 'Urgences 24/7', 'description' => "Service d'urgence disponible jour et nuit avec des médecins spécialisés."],
+    ['icon' => '🩺', 'title' => 'Consultations', 'description' => 'Consultations médicales générales et spécialisées sur rendez-vous.'],
+    ['icon' => '❤️', 'title' => 'Cardiologie', 'description' => 'Service de cardiologie équipé des technologies les plus avancées.'],
+    ['icon' => '👶', 'title' => 'Pédiatrie', 'description' => 'Soins dédiés aux enfants avec une équipe bienveillante et expérimentée.'],
+    ['icon' => '🦴', 'title' => 'Orthopédie', 'description' => 'Traitement des pathologies osseuses et articulaires.'],
+    ['icon' => '🧠', 'title' => 'Neurologie', 'description' => 'Diagnostic et traitement des maladies du système nerveux.'],
+    ['icon' => '🔬', 'title' => 'Laboratoire', 'description' => 'Analyses médicales avec résultats rapides et précis.'],
+    ['icon' => '💉', 'title' => 'Vaccination', 'description' => 'Centre de vaccination pour tous les âges.']
 ];
 
 // Statistiques
 $stats = [
-        ['number' => '15000+', 'label' => 'Patients par an'],
-        ['number' => '200+', 'label' => 'Professionnels'],
-        ['number' => '30+', 'label' => 'Spécialités'],
-        ['number' => '24/7', 'label' => 'Disponibilité']
+    ['number' => '15000+', 'label' => 'Patients par an'],
+    ['number' => '200+', 'label' => 'Professionnels'],
+    ['number' => '30+', 'label' => 'Spécialités'],
+    ['number' => '24/7', 'label' => 'Disponibilité']
 ];
 
 // Points forts
 $features = [
-        ['icon' => '🏆', 'title' => 'Excellence Reconnue', 'description' => 'Certifications nationales et internationales'],
-        ['icon' => '👥', 'title' => "Équipe d'Excellence", 'description' => 'Plus de 200 professionnels hautement qualifiés'],
-        ['icon' => '⚡', 'title' => 'Technologie de Pointe', 'description' => 'Équipements médicaux les plus avancés']
+    ['icon' => '🏆', 'title' => 'Excellence Reconnue', 'description' => 'Certifications nationales et internationales'],
+    ['icon' => '👥', 'title' => "Équipe d'Excellence", 'description' => 'Plus de 200 professionnels hautement qualifiés'],
+    ['icon' => '⚡', 'title' => 'Technologie de Pointe', 'description' => 'Équipements médicaux les plus avancés']
 ];
 
 // Informations de contact
 $contact = [
-        'address' => '15 Avenue de la République',
-        'city' => '94250 Gentilly',
-        'country' => 'France',
-        'phone' => '+33 1 45 67 89 00',
-        'emergency' => '15',
-        'email_contact' => 'contact@hopitalsudparis.fr',
-        'email_rdv' => 'rdv@hopitalsudparis.fr'
+    'address' => '15 Avenue de la République',
+    'city' => '94250 Gentilly',
+    'country' => 'France',
+    'phone' => '+33 1 45 67 89 00',
+    'emergency' => '15',
+    'email_contact' => 'contact@hopitalsudparis.fr',
+    'email_rdv' => 'rdv@hopitalsudparis.fr'
 ];
 
 // Horaires
 $hours = [
-        'urgences' => 'Ouvert 24h/24, 7j/7',
-        'consultations' => [
-                'Lundi - Vendredi: 8h00 - 20h00',
-                'Samedi: 9h00 - 18h00'
-        ]
+    'urgences' => 'Ouvert 24h/24, 7j/7',
+    'consultations' => [
+        'Lundi - Vendredi: 8h00 - 20h00',
+        'Samedi: 9h00 - 18h00'
+    ]
 ];
 ?>
 
@@ -203,7 +203,7 @@ $hours = [
     </div>
 </nav
 
-<!-- Hero Section -->
+        <!-- Hero Section -->
 <section id="accueil" class="pt-20 bg-gradient-to-br from-blue-50 via-white to-cyan-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         <div class="grid md:grid-cols-2 gap-12 items-center">
