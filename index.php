@@ -410,6 +410,46 @@ $hours = [
             </p>
         </div>
 
+        <div class="relative">
+            <div id="eventCarousel"
+                 class="flex overflow-x-auto space-x-6 pb-4 snap-x snap-mandatory scroll-smooth">
+
+                <?php if (!empty($evenements)): ?>
+                    <?php foreach ($evenements as $ev): ?>
+                        <div class="min-w-[320px] snap-center bg-gradient-to-br from-blue-50 to-cyan-50 border rounded-2xl p-6 shadow hover:shadow-xl transition-all duration-300">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2"><?= htmlspecialchars($ev->getTitre()) ?></h3>
+                            <p class="text-gray-600 mb-4"><?= htmlspecialchars($ev->getDescription()) ?></p>
+                            <div class="text-blue-600 font-semibold"><?= date('d M Y', strtotime($ev->getDateEvenement())) ?></div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="text-gray-600">Aucun événement pour le moment.</p>
+                <?php endif; ?>
+
+            </div>
+
+            <button onclick="scrollEvents(-1)"
+                    class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow p-3 rounded-full hover:scale-110 transition">
+                ◀
+            </button>
+            <button onclick="scrollEvents(1)"
+                    class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow p-3 rounded-full hover:scale-110 transition">
+                ▶
+            </button>
+        </div>
+    </div>
+</section>
+
+<script>
+    function scrollEvents(direction) {
+        const carousel = document.getElementById('eventCarousel');
+        carousel.scrollBy({
+            left: direction * 350,
+            behavior: 'smooth'
+        });
+    }
+</script>
+
         <!-- CARROUSEL EVENTS -->
         <div class="relative">
             <div id="eventCarousel"
