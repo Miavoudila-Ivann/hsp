@@ -82,7 +82,7 @@ $utilisateurs = $utilisateurRepo->findAll();
 $candidatures = $candidatureRepo->findAll();
 $contrats = $contratRepo->findAll();
 $etablissements = $etablissementRepo->findAll();
-$evenements = $evenementRepo->findAll();
+$evenements = $evenementRepo->getAllEvenements();
 $hopitaux = $hopitalRepo->findAll();
 
 include __DIR__ . '/header.php';

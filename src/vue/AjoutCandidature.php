@@ -1,6 +1,6 @@
 <?php
-// --- Partie PHP ---
 session_start();
+
 require_once __DIR__ . '/../bdd/Bdd.php';
 require_once __DIR__ . '/../repository/CandidatureRepository.php';
 require_once __DIR__ . '/../modele/Candidature.php';
@@ -25,11 +25,14 @@ $offreRepo = new OffreRepository($bdd);
 
 // Récupérer toutes les entreprises et offres
 $entreprises = $entrepriseRepo->findAll();
-$offres = $offreRepo->findAll(); // objets Offre
+$offres = $offreRepo->findAll();
 
 // Vérification session utilisateur
 $ref_utilisateur = $_SESSION['id_utilisateur'] ?? null;
 if (!$ref_utilisateur) die("Utilisateur non connecté !");
+
+// ✅ Nom hôpital sécurisé pour la navbar
+$hospital_name = htmlspecialchars($_SESSION["hospital_name"] ?? "Hopital Sud Paris");
 
 $message = '';
 $error = '';
@@ -41,15 +44,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ref_offre = $_POST['ref_offre'] ?? '';
 
     $cv_path = null;
+
     if (!empty($_FILES['cv']['name'])) {
         $uploadDir = __DIR__ . '/../uploads/cv/';
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
 
         $extension = pathinfo($_FILES['cv']['name'], PATHINFO_EXTENSION);
         $allowed = ['pdf','doc','docx'];
+
         if (in_array(strtolower($extension), $allowed)) {
             $filename = 'cv_'.$ref_utilisateur.'_'.time().'.'.$extension;
             $targetPath = $uploadDir.$filename;
+
             if (move_uploaded_file($_FILES['cv']['tmp_name'], $targetPath)) {
                 $cv_path = 'uploads/cv/'.$filename;
             }
@@ -87,71 +93,169 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "Tous les champs sont obligatoires.";
     }
 }
-
-include __DIR__ . '/header.php';
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>Ajouter une Candidature</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ✅ TAILWIND POUR LA NAVBAR -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fc;
+            padding-top: 110px; /* espace pour la navbar */
+        }
+
+        .form-section {
+            background: white;
+            max-width: 700px;
+            margin: 0 auto 50px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2563eb;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        button {
+            margin-top: 25px;
+            width: 100%;
+            padding: 12px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .success {
+            color: #16a34a;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .error {
+            color: #dc2626;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
+
+<!-- ✅ NAVBAR -->
+<nav class="fixed top-0 w-full bg-white/95 backdrop-blur-sm shadow-sm z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-20">
+
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-br from-blue-600 to-cyan-500 p-2 rounded-lg">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                </div>
+                <span class="text-2xl font-bold text-blue-700">
+                    <?= $hospital_name ?>
+                </span>
+            </div>
+
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="../../index.php" class="text-gray-700 hover:text-blue-600 font-medium">Accueil</a>
+                <a href="ListeEtablissement.php" class="text-gray-700 hover:text-blue-600 font-medium">Etablissements</a>
+                <a href="Profil.php" class="text-gray-700 hover:text-blue-600 font-medium">Profil</a>
+            </div>
+        </div>
+    </div>
+</nav>
+<!-- ✅ FIN NAVBAR -->
+
+
 <div class="form-section">
     <h1>Ajouter une Candidature</h1>
 
     <?php if ($message): ?>
-        <div style="color:green;"><?= htmlspecialchars($message) ?></div>
+        <div class="success"><?= htmlspecialchars($message) ?></div>
     <?php endif; ?>
+
     <?php if ($error): ?>
-        <div style="color:red;"><?= htmlspecialchars($error) ?></div>
+        <div class="error"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
 
     <form method="POST" enctype="multipart/form-data">
-        <div>
-            <label for="offre">Offre :</label>
-            <select name="ref_offre" id="offre" required>
-                <option value="">-- Sélectionnez une offre --</option>
-                <?php foreach ($offres as $offre): ?>
-                    <?php
-                    $nomEntreprise = '';
-                    foreach ($entreprises as $entreprise) {
-                        if ($entreprise->getId() == $offre->getRefEntreprise()) {
-                            $nomEntreprise = $entreprise->getNom();
-                            break;
-                        }
+
+        <label>Offre :</label>
+        <select name="ref_offre" required>
+            <option value="">-- Sélectionnez une offre --</option>
+            <?php foreach ($offres as $offre): ?>
+                <?php
+                $nomEntreprise = '';
+                foreach ($entreprises as $entreprise) {
+                    if ($entreprise->getId() == $offre->getRefEntreprise()) {
+                        $nomEntreprise = $entreprise->getNom();
+                        break;
                     }
-                    ?>
-                    <option value="<?= htmlspecialchars($offre->getIdOffre()) ?>">
-                        <?= htmlspecialchars($offre->getTitre()) ?> (<?= htmlspecialchars($nomEntreprise) ?>)
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
+                }
+                ?>
+                <option value="<?= htmlspecialchars($offre->getIdOffre()) ?>">
+                    <?= htmlspecialchars($offre->getTitre()) ?> (<?= htmlspecialchars($nomEntreprise) ?>)
+                </option>
+            <?php endforeach; ?>
+        </select>
 
-        <div>
-            <label for="nom">Nom :</label>
-            <input type="text" name="nom" id="nom" required>
-        </div>
+        <label>Nom :</label>
+        <input type="text" name="nom" required>
 
-        <div>
-            <label for="prenom">Prénom :</label>
-            <input type="text" name="prenom" id="prenom" required>
-        </div>
+        <label>Prénom :</label>
+        <input type="text" name="prenom" required>
 
-        <div>
-            <label for="motivation">Motivation :</label>
-            <textarea name="motivation" id="motivation" required></textarea>
-        </div>
+        <label>Motivation :</label>
+        <textarea name="motivation" required></textarea>
 
-        <div>
-            <label for="cv">CV :</label>
-            <input type="file" name="cv" id="cv" accept=".pdf,.doc,.docx">
-        </div>
+        <label>CV :</label>
+        <input type="file" name="cv" accept=".pdf,.doc,.docx">
 
         <button type="submit">Postuler</button>
+
     </form>
 </div>
+
 </body>
 </html>
