@@ -213,21 +213,23 @@ include __DIR__ . '/header.php';
         <tr><th>ID</th><th>Titre</th><th>Description</th><th>Type</th><th>Lieu</th><th>Places</th><th>Date</th><th>Actions</th></tr>
         <?php foreach($evenements as $ev): ?>
             <tr>
-                <td><?= htmlspecialchars($ev['id_evenement'] ?? '') ?></td>
-                <td><?= htmlspecialchars($ev['titre'] ?? '') ?></td>
-                <td><?= htmlspecialchars($ev['description'] ?? '') ?></td>
-                <td><?= htmlspecialchars($ev['type_evenement'] ?? '') ?></td>
-                <td><?= htmlspecialchars($ev['lieu'] ?? '') ?></td>
-                <td><?= htmlspecialchars($ev['nb_place'] ?? '') ?></td>
-                <td><?= htmlspecialchars($ev['date_evenement'] ?? '') ?></td>
+                <td><?= htmlspecialchars($ev->getIdEvenement()) ?></td>
+                <td><?= htmlspecialchars($ev->getTitre()) ?></td>
+                <td><?= htmlspecialchars($ev->getDescription()) ?></td>
+                <td><?= htmlspecialchars($ev->getTypeEvenement()) ?></td>
+                <td><?= htmlspecialchars($ev->getLieu()) ?></td>
+                <td><?= htmlspecialchars($ev->getNbPlace()) ?></td>
+                <td><?= htmlspecialchars($ev->getDateEvenement()) ?></td>
                 <td>
-                    <a href="../vue/modifierEvenement.php?id=<?= htmlspecialchars($ev['id_evenement'] ?? '') ?>">Modifier</a> |
-                    <a href="../vue/ListeEvenement.php?delete=<?= htmlspecialchars($ev['id_evenement'] ?? '') ?>" onclick="return confirm('Supprimer cet événement ?')">Supprimer</a>
+                    <a href="../vue/modifierEvenement.php?id=<?= htmlspecialchars($ev->getIdEvenement()) ?>">Modifier</a> |
+                    <a href="../vue/ListeEvenement.php?delete=<?= htmlspecialchars($ev->getIdEvenement()) ?>" onclick="return confirm('Supprimer cet événement ?')">Supprimer</a>
                 </td>
             </tr>
         <?php endforeach; ?>
     </table>
 </section>
+
+
 
 <!-- ===================== HOPITAUX ===================== -->
 <section>
