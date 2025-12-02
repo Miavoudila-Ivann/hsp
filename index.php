@@ -469,14 +469,7 @@ Z
 
 
 
-                <!-- ÉVÉNEMENT 2 -->
-                <div class="min-w-[320px] snap-center bg-gradient-to-br from-blue-50 to-cyan-50 border rounded-2xl p-6 shadow hover:shadow-xl transition-all duration-300">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Conférence Cardiologie</h3>
-                    <p class="text-gray-600 mb-4">
-                        Nos experts présenteront les avancées médicales de 2025.
-                    </p>
-                    <div class="text-blue-600 font-semibold">24 Avril 2025</div>
-                </div>
+
 
                 <!-- ÉVÉNEMENT 3 -->
                 <div class="min-w-[320px] snap-center bg-gradient-to-br from-blue-50 to-cyan-50 border rounded-2xl p-6 shadow hover:shadow-xl transition-all duration-300">
