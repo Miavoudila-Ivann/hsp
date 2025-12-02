@@ -471,15 +471,7 @@ Z
 
 
 
-                <!-- ÉVÉNEMENT 3 -->
-                <div class="min-w-[320px] snap-center bg-gradient-to-br from-blue-50 to-cyan-50 border rounded-2xl p-6 shadow hover:shadow-xl transition-all duration-300">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Semaine Prévention Santé</h3>
-                    <p class="text-gray-600 mb-4">
-                        Tests gratuits, ateliers et stands d'information.
-                    </p>
-                    <div class="text-blue-600 font-semibold">7–14 Mai 2025</div>
-                </div>
-            </div>
+
 
             <!-- BOUTONS SLIDE -->
             <button onclick="scrollEvents(-1)"
