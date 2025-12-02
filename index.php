@@ -461,6 +461,29 @@ $hours = [
         });
     }
 </script>
+Z
+        <!-- CARROUSEL EVENTS -->
+        <div class="relative">
+            <div id="eventCarousel"
+                 class="flex overflow-x-auto space-x-6 pb-4 snap-x snap-mandatory scroll-smooth">
+
+
+
+
+
+
+            <!-- BOUTONS SLIDE -->
+            <button onclick="scrollEvents(-1)"
+                    class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow p-3 rounded-full hover:scale-110 transition">
+                ◀
+            </button>
+            <button onclick="scrollEvents(1)"
+                    class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow p-3 rounded-full hover:scale-110 transition">
+                ▶
+            </button>
+        </div>
+    </div>
+</section>
 
 <script>
     function scrollEvents(direction) {
