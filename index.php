@@ -461,20 +461,13 @@ $hours = [
         });
     }
 </script>
-
+Z
         <!-- CARROUSEL EVENTS -->
         <div class="relative">
             <div id="eventCarousel"
                  class="flex overflow-x-auto space-x-6 pb-4 snap-x snap-mandatory scroll-smooth">
 
-                <!-- ÉVÉNEMENT 1 -->
-                <div class="min-w-[320px] snap-center bg-gradient-to-br from-blue-50 to-cyan-50 border rounded-2xl p-6 shadow hover:shadow-xl transition-all duration-300">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Journée Don du Sang</h3>
-                    <p class="text-gray-600 mb-4">
-                        Participez à notre grande collecte annuelle. Sauvez des vies !
-                    </p>
-                    <div class="text-blue-600 font-semibold">12 Mars 2025</div>
-                </div>
+
 
                 <!-- ÉVÉNEMENT 2 -->
                 <div class="min-w-[320px] snap-center bg-gradient-to-br from-blue-50 to-cyan-50 border rounded-2xl p-6 shadow hover:shadow-xl transition-all duration-300">
