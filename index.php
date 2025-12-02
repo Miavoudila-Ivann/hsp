@@ -472,6 +472,7 @@ Z
 
 
 
+
             <!-- BOUTONS SLIDE -->
             <button onclick="scrollEvents(-1)"
                     class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow p-3 rounded-full hover:scale-110 transition">
