@@ -3,20 +3,20 @@ namespace modele;
 
 class Entreprise
 {
-    private ?int $id;
-    private ?string $nom;
-    private ?string $rue;
-    private ?string $ville;
-    private ?int $cd;
-    private ?string $siteWeb;
+    private int $id;
+    private string $nom;
+    private string $rue;
+    private string $ville;
+    private int $cd;
+    private string $siteWeb;
 
         public function __construct(array $data = [])
     {
-        $this->id = $data['id_entreprise'] ?? $data['id'] ?? null;
+        $this->id = $data['id'] ?? 0;
         $this->nom = $data['nom_entreprise'] ?? $data['nom'] ?? '';
         $this->rue = $data['rue_entreprise'] ?? '';
         $this->ville = $data['ville_entreprise'] ?? '';
-        $this->cd = $data['cd_entreprise'] ?? null;
+        $this->cd = $data['cd_entreprise'] ?? 00000;
         $this->siteWeb = $data['site_web'] ?? '';
     }
 

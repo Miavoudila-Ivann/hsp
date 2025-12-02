@@ -132,7 +132,7 @@ $hours = [
                     <form action="src/vue/admin.php" method="get">
                         <button type="submit" class="text-gray-700 hover:text-red-600 font-medium">👥 Accéder au Dashboard</button>
                     </form>
-                    <form action="src/vue/Entreprise.php" method="get">
+                    <form action="src/vue/AjoutEntreprise.php" method="get">
                         <button type="submit" class="text-gray-700 hover:text-red-600 font-medium"> Entreprise </button>
                     </form>
                 <?php endif; ?>

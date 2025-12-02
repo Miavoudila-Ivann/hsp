@@ -8,7 +8,7 @@ use repository\EntrepriseRepository;
 use modele\Entreprise;
 
 if (!isset($_POST['ok'])) {
-    header('Location: ../vue/AjouterEntreprise.php');
+    header('Location: ../vue/AjoutEntreprise.php');
     exit;
 }
 
