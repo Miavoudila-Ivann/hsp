@@ -42,28 +42,22 @@ include __DIR__ . '/header.php';
     <title>Ajouter Offre</title>
 </head>
 <body>
-<h2>Ajouter une offre</h2>
 <form action="../traitement/AjouterOffreTrt.php" method="POST">
-    <label>Titre :</label>
-    <input type="text" name="titre" required>
-
-    <label>Description :</label>
-    <textarea name="description" required></textarea>
-
-    <label>Mission :</label>
-    <textarea name="mission" required></textarea>
-
-    <label>Salaire :</label>
-    <input type="text" name="salaire" required>
-
-    <label>Type d'offre :</label>
-    <input type="text" name="type_offre" required>
-
-    <label>État :</label>
-    <select name="etat" required>
-        <option value="ouverte">Ouverte</option>
-        <option value="fermée">Fermée</option>
-    </select>
+    <section id="offres" class="card">
+        <h2>Publier une Offre</h2>
+        <form action="AjouterOffre.php" method="POST">
+            <input type="text" name="titre" placeholder="Titre de l'offre" required>
+            <textarea name="description" placeholder="Description" required></textarea>
+            <textarea name="mission" placeholder="Missions principales" required></textarea>
+            <input type="number" name="salaire" placeholder="Salaire (en €)" required>
+            <select name="type_offre" required>
+                <option value="emploi">Emploi</option>
+                <option value="stage">Stage</option>
+                <option value="projet">Projet</option>
+            </select>
+            <input type="text" name="etat" placeholder="État (actif, inactif...)" required>
+        </form>
+    </section>
 
     <label>Entreprise :</label>
     <select name="ref_entreprise" required>

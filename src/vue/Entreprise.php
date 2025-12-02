@@ -85,43 +85,18 @@
 
 <header>
     <h1>Espace Partenaires - Entreprises</h1>
-    <nav>
-        <a href="#profil">Profil d'Entreprise</a>
-        <a href="#offres">Publication d'Offres</a>
-        <a href="#evenements">Publication d’Événements</a>
-    </nav>
 </header>
 
 <!-- ====================== PROFIL ENTREPRISE ======================= -->
 <section id="profil" class="card">
     <h2>Créer un Profil d’Entreprise</h2>
-    <form action="entreprise.php" method="POST">
+    <form action="Entreprise.php" method="POST">
         <input type="text" name="nom_entreprise" placeholder="Nom de l'entreprise" required>
         <input type="text" name="rue_entreprise" placeholder="Rue" required>
         <input type="text" name="ville_entreprise" placeholder="Ville" required>
         <input type="number" name="cd_entreprise" placeholder="Code postal" required>
         <input type="url" name="site_web" placeholder="Site web" required>
         <button type="submit">Créer le profil</button>
-    </form>
-</section>
-
-<!-- ====================== OFFRES ======================= -->
-<section id="offres" class="card">
-    <h2>Publier une Offre</h2>
-    <form action="offre.php" method="POST">
-        <input type="text" name="titre" placeholder="Titre de l'offre" required>
-        <textarea name="description" placeholder="Description" required></textarea>
-        <textarea name="mission" placeholder="Missions principales" required></textarea>
-        <input type="number" name="salaire" placeholder="Salaire (en €)" required>
-        <select name="type_offre" required>
-            <option value="emploi">Emploi</option>
-            <option value="stage">Stage</option>
-            <option value="projet">Projet</option>
-        </select>
-        <input type="text" name="etat" placeholder="État (actif, inactif...)" required>
-        <input type="text" name="ref_utilisateur" placeholder="Référence utilisateur" required>
-        <input type="text" name="ref_entreprise" placeholder="Référence entreprise" required>
-        <button type="submit">Publier l'offre</button>
     </form>
 </section>
 

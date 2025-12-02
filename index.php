@@ -140,6 +140,13 @@ $hours = [
                     </a>
                 <?php endif; ?>
 
+                <!-- ✅ Si entreprise -->
+                <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "entreprise"): ?>
+                    <form action="src/vue/AjouterOffre.php" method="get">
+                        <button type="submit" class="text-gray-700 hover:text-red-600 font-medium">👥 Offre </button>
+                    </form>
+                <?php endif; ?>
+
                 <!-- ✅ Bloc utilisateur connecté -->
                 <?php if (isset($_SESSION["id_utilisateur"])): ?>
                     <div class="flex items-center space-x-4 bg-gray-100 px-4 py-2 rounded-lg">
