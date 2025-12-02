@@ -112,8 +112,10 @@ $hours = [
 
             <!-- Desktop Menu -->
             <div class="hidden md:flex items-center space-x-8">
-                <?php if (isset($_SESSION['id_utilisateur'])): ?>
-                <a href="src/vue/AjoutCandidature.php" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Candidatures</a>
+                <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "user"): ?>
+                    <form action="src/vue/AjoutCandidature.php" method="get">
+                        <button type="submit" class="text-gray-700 hover:text-red-600 font-medium"> Candidatures </button>
+                    </form>
                 <?php endif; ?>
                 <a href="src/vue/ListeEtablissement.php" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Etablissements</a>
                 <a href="#apropos" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">À Propos</a>
@@ -126,28 +128,30 @@ $hours = [
                     </a>
                 <?php endif; ?>
 
-                <!-- ✅ Si admin -->
                 <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin"): ?>
                     <form action="src/vue/admin.php" method="get">
                         <button type="submit" class="text-gray-700 hover:text-red-600 font-medium">👥 Accéder au Dashboard</button>
                     </form>
+                    <form action="src/vue/Entreprise.php" method="get">
+                        <button type="submit" class="text-gray-700 hover:text-red-600 font-medium"> Entreprise </button>
+                    </form>
                 <?php endif; ?>
 
-                <!-- ✅ Si médecin -->
                 <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "medecin"): ?>
                     <a href="src/vue/ListeUtilisateurs.php" class="text-gray-700 hover:text-red-600 transition-colors font-medium">
                         👥 Liste des élèves
                     </a>
+                    <a href="src/vue/CreeEvenement.php" class="text-gray-700 hover:text-red-600 transition-colors font-medium">
+                        Evenements
+                    </a>
                 <?php endif; ?>
 
-                <!-- ✅ Si entreprise -->
                 <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "entreprise"): ?>
                     <form action="src/vue/AjouterOffre.php" method="get">
                         <button type="submit" class="text-gray-700 hover:text-red-600 font-medium">👥 Offre </button>
                     </form>
                 <?php endif; ?>
 
-                <!-- ✅ Bloc utilisateur connecté -->
                 <?php if (isset($_SESSION["id_utilisateur"])): ?>
                     <div class="flex items-center space-x-4 bg-gray-100 px-4 py-2 rounded-lg">
                         <div class="text-right">
@@ -163,7 +167,6 @@ $hours = [
                         </a>
                     </div>
 
-                    <!-- ✅ Bloc Rejoins Nous (si non connecté) -->
                 <?php else: ?>
                     <div class="relative" id="dropdownContainer">
                         <button id="dropdownButton" class="text-gray-700 hover:text-blue-600 font-medium focus:outline-none flex items-center">

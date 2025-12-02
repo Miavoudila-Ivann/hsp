@@ -87,7 +87,6 @@
     <h1>Espace Partenaires - Entreprises</h1>
 </header>
 
-<!-- ====================== PROFIL ENTREPRISE ======================= -->
 <section id="profil" class="card">
     <h2>Créer un Profil d’Entreprise</h2>
     <form action="Entreprise.php" method="POST">
@@ -97,20 +96,6 @@
         <input type="number" name="cd_entreprise" placeholder="Code postal" required>
         <input type="url" name="site_web" placeholder="Site web" required>
         <button type="submit">Créer le profil</button>
-    </form>
-</section>
-
-<!-- ====================== EVENEMENTS ======================= -->
-<section id="evenements" class="card">
-    <h2>Proposer un Événement</h2>
-    <form action="evenement.php" method="POST">
-        <input type="text" name="titre" placeholder="Titre de l’événement" required>
-        <textarea name="description" placeholder="Description de l’événement" required></textarea>
-        <input type="text" name="type_evenement" placeholder="Type d’événement" required>
-        <input type="text" name="lieu" placeholder="Lieu" required>
-        <input type="number" name="nb_place" placeholder="Nombre de places" required>
-        <input type="date" name="date_evenement" required>
-        <button type="submit">Publier l’événement</button>
     </form>
 </section>
 
