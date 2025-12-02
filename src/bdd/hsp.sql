@@ -275,6 +275,21 @@ CREATE TABLE IF NOT EXISTS `specialite` (
 
 -- --------------------------------------------------------
 
+CREATE TABLE rendez_vous (
+    id_rdv INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    telephone VARCHAR(20) NOT NULL,
+    service VARCHAR(100) NOT NULL,
+    date_souhait DATE NOT NULL,
+    message TEXT,
+    id_medecin INT DEFAULT NULL,
+    statut ENUM('en_attente','accepte','refuse') DEFAULT 'en_attente',
+    date_creation DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- --------------------------------------------------------
+
 --
 -- Structure de la table `utilisateur`
 --
