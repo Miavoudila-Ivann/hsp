@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mar. 02 déc. 2025 à 08:22
+-- Généré le : lun. 08 déc. 2025 à 22:58
 -- Version du serveur : 9.1.0
 -- Version de PHP : 8.3.14
 
@@ -47,6 +47,26 @@ CREATE TABLE IF NOT EXISTS `candidature` (
 
 INSERT INTO `candidature` (`id_candidature`, `motivation`, `statut`, `date_candidature`, `ref_offre`, `ref_utilisateur`, `cv_path`) VALUES
     (1, 'je veut travailler a la place de janine', 'acceptée', '2025-11-07', 1, 19, 'uploads/cv/cv_19_1762540757.pdf');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `commentaires`
+--
+
+DROP TABLE IF EXISTS `commentaires`;
+CREATE TABLE IF NOT EXISTS `commentaires` (
+                                              `id` int NOT NULL AUTO_INCREMENT,
+                                              `ressource_id` int NOT NULL,
+                                              `auteur_id` int NOT NULL,
+                                              `contenu` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                              `parent_id` int DEFAULT NULL,
+                                              `date_commentaire` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                              PRIMARY KEY (`id`),
+    KEY `ressource_id` (`ressource_id`),
+    KEY `auteur_id` (`auteur_id`),
+    KEY `parent_id` (`parent_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -245,6 +265,27 @@ CREATE TABLE IF NOT EXISTS `post` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `rendez_vous`
+--
+
+DROP TABLE IF EXISTS `rendez_vous`;
+CREATE TABLE IF NOT EXISTS `rendez_vous` (
+  `id_rdv` int NOT NULL AUTO_INCREMENT,
+  `nom` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `telephone` varchar(20) NOT NULL,
+  `service` varchar(100) NOT NULL,
+  `date_souhait` date NOT NULL,
+  `message` text,
+  `id_medecin` int DEFAULT NULL,
+  `statut` enum('en_attente','accepte','refuse') DEFAULT 'en_attente',
+  `date_creation` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_rdv`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `reponse`
 --
 
@@ -263,6 +304,24 @@ CREATE TABLE IF NOT EXISTS `reponse` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `ressources_contenu`
+--
+
+DROP TABLE IF EXISTS `ressources_contenu`;
+CREATE TABLE IF NOT EXISTS `ressources_contenu` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `titre` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `contenu` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `auteur_id` int NOT NULL,
+  `categorie` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'autre',
+  `date_publication` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `auteur_id` (`auteur_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `specialite`
 --
 
@@ -272,21 +331,6 @@ CREATE TABLE IF NOT EXISTS `specialite` (
   `libelle` int NOT NULL,
   PRIMARY KEY (`id_specialite`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
-
--- --------------------------------------------------------
-
-CREATE TABLE rendez_vous (
-    id_rdv INT AUTO_INCREMENT PRIMARY KEY,
-    nom VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    telephone VARCHAR(20) NOT NULL,
-    service VARCHAR(100) NOT NULL,
-    date_souhait DATE NOT NULL,
-    message TEXT,
-    id_medecin INT DEFAULT NULL,
-    statut ENUM('en_attente','accepte','refuse') DEFAULT 'en_attente',
-    date_creation DATETIME DEFAULT CURRENT_TIMESTAMP
-);
 
 -- --------------------------------------------------------
 
@@ -306,7 +350,7 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   `mdp` varchar(255) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
   `role` enum('admin','user','medecin','attente de confirmation','entreprise') CHARACTER SET latin2 COLLATE latin2_bin DEFAULT 'attente de confirmation',
   `status` enum('Attente','accepter','refuser') CHARACTER SET latin2 COLLATE latin2_bin DEFAULT 'Attente',
-  `reset_token` varchar(255) COLLATE latin2_bin DEFAULT NULL,
+  `reset_token` varchar(255) CHARACTER SET latin2 COLLATE latin2_bin DEFAULT NULL,
   `reset_expires` datetime DEFAULT NULL,
   PRIMARY KEY (`id_utilisateur`),
   UNIQUE KEY `email` (`email`)
@@ -329,6 +373,14 @@ INSERT INTO `utilisateur` (`id_utilisateur`, `nom`, `prenom`, `email`, `rue`, `c
 --
 
 --
+-- Contraintes pour la table `commentaires`
+--
+ALTER TABLE `commentaires`
+  ADD CONSTRAINT `commentaires_ibfk_1` FOREIGN KEY (`ressource_id`) REFERENCES `ressources_contenu` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `commentaires_ibfk_2` FOREIGN KEY (`auteur_id`) REFERENCES `utilisateur` (`id_utilisateur`) ON DELETE CASCADE,
+  ADD CONSTRAINT `commentaires_ibfk_3` FOREIGN KEY (`parent_id`) REFERENCES `commentaires` (`id`) ON DELETE CASCADE;
+
+--
 -- Contraintes pour la table `medecin`
 --
 ALTER TABLE `medecin`
@@ -340,6 +392,12 @@ ALTER TABLE `medecin`
 --
 ALTER TABLE `reponse`
   ADD CONSTRAINT `reponse_ibfk_1` FOREIGN KEY (`ref_post`) REFERENCES `post` (`id_post`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `ressources_contenu`
+--
+ALTER TABLE `ressources_contenu`
+  ADD CONSTRAINT `ressources_contenu_ibfk_1` FOREIGN KEY (`auteur_id`) REFERENCES `utilisateur` (`id_utilisateur`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
