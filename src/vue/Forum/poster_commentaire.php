@@ -36,5 +36,5 @@ $sql = "INSERT INTO commentaires (ressource_id, auteur_id, contenu, parent_id, d
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$ressource_id, $auteur_id, $contenu, $parent_id]);
 
-header("Location: afficher_ressource.php?id=" . $ressource_id);
+header("Location: afficher_ressources.php?id=" . $ressource_id);
 exit;

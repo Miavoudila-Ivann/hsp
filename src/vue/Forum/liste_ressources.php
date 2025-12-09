@@ -294,7 +294,7 @@ $ressources = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <p class="ressource-extrait">
                     <?= nl2br(htmlspecialchars(mb_strimwidth($r['contenu'], 0, 300, '…'))); ?>
                 </p>
-                <a href="afficher_ressource.php?id=<?= (int)$r['id']; ?>" class="btn-small">
+                <a href="afficher_ressources.php?id=<?= (int)$r['id']; ?>" class="btn-small">
                     Voir la ressource & les commentaires
                 </a>
             </article>
