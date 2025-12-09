@@ -6,7 +6,8 @@ error_reporting(E_ALL);
 require_once __DIR__ . '/../../bdd/Bdd.php';
 session_start();
 
-$pdo = getBdd();
+$database = new Bdd();       // ✔ Crée l'objet Bdd
+$pdo = $database->getBdd();
 
 // Récupération des ressources (sujets)
 $sql = "SELECT r.id, r.titre, r.contenu, r.date_publication, u.prenom, u.nom

@@ -5,8 +5,8 @@ error_reporting(E_ALL);
 
 require_once __DIR__ . '/../../bdd/Bdd.php';
 session_start();
-
-$pdo = getBdd();
+$database = new Bdd();       // ✔ Crée l'objet Bdd
+$pdo = $database->getBdd();
 
 // ID utilisateur connecté
 $auteur_id = $_SESSION['id_utilisateur'] ?? null;

@@ -6,7 +6,8 @@ error_reporting(E_ALL);
 require_once __DIR__ . '/../../../src/bdd/Bdd.php';
 session_start();
 
-$pdo = getBdd();
+$database = new Bdd();       // ✔ Crée l'objet Bdd
+$pdo = $database->getBdd();
 
 if (!isset($_GET['id'])) {
     die("Aucune ressource spécifiée.");

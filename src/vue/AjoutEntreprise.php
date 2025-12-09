@@ -7,41 +7,43 @@ require_once '../../src/bdd/Bdd.php';
 require_once '../../src/repository/EntrepriseRepository.php';
 require_once '../../src/modele/Entreprise.php';
 
-use repository\EvenementRepository;
-use modele\Evenement;
-
 $message = '';
 $error = '';
 
 try {
     // Connexion à la base
-    $pdo = getBdd();
-    $bdd = $database->getBdd(); // doit retourner un objet PDO
-    $repo = new \repository\EntrepriseRepository($bdd);
+    $database = new Bdd();       // ✔ Crée l'objet Bdd
+    $pdo = $database->getBdd();  // ✔ Récupère l'objet PDO
+
+    // Instanciation du repository
+    $repo = new \repository\EntrepriseRepository($pdo);
 
     // Traitement du formulaire
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $nom_entreprise = trim($_POST['nom_entreprise'] ?? '');
-        $rue_entreprise = trim($_POST['rue_entreprise'] ?? '');
+
+        $nom_entreprise   = trim($_POST['nom_entreprise'] ?? '');
+        $rue_entreprise   = trim($_POST['rue_entreprise'] ?? '');
         $ville_entreprise = trim($_POST['ville_entreprise'] ?? '');
-        $cd_entreprise = trim($_POST['cd_entreprise'] ?? '');
-        $site_web = trim($_POST['site_web'] ?? '');
+        $cd_entreprise    = trim($_POST['cd_entreprise'] ?? '');
+        $site_web         = trim($_POST['site_web'] ?? '');
 
         if ($nom_entreprise && $rue_entreprise && $ville_entreprise && $cd_entreprise && $site_web) {
+
             $entreprise = new \modele\Entreprise([
-                    'nom_entreprise' => $nom_entreprise,
-                    'rue_entreprise' => $rue_entreprise,
+                    'nom_entreprise'   => $nom_entreprise,
+                    'rue_entreprise'   => $rue_entreprise,
                     'ville_entreprise' => $ville_entreprise,
-                    'cd_entreprise' => $cd_entreprise,
-                    'site_web' => $site_web,
+                    'cd_entreprise'    => $cd_entreprise,
+                    'site_web'         => $site_web,
             ]);
 
             if ($repo->ajouter($entreprise)) {
-                $message = 'Entrprise ajouté avec succès ! Vous allez être redirigé.';
+                $message = 'Entreprise ajoutée avec succès ! Vous allez être redirigé.';
                 echo '<script>setTimeout(function(){ window.location.href = "ListeEntreprise.php"; }, 2000);</script>';
             } else {
                 $error = "Erreur lors de l'ajout. Veuillez réessayer.";
             }
+
         } else {
             $error = 'Tous les champs sont obligatoires.';
         }
@@ -52,6 +54,7 @@ try {
     $error = "Erreur de connexion à la base de données.";
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>

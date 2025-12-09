@@ -6,10 +6,9 @@ session_start();
 require_once 'src/bdd/Bdd.php';
 require_once 'src/repository/EvenementRepository.php';
 require_once 'src/modele/Evenement.php';
-
+$database = new Bdd();       // ✔ Crée l'objet Bdd
+$pdo = $database->getBdd();
 use repository\EvenementRepository;
-
-$pdo = getBdd();
 $evenementRepo = new EvenementRepository($pdo);  // ✅ Changé $bdd en $pdo
 $evenements = $evenementRepo->getAllEvenements();
 ?>
