@@ -9,8 +9,8 @@ require_once 'src/modele/Evenement.php';
 
 use repository\EvenementRepository;
 
-$bdd = (new Bdd())->getBdd();
-$evenementRepo = new EvenementRepository($bdd);
+$pdo = getBdd();
+$evenementRepo = new EvenementRepository($pdo);  // ✅ Changé $bdd en $pdo
 $evenements = $evenementRepo->getAllEvenements();
 ?>
 
@@ -116,6 +116,9 @@ $hours = [
                     <form action="src/vue/AjoutCandidature.php" method="get">
                         <button type="submit" class="text-gray-700 hover:text-red-600 font-medium"> Candidatures </button>
                     </form>
+                    <form action="src/vue/Forum/creer_ressources.php" method="get">
+                        <button type="submit" class="text-gray-700 hover:text-red-600 font-medium"> Forum </button>
+                    </form>
                 <?php endif; ?>
                 <a href="src/vue/ListeEtablissement.php" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Etablissements</a>
                 <a href="#apropos" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">À Propos</a>
@@ -135,6 +138,9 @@ $hours = [
                     <form action="src/vue/AjoutEntreprise.php" method="get">
                         <button type="submit" class="text-gray-700 hover:text-red-600 font-medium"> Entreprise </button>
                     </form>
+                    <form action="src/vue/Forum/creer_ressources.php" method="get">
+                        <button type="submit" class="text-gray-700 hover:text-red-600 font-medium"> Forum </button>
+                    </form>
                 <?php endif; ?>
 
                 <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "medecin"): ?>
@@ -144,11 +150,17 @@ $hours = [
                     <a href="src/vue/CreeEvenement.php" class="text-gray-700 hover:text-red-600 transition-colors font-medium">
                         Evenements
                     </a>
+                    <form action="src/vue/Forum/creer_ressources.php" method="get">
+                        <button type="submit" class="text-gray-700 hover:text-red-600 font-medium"> Forum </button>
+                    </form>
                 <?php endif; ?>
 
                 <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "entreprise"): ?>
                     <form action="src/vue/AjouterOffre.php" method="get">
                         <button type="submit" class="text-gray-700 hover:text-red-600 font-medium">👥 Offre </button>
+                    </form>
+                    <form action="src/vue/Forum/afficher_ressources.php" method="get">
+                        <button type="submit" class="text-gray-700 hover:text-red-600 font-medium"> Forum </button>
                     </form>
                 <?php endif; ?>
 

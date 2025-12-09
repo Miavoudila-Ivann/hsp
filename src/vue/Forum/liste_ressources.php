@@ -3,7 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once __DIR__ . '/../../src/bdd/Bdd.php';
+require_once __DIR__ . '/../../bdd/Bdd.php';
 session_start();
 
 $pdo = getBdd();
@@ -267,7 +267,7 @@ $ressources = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
     <div class="nav-right">
         <a class="nav-link" href="liste_ressources.php">Accueil</a>
-        <a class="nav-link" href="creer_ressource.php">Poster un sujet</a>
+        <a class="nav-link" href="creer_ressources.php">Poster un sujet</a>
         <button class="nav-btn" id="openCommentModal">Ajouter un commentaire</button>
     </div>
 </header>

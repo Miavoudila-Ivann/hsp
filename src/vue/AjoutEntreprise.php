@@ -15,7 +15,7 @@ $error = '';
 
 try {
     // Connexion à la base
-    $database = new Bdd();
+    $pdo = getBdd();
     $bdd = $database->getBdd(); // doit retourner un objet PDO
     $repo = new \repository\EntrepriseRepository($bdd);
 

@@ -3,12 +3,12 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once __DIR__ . '/../../src/bdd/Bdd.php';
+require_once __DIR__ . '/../../bdd/Bdd.php';
 session_start();
 
 $pdo = getBdd();
 
-// ID utilisateur connecté - adapter selon votre système de session
+// ID utilisateur connecté
 $auteur_id = $_SESSION['id_utilisateur'] ?? null;
 
 $erreur = null;
@@ -23,13 +23,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($auteur_id === null) {
         $erreur = "Vous devez être connecté pour poster un sujet.";
     } else {
-        $sql = "INSERT INTO ressources_contenu (titre, contenu, auteur_id, categorie, date_publication)
-                VALUES (?, ?, ?, ?, NOW())";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$titre, $contenu, $auteur_id, $categorie]);
+        // ✅ VÉRIFIER QUE L'UTILISATEUR EXISTE
+        try {
+            $checkUser = $pdo->prepare("SELECT id_utilisateur FROM utilisateur WHERE id_utilisateur = ?");
+            $checkUser->execute([$auteur_id]);
 
-        header('Location: liste_ressources.php');
-        exit;
+            if ($checkUser->rowCount() === 0) {
+                $erreur = "Erreur : Votre session utilisateur est invalide. Veuillez vous reconnecter.";
+                // Détruire la session invalide
+                unset($_SESSION['id_utilisateur']);
+            } else {
+                // L'utilisateur existe, on peut insérer
+                $sql = "INSERT INTO ressources_contenu (titre, contenu, auteur_id, categorie, date_publication)
+                        VALUES (?, ?, ?, ?, NOW())";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([$titre, $contenu, $auteur_id, $categorie]);
+
+                header('Location: liste_ressources.php?success=1');
+                exit;
+            }
+        } catch (PDOException $e) {
+            $erreur = "Erreur lors de la création du sujet : " . $e->getMessage();
+        }
     }
 }
 ?>
@@ -84,6 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .input-text, .input-select, .input-textarea {
             width:100%; border-radius:10px; border:1px solid #374151;
             background:#020617; color:#e5e7eb; padding:8px 10px; font-size:14px;
+            font-family: inherit;
         }
         .input-textarea { min-height:180px; resize:vertical; }
 
@@ -96,6 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size:14px; font-weight:600; cursor:pointer;
             background:linear-gradient(90deg,#22c55e,#16a34a); color:#fff;
             box-shadow:0 0 18px rgba(34,197,94,0.7);
+            transition: transform 0.2s;
         }
         .btn-primary:hover { transform:translateY(-1px); }
 
@@ -104,6 +121,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-bottom:12px; font-size:14px; color:#fee2e2;
             border:1px solid #b91c1c;
         }
+
+        .warning {
+            background:rgba(251, 191, 36, 0.1);
+            border-radius:10px;
+            padding:10px 12px;
+            margin-bottom:12px;
+            font-size:14px;
+            color:#fde047;
+            border:1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        .debug-info {
+            background:#1e293b;
+            border-radius:10px;
+            padding:12px;
+            margin-top:20px;
+            font-size:12px;
+            color:#94a3b8;
+            border:1px solid #334155;
+        }
+        .debug-info strong { color:#e2e8f0; }
     </style>
 </head>
 <body>
@@ -113,8 +151,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <a href="liste_ressources.php" class="nav-logo">Forum HSP</a>
     </div>
     <div class="nav-right">
-        <a class="nav-link" href="liste_ressources.php">Accueil</a>
-        <a class="nav-link" href="creer_ressource.php">Poster un sujet</a>
+        <a class="nav-link" href="../../../index.php">Page d'Accueil</a>
+        <a class="nav-link" href="liste_ressources.php">commentaire</a>
+        <a class="nav-link" href="creer_ressources.php">Poster un sujet</a>
     </div>
 </header>
 
@@ -123,19 +162,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h1>Poster un nouveau sujet</h1>
 
         <?php if ($erreur): ?>
-            <div class="error"><?= htmlspecialchars($erreur); ?></div>
+            <div class="error">⚠️ <?= htmlspecialchars($erreur); ?></div>
+        <?php endif; ?>
+
+        <?php if ($auteur_id === null): ?>
+            <div class="warning">
+                🔒 Vous devez être connecté pour poster un sujet.
+                <br><small>Veuillez vous connecter ou créer un compte.</small>
+            </div>
         <?php endif; ?>
 
         <form method="post">
             <div class="form-row">
                 <label for="titre">Titre du sujet</label>
                 <input type="text" id="titre" name="titre" class="input-text"
-                       required value="<?= htmlspecialchars($_POST['titre'] ?? ''); ?>">
+                       required
+                        <?= $auteur_id === null ? 'disabled' : ''; ?>
+                       value="<?= htmlspecialchars($_POST['titre'] ?? ''); ?>">
             </div>
 
             <div class="form-row">
                 <label for="categorie">Catégorie</label>
-                <select id="categorie" name="categorie" class="input-select">
+                <select id="categorie" name="categorie" class="input-select"
+                        <?= $auteur_id === null ? 'disabled' : ''; ?>>
                     <option value="general">Général</option>
                     <option value="question">Question</option>
                     <option value="tutoriel">Tutoriel</option>
@@ -146,13 +195,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div class="form-row">
                 <label for="contenu">Contenu</label>
-                <textarea id="contenu" name="contenu" class="input-textarea" required><?=
+                <textarea id="contenu" name="contenu" class="input-textarea" required
+                          <?= $auteur_id === null ? 'disabled' : ''; ?>><?=
                     htmlspecialchars($_POST['contenu'] ?? '');
                     ?></textarea>
             </div>
 
-            <button type="submit" class="btn-primary">Publier le sujet</button>
+            <button type="submit" class="btn-primary"
+                    <?= $auteur_id === null ? 'disabled' : ''; ?>>
+                Publier le sujet
+            </button>
         </form>
+
+        <!-- Informations de débogage (à retirer en production) -->
+        <div class="debug-info">
+            <strong>🔍 Informations de session :</strong><br>
+            ID utilisateur en session : <?= $auteur_id !== null ? htmlspecialchars($auteur_id) : '<em>Non connecté</em>'; ?><br>
+            <small>Si l'ID est affiché mais que vous avez une erreur, cet utilisateur n'existe pas dans la base de données.</small>
+        </div>
     </div>
 </main>
 
