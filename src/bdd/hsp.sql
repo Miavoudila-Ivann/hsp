@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : lun. 08 déc. 2025 à 22:58
+-- Généré le : sam. 03 jan. 2026 à 13:14
 -- Version du serveur : 9.1.0
 -- Version de PHP : 8.3.14
 
@@ -115,16 +115,20 @@ CREATE TABLE IF NOT EXISTS `entreprise` (
     `ville_entreprise` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
     `cd_entreprise` int NOT NULL,
     `site_web` varchar(100) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-    PRIMARY KEY (`id_entreprise`)
+    `email` varchar(100) COLLATE latin2_bin DEFAULT NULL,
+    `mdp` varchar(255) COLLATE latin2_bin DEFAULT NULL,
+    `status` enum('Attente','accepter','refuser') COLLATE latin2_bin DEFAULT 'Attente',
+    PRIMARY KEY (`id_entreprise`),
+    UNIQUE KEY `email` (`email`)
     ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 
 --
 -- Déchargement des données de la table `entreprise`
 --
 
-INSERT INTO `entreprise` (`id_entreprise`, `nom_entreprise`, `rue_entreprise`, `ville_entreprise`, `cd_entreprise`, `site_web`) VALUES
-                                                                                                                                    (1, 'Thales', '12', 'Paris', 75003, 'https://authenticate.riotgames.com/?client_id=riot-client&code_challenge=FmLlnI30Qxle0uing4qOzQMJxAp'),
-                                                                                                                                    (3, 'McDonald\'s', '34', 'Luxamburg', 2440, 'https://music.youtube.com/playlist?list=PLtks0zrHykZG_AiHf1RLRljuFKBMI1g2W');
+INSERT INTO `entreprise` (`id_entreprise`, `nom_entreprise`, `rue_entreprise`, `ville_entreprise`, `cd_entreprise`, `site_web`, `email`, `mdp`, `status`) VALUES
+                                                                                                                                                              (1, 'Thales', '12', 'Paris', 75003, 'https://authenticate.riotgames.com/?client_id=riot-client&code_challenge=FmLlnI30Qxle0uing4qOzQMJxAp', NULL, NULL, 'Attente'),
+                                                                                                                                                              (3, 'McDonald\'s', '34', 'Luxamburg', 2440, 'https://music.youtube.com/playlist?list=PLtks0zrHykZG_AiHf1RLRljuFKBMI1g2W', NULL, NULL, 'Attente');
 
 -- --------------------------------------------------------
 

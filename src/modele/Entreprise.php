@@ -9,15 +9,31 @@ class Entreprise
     private string $ville;
     private int $cd;
     private string $siteWeb;
+    private ?string $email;
+    private ?string $mdp;
+    private string $status;
 
-        public function __construct(array $data = [])
+    public function getMdp(): ?string
     {
-        $this->id = $data['id'] ?? 0;
+        return $this->mdp;
+    }
+
+    public function setMdp(?string $mdp): void
+    {
+        $this->mdp = $mdp;
+    }
+
+    public function __construct(array $data = [])
+    {
+        $this->id = $data['id'] ?? $data['id_entreprise'] ?? 0;
         $this->nom = $data['nom_entreprise'] ?? $data['nom'] ?? '';
         $this->rue = $data['rue_entreprise'] ?? '';
         $this->ville = $data['ville_entreprise'] ?? '';
         $this->cd = $data['cd_entreprise'] ?? 00000;
         $this->siteWeb = $data['site_web'] ?? '';
+        $this->email = $data['email'] ?? null;
+        $this->mdp = $data['mdp'] ?? null;
+        $this->status = $data['status'] ?? 'Attente';
     }
 
     // --- Getters ---
@@ -26,9 +42,29 @@ class Entreprise
         return $this->id;
     }
 
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): void
+    {
+        $this->email = $email;
+    }
+
     public function getNom(): string
     {
         return $this->nom;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): void
+    {
+        $this->status = $status;
     }
 
     public function getRue(): string

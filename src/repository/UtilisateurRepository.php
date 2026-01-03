@@ -117,27 +117,24 @@ class UtilisateurRepository
 
             // Vérifie le mot de passe (haché)
             if (password_verify($password, $user['mdp'])) {
-
-                // Retourne un objet Utilisateur si le login est valide
+                // ✅ Retourne l'objet Utilisateur avec toutes les infos, y compris le statut
                 return new Utilisateur(
                     $user['id_utilisateur'],
                     $user['prenom'],
                     $user['nom'],
                     $user['email'],
-                    $user['mdp'], // hash stocké
+                    $user['mdp'],
                     $user['role'],
                     $user['rue'],
                     $user['cd'],
-                    $user['ville']
+                    $user['ville'],
+                    $user['status']  // ✅ IMPORTANT : inclure le statut
                 );
-
             } else {
-                 //var_dump("Mot de passe incorrect", $password, $email);
                 return false;
             }
 
         } catch (PDOException $e) {
-            // Log en interne ou retour d’erreur
             error_log("Erreur connexion utilisateur : " . $e->getMessage());
             return false;
         }

@@ -19,17 +19,55 @@ class EntrepriseRepository
     // --- Créer une entreprise ---
     public function ajouter(Entreprise $entreprise) {
         $stmt = $this->bdd->prepare(
-            "INSERT INTO entreprise (nom_entreprise, rue_entreprise, ville_entreprise, cd_entreprise, site_web)
-         VALUES (?, ?, ?, ?, ?)"
+            "INSERT INTO entreprise (nom_entreprise, rue_entreprise, ville_entreprise, cd_entreprise, site_web, email, mdp, status)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
         );
         return $stmt->execute([
             $entreprise->getNom(),
             $entreprise->getRue(),
             $entreprise->getVille(),
             $entreprise->getCd(),
-            $entreprise->getSiteWeb()
+            $entreprise->getSiteWeb(),
+            $entreprise->getEmail(),
+            $entreprise->getMdp(),
+            $entreprise->getStatus()
         ]);
     }
+
+    // --- Inscription entreprise ---
+    public function inscrireEntreprise(Entreprise $entreprise): bool {
+        return $this->ajouter($entreprise);
+    }
+
+    // --- Connexion entreprise ---
+    public function connexionEntreprise(string $email, string $password) {
+        try {
+            $stmt = $this->bdd->prepare("SELECT * FROM entreprise WHERE email = ?");
+            $stmt->execute([$email]);
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$data) {
+                return false;
+            }
+
+            // ✅ SUPPRIME CETTE VÉRIFICATION ICI - on la fait dans Connexion.php
+            // if ($data['status'] !== 'accepter') {
+            //     return ['error' => 'Votre compte est en attente de validation'];
+            // }
+
+            // Vérifier le mot de passe
+            if (password_verify($password, $data['mdp'])) {
+                // ✅ Retourne l'objet Entreprise avec toutes les données
+                return new Entreprise($data);
+            }
+
+            return false;
+        } catch (PDOException $e) {
+            error_log("Erreur connexion entreprise : " . $e->getMessage());
+            return false;
+        }
+    }
+
 
     // --- Récupérer une entreprise par ID ---
     public function getEntrepriseParId($id)
