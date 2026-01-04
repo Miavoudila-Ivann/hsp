@@ -113,12 +113,16 @@ $hours = [
             <div class="hidden md:flex items-center space-x-8">
                 <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "user"): ?>
                     <form action="src/vue/AjoutCandidature.php" method="get">
-                        <button type="submit" class="text-gray-700 hover:text-red-600 font-medium"> Candidatures </button>
+                        <button type="submit" class="text-gray-700 hover:text-red-600 font-medium">Candidatures</button>
                     </form>
                     <form action="src/vue/Forum/creer_ressources.php" method="get">
-                        <button type="submit" class="text-gray-700 hover:text-red-600 font-medium"> Forum </button>
+                        <button type="submit" class="text-gray-700 hover:text-red-600 font-medium">Forum</button>
                     </form>
+                    <a href="src/vue/MesCandidatures.php" class="text-gray-700 hover:text-green-600 transition-colors font-medium">
+                        📨 Candidatures
+                    </a>
                 <?php endif; ?>
+
                 <a href="src/vue/ListeEtablissement.php" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Etablissements</a>
                 <a href="#apropos" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">À Propos</a>
                 <a href="#contact" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Contact</a>
@@ -135,10 +139,10 @@ $hours = [
                         <button type="submit" class="text-gray-700 hover:text-red-600 font-medium">👥 Accéder au Dashboard</button>
                     </form>
                     <form action="src/vue/AjoutEntreprise.php" method="get">
-                        <button type="submit" class="text-gray-700 hover:text-red-600 font-medium"> Entreprise </button>
+                        <button type="submit" class="text-gray-700 hover:text-red-600 font-medium">Entreprise</button>
                     </form>
                     <form action="src/vue/Forum/creer_ressources.php" method="get">
-                        <button type="submit" class="text-gray-700 hover:text-red-600 font-medium"> Forum </button>
+                        <button type="submit" class="text-gray-700 hover:text-red-600 font-medium">Forum</button>
                     </form>
                 <?php endif; ?>
 
@@ -150,27 +154,39 @@ $hours = [
                         Evenements
                     </a>
                     <form action="src/vue/Forum/creer_ressources.php" method="get">
-                        <button type="submit" class="text-gray-700 hover:text-red-600 font-medium"> Forum </button>
+                        <button type="submit" class="text-gray-700 hover:text-red-600 font-medium">Forum</button>
                     </form>
                 <?php endif; ?>
 
+                <!-- ✅ NOUVEAU : Menu pour les entreprises -->
                 <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "entreprise"): ?>
-                    <form action="src/vue/AjouterOffre.php" method="get">
-                        <button type="submit" class="text-gray-700 hover:text-red-600 font-medium">👥 Offre </button>
-                    </form>
-                    <form action="src/vue/Forum/afficher_ressources.php" method="get">
-                        <button type="submit" class="text-gray-700 hover:text-red-600 font-medium"> Forum </button>
-                    </form>
+                    <a href="src/vue/AjouterOffre.php" class="text-gray-700 hover:text-green-600 transition-colors font-medium">
+                        📝 Ajouter une Offre
+                    </a>
+                        <a href="src/vue/MesOffres.php" class="text-gray-700 hover:text-green-600 transition-colors font-medium">
+                        📨 Candidatures
+                    </a>
+                    <a href="src/vue/Forum/afficher_ressources.php" class="text-gray-700 hover:text-green-600 transition-colors font-medium">
+                        💬 Forum
+                    </a>
                 <?php endif; ?>
 
-                <?php if (isset($_SESSION["id_utilisateur"])): ?>
+                <?php if (isset($_SESSION["id_utilisateur"]) || isset($_SESSION["id_entreprise"])): ?>
                     <div class="flex items-center space-x-4 bg-gray-100 px-4 py-2 rounded-lg">
                         <div class="text-right">
                             <div class="font-semibold text-gray-900">
-                                <?= htmlspecialchars($_SESSION["prenom"] . " " . $_SESSION["nom"]) ?>
+                                <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "entreprise"): ?>
+                                    <?= htmlspecialchars($_SESSION["nom_entreprise"] ?? "Entreprise") ?>
+                                <?php else: ?>
+                                    <?= htmlspecialchars($_SESSION["prenom"] . " " . $_SESSION["nom"]) ?>
+                                <?php endif; ?>
                             </div>
                             <div class="text-sm text-gray-500">
-                                <?= htmlspecialchars($_SESSION["role"]) ?>
+                                <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "entreprise"): ?>
+                                    Entreprise
+                                <?php else: ?>
+                                    <?= htmlspecialchars($_SESSION["role"]) ?>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <a href="src/vue/Deconnexion.php" class="text-red-500 hover:text-red-700 font-medium">
@@ -198,7 +214,6 @@ $hours = [
                     </div>
                 <?php endif; ?>
             </div>
-
             <!-- ✅ Script pour gérer le menu déroulant -->
             <script>
                 const dropdownButton = document.getElementById('dropdownButton');

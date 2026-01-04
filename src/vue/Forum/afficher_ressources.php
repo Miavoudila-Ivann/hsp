@@ -9,7 +9,7 @@ session_start();
 $database = new Bdd();       // ✔ Crée l'objet Bdd
 $pdo = $database->getBdd();
 
-if (!isset($_GET['id'])) {
+if (!isset($_GET['id_utilisateur'])) {
     die("Aucune ressource spécifiée.");
 }
 

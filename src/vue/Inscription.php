@@ -156,9 +156,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </label>
         </div>
 
+        <label>Rôle :</label>
+        <div class="checkbox-group">
+            <div>
+                <input type="radio" id="role_user" name="role" value="user" required>
+                <label for="role_user">Utilisateur</label>
+            </div>
+            <div>
+                <input type="radio" id="role_medecin" name="role" value="medecin">
+                <label for="role_medecin">Médecin</label>
+            </div>
+            <div>
+                <input type="radio" id="role_admin" name="role" value="admin">
+                <label for="role_admin">Admin</label>
+            </div>
+        </div>
+
         <button type="submit">S'inscrire</button>
         <br><br>
         <a href="Connexion.php">Se connecter</a>
+        <div class="flex flex-col space-y-2">
+            <a href="InscriptionEntreprise.php" class="text-green-600 hover:text-green-500 font-medium">
+                → Inscription Entreprise
+            </a>
+        </div>
     </form>
 </div>
 
