@@ -50,7 +50,7 @@ include __DIR__ . '/header.php';
     <button type="submit">Envoyer</button>
 </form>
 
-<a class="btn" href="MesCandidatures.php">Voir mes candidatures</a>
+<a class="btn" href="Candidatures.php">Voir mes candidatures</a>
 
 <style>
     .btn {

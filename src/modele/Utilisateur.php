@@ -57,10 +57,9 @@ class Utilisateur {
     public function getVille() {
         return $this->ville;
     }
-    public function getStatus() {
-
+    public function getStatus(): ?string
+    {
         return $this->status;
-
     }
 
     public function setIdUtilisateur($id_utilisateur) {
@@ -90,9 +89,9 @@ class Utilisateur {
     public function setVille($ville) {
         $this->ville = $ville;
     }
-    public function setStatus($status) {
-
-        $this->status = $status;
+    public function setStatus(): ?string
+    {
+        return $this->status;
     }
 }
 ?>

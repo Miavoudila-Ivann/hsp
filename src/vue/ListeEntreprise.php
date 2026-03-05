@@ -30,7 +30,7 @@ include __DIR__ . '/header.php';
 </head>
 <body>
 <h1>Liste des entreprises</h1>
-<a href="AjouterEntreprise.php">Ajouter une nouvelle entreprise</a>
+<a href="AjoutEntreprise.php">Ajouter une nouvelle entreprise</a>
 <table>
     <thead>
     <tr>

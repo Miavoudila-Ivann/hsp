@@ -1,3 +1,60 @@
+<?php
+// Activation des erreurs
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+require_once '../../src/bdd/Bdd.php';
+require_once '../../src/repository/EntrepriseRepository.php';
+require_once '../../src/modele/Entreprise.php';
+
+$message = '';
+$error = '';
+
+try {
+    // Connexion à la base
+    $database = new Bdd();       // ✔ Crée l'objet Bdd
+    $pdo = $database->getBdd();  // ✔ Récupère l'objet PDO
+
+    // Instanciation du repository
+    $repo = new \repository\EntrepriseRepository($pdo);
+
+    // Traitement du formulaire
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        $nom_entreprise   = trim($_POST['nom_entreprise'] ?? '');
+        $rue_entreprise   = trim($_POST['rue_entreprise'] ?? '');
+        $ville_entreprise = trim($_POST['ville_entreprise'] ?? '');
+        $cd_entreprise    = trim($_POST['cd_entreprise'] ?? '');
+        $site_web         = trim($_POST['site_web'] ?? '');
+
+        if ($nom_entreprise && $rue_entreprise && $ville_entreprise && $cd_entreprise && $site_web) {
+
+            $entreprise = new \modele\Entreprise([
+                    'nom_entreprise'   => $nom_entreprise,
+                    'rue_entreprise'   => $rue_entreprise,
+                    'ville_entreprise' => $ville_entreprise,
+                    'cd_entreprise'    => $cd_entreprise,
+                    'site_web'         => $site_web,
+            ]);
+
+            if ($repo->ajouter($entreprise)) {
+                $message = 'Entreprise ajoutée avec succès ! Vous allez être redirigé.';
+                echo '<script>setTimeout(function(){ window.location.href = "ListeEntreprise.php"; }, 2000);</script>';
+            } else {
+                $error = "Erreur lors de l'ajout. Veuillez réessayer.";
+            }
+
+        } else {
+            $error = 'Tous les champs sont obligatoires.';
+        }
+    }
+
+} catch (Exception $e) {
+    error_log('Erreur : ' . $e->getMessage());
+    $error = "Erreur de connexion à la base de données.";
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -85,57 +142,17 @@
 
 <header>
     <h1>Espace Partenaires - Entreprises</h1>
-    <nav>
-        <a href="#profil">Profil d'Entreprise</a>
-        <a href="#offres">Publication d'Offres</a>
-        <a href="#evenements">Publication d’Événements</a>
-    </nav>
 </header>
 
-<!-- ====================== PROFIL ENTREPRISE ======================= -->
 <section id="profil" class="card">
     <h2>Créer un Profil d’Entreprise</h2>
-    <form action="entreprise.php" method="POST">
+    <form action="AjoutEntreprise.php" method="POST">
         <input type="text" name="nom_entreprise" placeholder="Nom de l'entreprise" required>
         <input type="text" name="rue_entreprise" placeholder="Rue" required>
         <input type="text" name="ville_entreprise" placeholder="Ville" required>
         <input type="number" name="cd_entreprise" placeholder="Code postal" required>
         <input type="url" name="site_web" placeholder="Site web" required>
         <button type="submit">Créer le profil</button>
-    </form>
-</section>
-
-<!-- ====================== OFFRES ======================= -->
-<section id="offres" class="card">
-    <h2>Publier une Offre</h2>
-    <form action="offre.php" method="POST">
-        <input type="text" name="titre" placeholder="Titre de l'offre" required>
-        <textarea name="description" placeholder="Description" required></textarea>
-        <textarea name="mission" placeholder="Missions principales" required></textarea>
-        <input type="number" name="salaire" placeholder="Salaire (en €)" required>
-        <select name="type_offre" required>
-            <option value="emploi">Emploi</option>
-            <option value="stage">Stage</option>
-            <option value="projet">Projet</option>
-        </select>
-        <input type="text" name="etat" placeholder="État (actif, inactif...)" required>
-        <input type="text" name="ref_utilisateur" placeholder="Référence utilisateur" required>
-        <input type="text" name="ref_entreprise" placeholder="Référence entreprise" required>
-        <button type="submit">Publier l'offre</button>
-    </form>
-</section>
-
-<!-- ====================== EVENEMENTS ======================= -->
-<section id="evenements" class="card">
-    <h2>Proposer un Événement</h2>
-    <form action="evenement.php" method="POST">
-        <input type="text" name="titre" placeholder="Titre de l’événement" required>
-        <textarea name="description" placeholder="Description de l’événement" required></textarea>
-        <input type="text" name="type_evenement" placeholder="Type d’événement" required>
-        <input type="text" name="lieu" placeholder="Lieu" required>
-        <input type="number" name="nb_place" placeholder="Nombre de places" required>
-        <input type="date" name="date_evenement" required>
-        <button type="submit">Publier l’événement</button>
     </form>
 </section>
 

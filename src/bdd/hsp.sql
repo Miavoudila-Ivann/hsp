@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : sam. 08 nov. 2025 à 15:40
--- Version du serveur : 8.3.0
--- Version de PHP : 8.2.18
+-- Généré le : dim. 04 jan. 2026 à 20:59
+-- Version du serveur : 9.1.0
+-- Version de PHP : 8.3.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,24 +29,47 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `candidature`;
 CREATE TABLE IF NOT EXISTS `candidature` (
-  `id_candidature` int NOT NULL AUTO_INCREMENT,
-  `motivation` text CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  `statut` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  `date_candidature` date NOT NULL,
-  `ref_offre` int NOT NULL,
-  `ref_utilisateur` int NOT NULL,
-  `cv_path` varchar(255) COLLATE latin2_bin DEFAULT NULL,
-  PRIMARY KEY (`id_candidature`),
-  KEY `ref_offre_candidature` (`ref_offre`),
-  KEY `ref_utilisateur_candidature` (`ref_utilisateur`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+                                             `id_candidature` int NOT NULL AUTO_INCREMENT,
+                                             `motivation` text CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
+                                             `statut` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
+    `date_candidature` date NOT NULL,
+    `ref_offre` int NOT NULL,
+    `ref_utilisateur` int NOT NULL,
+    `cv_path` varchar(255) CHARACTER SET latin2 COLLATE latin2_bin DEFAULT NULL,
+    PRIMARY KEY (`id_candidature`),
+    KEY `ref_offre_candidature` (`ref_offre`),
+    KEY `ref_utilisateur_candidature` (`ref_utilisateur`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 
 --
 -- Déchargement des données de la table `candidature`
 --
 
 INSERT INTO `candidature` (`id_candidature`, `motivation`, `statut`, `date_candidature`, `ref_offre`, `ref_utilisateur`, `cv_path`) VALUES
-(1, 'je veut travailler a la place de janine', 'acceptée', '2025-11-07', 1, 19, 'uploads/cv/cv_19_1762540757.pdf');
+                                                                                                                                        (1, 'je veut travailler a la place de janine', 'acceptée', '2025-11-07', 1, 19, 'uploads/cv/cv_19_1762540757.pdf'),
+                                                                                                                                        (2, 'efesf sefsf', 'En attente', '2026-01-03', 5, 24, 'uploads/cv/cv_24_1767478185.pdf'),
+                                                                                                                                        (3, 'DAD FDFSF E', 'En attente', '2026-01-04', 5, 24, 'uploads/cv/cv_24_1767519054.pdf'),
+                                                                                                                                        (4, 'ezfzefzfzfzfzf', 'En attente', '2026-01-04', 5, 24, 'uploads/cv/cv_24_1767560047.pdf');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `commentaires`
+--
+
+DROP TABLE IF EXISTS `commentaires`;
+CREATE TABLE IF NOT EXISTS `commentaires` (
+                                              `id` int NOT NULL AUTO_INCREMENT,
+                                              `ressource_id` int NOT NULL,
+                                              `auteur_id` int NOT NULL,
+                                              `contenu` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                              `parent_id` int DEFAULT NULL,
+                                              `date_commentaire` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                              PRIMARY KEY (`id`),
+    KEY `ressource_id` (`ressource_id`),
+    KEY `auteur_id` (`auteur_id`),
+    KEY `parent_id` (`parent_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -56,13 +79,13 @@ INSERT INTO `candidature` (`id_candidature`, `motivation`, `statut`, `date_candi
 
 DROP TABLE IF EXISTS `contact`;
 CREATE TABLE IF NOT EXISTS `contact` (
-  `id_contact` int NOT NULL,
-  `sujet` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  `message` varchar(100) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  `date_envoie` date NOT NULL,
-  `status` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  PRIMARY KEY (`id_contact`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+                                         `id_contact` int NOT NULL,
+                                         `sujet` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
+    `message` varchar(100) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
+    `date_envoie` date NOT NULL,
+    `status` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
+    PRIMARY KEY (`id_contact`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 
 -- --------------------------------------------------------
 
@@ -72,14 +95,14 @@ CREATE TABLE IF NOT EXISTS `contact` (
 
 DROP TABLE IF EXISTS `contrat`;
 CREATE TABLE IF NOT EXISTS `contrat` (
-  `id_contrat` int NOT NULL AUTO_INCREMENT,
-  `date_debut` date NOT NULL,
-  `date_fin` date DEFAULT NULL,
-  `salaire` double NOT NULL,
-  `ref_post` int NOT NULL,
-  `ref_candidature` int NOT NULL,
-  PRIMARY KEY (`id_contrat`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+                                         `id_contrat` int NOT NULL AUTO_INCREMENT,
+                                         `date_debut` date NOT NULL,
+                                         `date_fin` date DEFAULT NULL,
+                                         `salaire` double NOT NULL,
+                                         `ref_post` int NOT NULL,
+                                         `ref_candidature` int NOT NULL,
+                                         PRIMARY KEY (`id_contrat`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -89,22 +112,27 @@ CREATE TABLE IF NOT EXISTS `contrat` (
 
 DROP TABLE IF EXISTS `entreprise`;
 CREATE TABLE IF NOT EXISTS `entreprise` (
-  `id_entreprise` int NOT NULL AUTO_INCREMENT,
-  `nom_entreprise` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  `rue_entreprise` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  `ville_entreprise` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  `cd_entreprise` int NOT NULL,
-  `site_web` varchar(100) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  PRIMARY KEY (`id_entreprise`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+                                            `id_entreprise` int NOT NULL AUTO_INCREMENT,
+                                            `nom_entreprise` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
+    `rue_entreprise` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
+    `ville_entreprise` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
+    `cd_entreprise` int NOT NULL,
+    `site_web` varchar(100) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
+    `email` varchar(100) COLLATE latin2_bin DEFAULT NULL,
+    `mdp` varchar(255) COLLATE latin2_bin DEFAULT NULL,
+    `status` enum('Attente','accepter','refuser') COLLATE latin2_bin DEFAULT 'Attente',
+    PRIMARY KEY (`id_entreprise`),
+    UNIQUE KEY `email` (`email`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 
 --
 -- Déchargement des données de la table `entreprise`
 --
 
-INSERT INTO `entreprise` (`id_entreprise`, `nom_entreprise`, `rue_entreprise`, `ville_entreprise`, `cd_entreprise`, `site_web`) VALUES
-(1, 'Thales', '12', 'Paris', 75003, 'https://authenticate.riotgames.com/?client_id=riot-client&code_challenge=FmLlnI30Qxle0uing4qOzQMJxAp'),
-(3, 'McDonald\'s', '34', 'Luxamburg', 2440, 'https://music.youtube.com/playlist?list=PLtks0zrHykZG_AiHf1RLRljuFKBMI1g2W');
+INSERT INTO `entreprise` (`id_entreprise`, `nom_entreprise`, `rue_entreprise`, `ville_entreprise`, `cd_entreprise`, `site_web`, `email`, `mdp`, `status`) VALUES
+                                                                                                                                                              (1, 'Thales', '12', 'Paris', 75003, 'https://authenticate.riotgames.com/?client_id=riot-client&code_challenge=FmLlnI30Qxle0uing4qOzQMJxAp', NULL, NULL, 'accepter'),
+                                                                                                                                                              (3, 'McDonald\'s', '34', 'Luxamburg', 2440, 'https://music.youtube.com/playlist?list=PLtks0zrHykZG_AiHf1RLRljuFKBMI1g2W', NULL, NULL, 'Attente'),
+(5, 'LPRS', '5 Avenue du Général de Gaulle', 'Dugny', 93440, 'https://www.bing.com/ck/a?!&&p=5bc2f5a3518cbfc9aabff63e4dc253c3fcb0733f7bdaf67ff1db39756ac6fbd7Jmltd', 'e.idbraim@lprs.fr', '$2y$10$8jPPzXON.mV02bEvK90DI.STeXU4mFP8nYLHQ..AnqQS4PxQf5rA2', 'accepter');
 
 -- --------------------------------------------------------
 
@@ -205,9 +233,9 @@ CREATE TABLE IF NOT EXISTS `medecin` (
 DROP TABLE IF EXISTS `offre`;
 CREATE TABLE IF NOT EXISTS `offre` (
   `id_offre` int NOT NULL AUTO_INCREMENT,
-  `titre` varchar(150) COLLATE latin2_bin NOT NULL,
+  `titre` varchar(150) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
   `description` varchar(255) CHARACTER SET latin2 COLLATE latin2_bin DEFAULT NULL,
-  `mission` varchar(255) COLLATE latin2_bin NOT NULL,
+  `mission` varchar(255) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
   `salaire` double NOT NULL,
   `type_offre` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin DEFAULT NULL,
   `etat` enum('activer','desactiver') CHARACTER SET latin2 COLLATE latin2_bin NOT NULL DEFAULT 'desactiver',
@@ -217,14 +245,16 @@ CREATE TABLE IF NOT EXISTS `offre` (
   PRIMARY KEY (`id_offre`),
   KEY `ref_utilisateur_offre` (`ref_utilisateur`),
   KEY `ref_entreprise_offre` (`ref_entreprise`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 
 --
 -- Déchargement des données de la table `offre`
 --
 
 INSERT INTO `offre` (`id_offre`, `titre`, `description`, `mission`, `salaire`, `type_offre`, `etat`, `ref_utilisateur`, `ref_entreprise`, `date_publication`) VALUES
-(1, 'Alternance Technicien Support (H/F)', 'on recrute pas mais on fais juste semblant devant nos supérieur personne ne va ?tre pris parce que vous ?tes pas le fils on cousin du directeur ', '- Brancher des truc en balle\r\n- régler les probl?mes de Janine (elle veut pas prendre sa retraite)\r\n- ?tre présent ', 5580, 'informatique', '', 18, 1, '2025-11-21');
+(1, 'Alternance Technicien Support (H/F)', 'on recrute pas mais on fais juste semblant devant nos supérieur personne ne va ?tre pris parce que vous ?tes pas le fils on cousin du directeur ', '- Brancher des truc en balle\r\n- régler les probl?mes de Janine (elle veut pas prendre sa retraite)\r\n- ?tre présent ', 5580, 'informatique', '', 18, 1, '2025-11-21'),
+(2, 'baveux', 'zfzfzef', 'aaaaaaaaaaaaaaaaaaaa', 8000, 'Stage', 'activer', 24, 5, '2026-01-03'),
+(3, 'Stage dev', 'AZDZDAZDAD', 'ADAZDQSDZADADQS', 8000, 'Stage', 'activer', 0, 5, '2026-01-04');
 
 -- --------------------------------------------------------
 
@@ -241,6 +271,27 @@ CREATE TABLE IF NOT EXISTS `post` (
   `date_post` date NOT NULL,
   PRIMARY KEY (`id_post`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `rendez_vous`
+--
+
+DROP TABLE IF EXISTS `rendez_vous`;
+CREATE TABLE IF NOT EXISTS `rendez_vous` (
+  `id_rdv` int NOT NULL AUTO_INCREMENT,
+  `nom` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `telephone` varchar(20) NOT NULL,
+  `service` varchar(100) NOT NULL,
+  `date_souhait` date NOT NULL,
+  `message` text,
+  `id_medecin` int DEFAULT NULL,
+  `statut` enum('en_attente','accepte','refuse') DEFAULT 'en_attente',
+  `date_creation` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_rdv`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -263,6 +314,24 @@ CREATE TABLE IF NOT EXISTS `reponse` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `ressources_contenu`
+--
+
+DROP TABLE IF EXISTS `ressources_contenu`;
+CREATE TABLE IF NOT EXISTS `ressources_contenu` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `titre` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `contenu` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `auteur_id` int NOT NULL,
+  `categorie` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'autre',
+  `date_publication` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `auteur_id` (`auteur_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `specialite`
 --
 
@@ -279,42 +348,48 @@ CREATE TABLE IF NOT EXISTS `specialite` (
 -- Structure de la table `utilisateur`
 --
 
-DROP TABLE IF EXISTS utilisateur;
-
-CREATE TABLE utilisateur (
-  id_utilisateur INT NOT NULL AUTO_INCREMENT,
-  nom VARCHAR(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  prenom VARCHAR(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  email VARCHAR(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  rue VARCHAR(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  cd INT NOT NULL,
-  ville VARCHAR(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  mdp VARCHAR(255) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  role ENUM('admin','user','medecin','attente de confirmation') COLLATE latin2_bin DEFAULT 'attente de confirmation',
-  status ENUM('Attente','accepter','refuser') COLLATE latin2_bin DEFAULT 'Attente',
-  reset_token VARCHAR(255) NULL,
-  reset_expires DATETIME NULL,
-  PRIMARY KEY (id_utilisateur),
-  UNIQUE KEY (email)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
-
+DROP TABLE IF EXISTS `utilisateur`;
+CREATE TABLE IF NOT EXISTS `utilisateur` (
+  `id_utilisateur` int NOT NULL AUTO_INCREMENT,
+  `nom` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
+  `prenom` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
+  `email` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
+  `rue` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
+  `cd` int NOT NULL,
+  `ville` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
+  `mdp` varchar(255) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
+  `role` enum('admin','user','medecin','attente de confirmation','entreprise') CHARACTER SET latin2 COLLATE latin2_bin DEFAULT 'attente de confirmation',
+  `status` enum('Attente','accepter','refuser') CHARACTER SET latin2 COLLATE latin2_bin DEFAULT 'Attente',
+  `reset_token` varchar(255) CHARACTER SET latin2 COLLATE latin2_bin DEFAULT NULL,
+  `reset_expires` datetime DEFAULT NULL,
+  PRIMARY KEY (`id_utilisateur`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 
 --
 -- Déchargement des données de la table `utilisateur`
 --
-INSERT INTO `utilisateur`
-(`id_utilisateur`, `nom`, `prenom`, `email`, `rue`, `cd`, `ville`, `mdp`, `role`, `status`, `reset_token`, `reset_expires`)
-VALUES
+
+INSERT INTO `utilisateur` (`id_utilisateur`, `nom`, `prenom`, `email`, `rue`, `cd`, `ville`, `mdp`, `role`, `status`, `reset_token`, `reset_expires`) VALUES
 (18, 'Rodri', 'ROh ROh', 'panormalfake@gmail.com', '28', 92000, 'ST-Denis', '$2y$10$ES8QUhoZuOF.DMHhj7gI2uBN.KLCYETJZnrbowavEQXKxL0ETCYlK', 'user', 'refuser', NULL, NULL),
 (19, 'Touzanine', 'Issa', 'issatouzanine@hotmail.fr', '07', 93200, 'ST-Denis', '$2y$10$jaHUSuxJAcIP25jXs6Dt4eL4i3FI8ZUnXgu2Bjgg0qc.alqSX3KCS', 'admin', 'accepter', NULL, NULL),
 (20, 'DupontDeLigoness', 'Dody', 'proto@gmail.com', '44', 93200, 'Pierrefitte', '$2y$10$xSq7A.7tq25rF2EUTtE2IeuMb//8eH2qGS0Aop/4yJKz2c5xou5j2', 'user', 'Attente', NULL, NULL),
 (21, 'Touzanine', 'Mohamed', 'MohamedTouzanine@gmail.com', '33', 44500, 'Nante', '$2y$10$In/iCMFOBnhKJYTHmmG9reEd/MDDkGAXDN023oR6UP.UirepuOVOq', 'medecin', 'Attente', NULL, NULL),
 (22, 'azert', 'azertyu', 'azazaz@proto.fr', '28', 93200, 'ST-Denis', '$2y$10$7CJRZRhK/QQLBn7MvAsbp.nx9l76Ci5iRfwvVAdoDal90Q5l7nS9q', 'attente de confirmation', 'Attente', NULL, NULL),
-(23, 'bave', 'bave', 'e.idbraim@lprs.fr', 'bave', 95200, 'baveville', '$2y$10$gGPwllvH5UNJ4exs6djlzeP95w/wyimb1aQvdRXOYgZggluWXpjke', 'admin', 'Attente', '3ea9281dffb816684b41504409621f92f5c6a638cc46b615ba6a347b77d3c264', '2025-11-23 19:17:43');
+(23, 'bave', 'bave', 'e.idbraim@lprs.fr', 'bave', 95200, 'baveville', '$2y$10$gGPwllvH5UNJ4exs6djlzeP95w/wyimb1aQvdRXOYgZggluWXpjke', 'admin', 'accepter', '3ea9281dffb816684b41504409621f92f5c6a638cc46b615ba6a347b77d3c264', '2025-11-23 19:17:43'),
+(24, 'idbraim', 'elias', 'eliasidb7@gmail.com', 'zef', 95200, 'SARCELLES', '$2y$10$OarDv7D2PSZxHcevQYkj0OAMgsx87XEbjgM/pyVaQVbF9hw8lLd76', 'user', 'Attente', NULL, NULL);
 
 --
 -- Contraintes pour les tables déchargées
 --
+
+--
+-- Contraintes pour la table `commentaires`
+--
+ALTER TABLE `commentaires`
+  ADD CONSTRAINT `commentaires_ibfk_1` FOREIGN KEY (`ressource_id`) REFERENCES `ressources_contenu` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `commentaires_ibfk_2` FOREIGN KEY (`auteur_id`) REFERENCES `utilisateur` (`id_utilisateur`) ON DELETE CASCADE,
+  ADD CONSTRAINT `commentaires_ibfk_3` FOREIGN KEY (`parent_id`) REFERENCES `commentaires` (`id`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `medecin`
@@ -328,6 +403,12 @@ ALTER TABLE `medecin`
 --
 ALTER TABLE `reponse`
   ADD CONSTRAINT `reponse_ibfk_1` FOREIGN KEY (`ref_post`) REFERENCES `post` (`id_post`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `ressources_contenu`
+--
+ALTER TABLE `ressources_contenu`
+  ADD CONSTRAINT `ressources_contenu_ibfk_1` FOREIGN KEY (`auteur_id`) REFERENCES `utilisateur` (`id_utilisateur`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
