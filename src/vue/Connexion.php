@@ -23,14 +23,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $utilisateur = $repo->connexion($email, $password);
 
         if ($utilisateur) {
-            $_SESSION["email"] = $utilisateur->getEmail();
-            $_SESSION["role"] = $utilisateur->getRole();
-            $_SESSION["id_utilisateur"] = $utilisateur->getIdUtilisateur();
-            $_SESSION["prenom"] = $utilisateur->getPrenom();
-            $_SESSION["nom"] = $utilisateur->getNom();
+            $status = $utilisateur->getStatus();
+            if ($status === 'refuser') {
+                $error = "Votre compte a été refusé. Contactez l'administrateur.";
+            } elseif ($status !== 'accepter') {
+                $error = "Votre compte est en attente de validation par un administrateur.";
+            } else {
+                $_SESSION["email"] = $utilisateur->getEmail();
+                $_SESSION["role"] = $utilisateur->getRole();
+                $_SESSION["id_utilisateur"] = $utilisateur->getIdUtilisateur();
+                $_SESSION["prenom"] = $utilisateur->getPrenom();
+                $_SESSION["nom"] = $utilisateur->getNom();
 
-            header("Location: ../../index.php");
-            exit();
+                // Log connexion RGPD
+                $stmt = $bdd->prepare("INSERT INTO log_connexion (ref_utilisateur, date_connexion, ip) VALUES (?, NOW(), ?)");
+                $stmt->execute([$utilisateur->getIdUtilisateur(), $_SERVER['REMOTE_ADDR'] ?? '']);
+
+                header("Location: ../../index.php");
+                exit();
+            }
         } else {
             $error = "Identifiants incorrects.";
         }

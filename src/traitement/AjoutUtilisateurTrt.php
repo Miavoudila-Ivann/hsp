@@ -10,7 +10,7 @@ if (isset($_POST['ok'])) {
     extract($_POST);
 
     if (!empty($nom) && !empty($prenom) && !empty($email) && !empty($rue) && !empty($cd) && !empty($ville)) {
-        $utilisateur = new Utilisateur(null, $nom, $prenom, $email, $rue, $cd, $ville);
+        $utilisateur = new Utilisateur(null, $prenom, $nom, $email, null, null, $rue, $cd, $ville);
         $repo = new UtilisateurRepository($bdd);
 
         $result = $repo->ajouter($utilisateur);

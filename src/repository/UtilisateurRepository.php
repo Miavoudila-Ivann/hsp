@@ -25,6 +25,12 @@ class UtilisateurRepository
 
     public function inscription(array $data): array {
         try {
+            // Validation du mot de passe côté serveur
+            $pwd = $data['password'];
+            if (strlen($pwd) < 12 || !preg_match('/[A-Z]/', $pwd) || !preg_match('/[a-z]/', $pwd) || !preg_match('/[0-9]/', $pwd) || !preg_match('/[\W_]/', $pwd)) {
+                return ['success' => false, 'error' => 'Le mot de passe doit contenir au moins 12 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.'];
+            }
+
             // Vérifie si l'email existe déjà
             $stmt = $this->bdd->prepare("SELECT COUNT(*) FROM utilisateur WHERE email = :email");
             $stmt->execute(['email' => $data['email']]);
@@ -124,11 +130,12 @@ class UtilisateurRepository
                     $user['prenom'],
                     $user['nom'],
                     $user['email'],
-                    $user['mdp'], // hash stocké
+                    $user['mdp'],
                     $user['role'],
                     $user['rue'],
                     $user['cd'],
-                    $user['ville']
+                    $user['ville'],
+                    $user['status']
                 );
 
             } else {
@@ -204,7 +211,4 @@ class UtilisateurRepository
     }
 
 }
-
-include __DIR__ . '/../vue/footer.php';
-
 ?>
