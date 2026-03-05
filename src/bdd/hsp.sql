@@ -333,3 +333,135 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+-- Ajout des rôles manquants
+ALTER TABLE utilisateur MODIFY COLUMN role ENUM('admin','user','medecin','secretaire','gestionnaire_stock','attente de confirmation') COLLATE latin2_bin DEFAULT 'attente de confirmation';
+
+-- Table patient
+CREATE TABLE IF NOT EXISTS patient (
+  id_patient INT NOT NULL AUTO_INCREMENT,
+  nom VARCHAR(50) NOT NULL,
+  prenom VARCHAR(50) NOT NULL,
+  num_secu VARCHAR(15) NOT NULL,
+  email VARCHAR(100) NOT NULL,
+  telephone VARCHAR(15) NOT NULL,
+  adresse VARCHAR(100) NOT NULL,
+  PRIMARY KEY (id_patient),
+  UNIQUE KEY (num_secu)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+
+-- Table dossier_prise_en_charge
+CREATE TABLE IF NOT EXISTS dossier_prise_en_charge (
+  id_dossier INT NOT NULL AUTO_INCREMENT,
+  date_arrivee DATE NOT NULL,
+  heure_arrivee TIME NOT NULL,
+  symptomes TEXT NOT NULL,
+  gravite TINYINT NOT NULL,
+  statut ENUM('en_attente','en_consultation','sorti','hospitalise') DEFAULT 'en_attente',
+  ref_patient INT NOT NULL,
+  ref_secretaire INT NOT NULL,
+  PRIMARY KEY (id_dossier),
+  KEY (ref_patient),
+  KEY (ref_secretaire)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+
+-- Table chambre
+CREATE TABLE IF NOT EXISTS chambre (
+  id_chambre INT NOT NULL AUTO_INCREMENT,
+  numero VARCHAR(10) NOT NULL,
+  disponible TINYINT(1) DEFAULT 1,
+  ref_hopital INT NOT NULL,
+  PRIMARY KEY (id_chambre),
+  KEY (ref_hopital)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+
+-- Table ordonnance
+CREATE TABLE IF NOT EXISTS ordonnance (
+  id_ordonnance INT NOT NULL AUTO_INCREMENT,
+  date_emission DATE NOT NULL,
+  contenu TEXT NOT NULL,
+  ref_dossier INT NOT NULL,
+  ref_medecin INT NOT NULL,
+  PRIMARY KEY (id_ordonnance),
+  KEY (ref_dossier),
+  KEY (ref_medecin)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+
+-- Table hospitalisation
+CREATE TABLE IF NOT EXISTS hospitalisation (
+  id_hospitalisation INT NOT NULL AUTO_INCREMENT,
+  date_debut DATE NOT NULL,
+  description_maladie TEXT NOT NULL,
+  ref_dossier INT NOT NULL,
+  ref_chambre INT NOT NULL,
+  ref_medecin INT NOT NULL,
+  PRIMARY KEY (id_hospitalisation),
+  KEY (ref_dossier),
+  KEY (ref_chambre),
+  KEY (ref_medecin)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+
+-- Table produit
+CREATE TABLE IF NOT EXISTS produit (
+  id_produit INT NOT NULL AUTO_INCREMENT,
+  libelle VARCHAR(100) NOT NULL,
+  description TEXT,
+  dangerosite TINYINT NOT NULL,
+  stock_actuel INT DEFAULT 0,
+  PRIMARY KEY (id_produit)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+
+-- Table fournisseur
+CREATE TABLE IF NOT EXISTS fournisseur (
+  id_fournisseur INT NOT NULL AUTO_INCREMENT,
+  nom VARCHAR(100) NOT NULL,
+  contact VARCHAR(100),
+  email VARCHAR(100),
+  PRIMARY KEY (id_fournisseur)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+
+-- Table fournisseur_produit
+CREATE TABLE IF NOT EXISTS fournisseur_produit (
+  id_fournisseur_produit INT NOT NULL AUTO_INCREMENT,
+  ref_fournisseur INT NOT NULL,
+  ref_produit INT NOT NULL,
+  prix DOUBLE NOT NULL,
+  PRIMARY KEY (id_fournisseur_produit),
+  KEY (ref_fournisseur),
+  KEY (ref_produit)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+
+-- Table demande_stock
+CREATE TABLE IF NOT EXISTS demande_stock (
+  id_demande INT NOT NULL AUTO_INCREMENT,
+  quantite INT NOT NULL,
+  statut ENUM('en_attente','acceptee','refusee') DEFAULT 'en_attente',
+  date_demande DATE NOT NULL,
+  ref_produit INT NOT NULL,
+  ref_medecin INT NOT NULL,
+  PRIMARY KEY (id_demande),
+  KEY (ref_produit),
+  KEY (ref_medecin)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+
+-- Table log_connexion (RGPD)
+CREATE TABLE IF NOT EXISTS log_connexion (
+  id_log INT NOT NULL AUTO_INCREMENT,
+  ref_utilisateur INT NOT NULL,
+  date_connexion DATETIME NOT NULL,
+  ip VARCHAR(45),
+  PRIMARY KEY (id_log),
+  KEY (ref_utilisateur)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
+
+-- Table historique (RGPD)
+CREATE TABLE IF NOT EXISTS historique (
+  id_historique INT NOT NULL AUTO_INCREMENT,
+  action VARCHAR(50) NOT NULL,
+  table_cible VARCHAR(50) NOT NULL,
+  ref_cible INT,
+  description TEXT,
+  ref_utilisateur INT,
+  date_action DATETIME NOT NULL,
+  PRIMARY KEY (id_historique)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
