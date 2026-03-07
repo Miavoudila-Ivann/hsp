@@ -133,10 +133,8 @@ $hours = [
                     </form>
                 <?php endif; ?>
 
-                <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin"): ?>
-                    <form action="src/vue/admin.php" method="get">
-                        <button type="submit" class="text-gray-700 hover:text-red-600 font-medium">👥 Forum</button>
-                    </form>
+                <?php if (isset($_SESSION["role"]) && in_array($_SESSION["role"], ['admin','user','medecin','entreprise'])): ?>
+                    <a href="src/vue/forum/index.php" class="text-gray-700 hover:text-blue-600 font-medium">Forum</a>
                 <?php endif; ?>
                 <!-- ✅ Si médecin -->
                 <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "medecin"): ?>
