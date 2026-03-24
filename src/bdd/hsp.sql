@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `commentaires` (
 
 DROP TABLE IF EXISTS `contact`;
 CREATE TABLE IF NOT EXISTS `contact` (
-                                         `id_contact` int NOT NULL,
+                                         `id_contact` int NOT NULL AUTO_INCREMENT,
                                          `sujet` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
     `message` varchar(100) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
     `date_envoie` date NOT NULL,
@@ -252,9 +252,9 @@ CREATE TABLE IF NOT EXISTS `offre` (
 --
 
 INSERT INTO `offre` (`id_offre`, `titre`, `description`, `mission`, `salaire`, `type_offre`, `etat`, `ref_utilisateur`, `ref_entreprise`, `date_publication`) VALUES
-(1, 'Alternance Technicien Support (H/F)', 'on recrute pas mais on fais juste semblant devant nos supérieur personne ne va ?tre pris parce que vous ?tes pas le fils on cousin du directeur ', '- Brancher des truc en balle\r\n- régler les probl?mes de Janine (elle veut pas prendre sa retraite)\r\n- ?tre présent ', 5580, 'informatique', '', 18, 1, '2025-11-21'),
+(1, 'Alternance Technicien Support (H/F)', 'on recrute pas mais on fais juste semblant devant nos supérieur personne ne va ?tre pris parce que vous ?tes pas le fils on cousin du directeur ', '- Brancher des truc en balle\r\n- régler les probl?mes de Janine (elle veut pas prendre sa retraite)\r\n- ?tre présent ', 5580, 'informatique', 'desactiver', 18, 1, '2025-11-21'),
 (2, 'baveux', 'zfzfzef', 'aaaaaaaaaaaaaaaaaaaa', 8000, 'Stage', 'activer', 24, 5, '2026-01-03'),
-(3, 'Stage dev', 'AZDZDAZDAD', 'ADAZDQSDZADADQS', 8000, 'Stage', 'activer', 0, 5, '2026-01-04');
+(3, 'Stage dev', 'AZDZDAZDAD', 'ADAZDQSDZADADQS', 8000, 'Stage', 'activer', 24, 5, '2026-01-04');
 
 -- --------------------------------------------------------
 
@@ -267,7 +267,7 @@ CREATE TABLE IF NOT EXISTS `post` (
   `id_post` int NOT NULL AUTO_INCREMENT,
   `canal` int NOT NULL,
   `titre` varchar(50) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
-  `contenu` int NOT NULL,
+  `contenu` text CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
   `date_post` date NOT NULL,
   PRIMARY KEY (`id_post`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
@@ -291,7 +291,7 @@ CREATE TABLE IF NOT EXISTS `rendez_vous` (
   `statut` enum('en_attente','accepte','refuse') DEFAULT 'en_attente',
   `date_creation` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_rdv`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -307,7 +307,7 @@ CREATE TABLE IF NOT EXISTS `reponse` (
   `ref_post` int NOT NULL,
   `ref_auteur` int NOT NULL,
   PRIMARY KEY (`id_reponse`),
-  UNIQUE KEY `ref_post_reponse` (`ref_post`),
+  KEY `ref_post_reponse` (`ref_post`),
   KEY `ref_auteur_reponse` (`ref_auteur`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 
@@ -338,7 +338,7 @@ CREATE TABLE IF NOT EXISTS `ressources_contenu` (
 DROP TABLE IF EXISTS `specialite`;
 CREATE TABLE IF NOT EXISTS `specialite` (
   `id_specialite` int NOT NULL AUTO_INCREMENT,
-  `libelle` int NOT NULL,
+  `libelle` varchar(100) CHARACTER SET latin2 COLLATE latin2_bin NOT NULL,
   PRIMARY KEY (`id_specialite`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_bin;
 
@@ -396,7 +396,8 @@ ALTER TABLE `commentaires`
 --
 ALTER TABLE `medecin`
   ADD CONSTRAINT `medecin_ibfk_1` FOREIGN KEY (`ref_specialite`) REFERENCES `specialite` (`id_specialite`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `medecin_ibfk_2` FOREIGN KEY (`ref_hopital`) REFERENCES `hopital` (`id_hopital`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `medecin_ibfk_2` FOREIGN KEY (`ref_hopital`) REFERENCES `hopital` (`id_hopital`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `medecin_ibfk_3` FOREIGN KEY (`ref_etablissement`) REFERENCES `etablissement` (`id_etablissement`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `reponse`
