@@ -1,4 +1,9 @@
 <?php
+/**
+ * Page de profil de l'utilisateur connecté.
+ * Affiche et permet la modification des informations personnelles (nom, prénom, email, mot de passe).
+ * Rôles autorisés : tout utilisateur connecté (session active obligatoire).
+ */
 use repository\UtilisateurRepository;
 
 session_start();
@@ -10,6 +15,7 @@ $database = new Bdd();
 $bdd = $database->getBdd();
 $repo = new UtilisateurRepository($bdd);
 
+// Redirection si l'utilisateur n'est pas authentifié
 if (!isset($_SESSION['id_utilisateur'])) {
     header("Location: Connexion.php");
     exit;
@@ -108,7 +114,7 @@ $hospital_name = htmlspecialchars($_SESSION["hospital_name"] ?? "Hopital Sud Par
 </head>
 <body>
 
-<!-- ✅ NAVBAR CORRIGÉE -->
+<!-- Barre de navigation propre à la page Profil (Tailwind) -->
 <nav class="fixed w-full bg-white/95 backdrop-blur-sm shadow-sm z-50 top-0">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-20">
@@ -130,6 +136,7 @@ $hospital_name = htmlspecialchars($_SESSION["hospital_name"] ?? "Hopital Sud Par
                 <a href="../../index.php" class="text-gray-700 hover:text-blue-600 font-medium">Accueil</a>
                 <a href="ListeEtablissement.php" class="text-gray-700 hover:text-blue-600 font-medium">Etablissements</a>
 
+                <!-- Liens conditionnels selon le rôle en session -->
                 <?php if (isset($_SESSION["id_utilisateur"])): ?>
                     <a href="Profil.php" class="text-gray-700 hover:text-blue-600 font-medium">Profil</a>
                 <?php endif; ?>
@@ -146,7 +153,7 @@ $hospital_name = htmlspecialchars($_SESSION["hospital_name"] ?? "Hopital Sud Par
         </div>
     </div>
 </nav>
-<!-- ✅ FIN NAVBAR -->
+<!-- Fin navbar -->
 
 
 <div class="container">

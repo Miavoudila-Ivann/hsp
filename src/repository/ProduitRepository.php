@@ -7,14 +7,31 @@ use \PDO;
 use PDOException;
 use \Produit;
 
+/**
+ * Gère les requêtes SQL liées aux produits médicaux en stock.
+ *
+ * Permet de lister, créer, modifier et supprimer les produits
+ * (médicaments, équipements, consommables) gérés dans le stock hospitalier.
+ */
 class ProduitRepository
 {
+    /** @var \PDO Instance de connexion à la base de données */
     private $bdd;
 
+    /**
+     * Initialise le repository avec une connexion PDO.
+     *
+     * @param \PDO $bdd Instance de connexion à la base de données
+     */
     public function __construct(\PDO $bdd) {
         $this->bdd = $bdd;
     }
 
+    /**
+     * Récupère tous les produits, triés par identifiant croissant.
+     *
+     * @return array Tableau associatif de tous les produits
+     */
     public function findAll(): array
     {
         try {
@@ -27,6 +44,12 @@ class ProduitRepository
         }
     }
 
+    /**
+     * Récupère un produit par son identifiant.
+     *
+     * @param mixed $id Identifiant du produit
+     * @return Produit|null L'objet Produit correspondant, ou null si non trouvé
+     */
     public function findById($id): ?Produit
     {
         try {
@@ -49,6 +72,14 @@ class ProduitRepository
         }
     }
 
+    /**
+     * Insère un nouveau produit en base de données.
+     *
+     * Le stock est initialisé à 0 si aucune valeur n'est fournie.
+     *
+     * @param Produit $produit L'objet produit à enregistrer
+     * @return bool Vrai si l'insertion a réussi, faux sinon
+     */
     public function ajouter(Produit $produit): bool
     {
         try {
@@ -68,6 +99,12 @@ class ProduitRepository
         }
     }
 
+    /**
+     * Met à jour les informations d'un produit existant.
+     *
+     * @param Produit $produit L'objet produit avec les nouvelles données
+     * @return bool Vrai si la modification a réussi, faux sinon
+     */
     public function modifier(Produit $produit): bool
     {
         try {
@@ -92,6 +129,12 @@ class ProduitRepository
         }
     }
 
+    /**
+     * Supprime un produit par son identifiant.
+     *
+     * @param mixed $id Identifiant du produit à supprimer
+     * @return bool Vrai si la suppression a réussi, faux sinon
+     */
     public function supprimer($id): bool
     {
         try {

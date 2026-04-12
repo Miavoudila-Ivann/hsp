@@ -7,17 +7,38 @@ use \PDO;
 use PDOException;
 use \DemandeStock;
 
+/**
+ * Gère les requêtes SQL liées aux demandes de stock médical.
+ *
+ * Permet aux médecins de soumettre des demandes d'approvisionnement en produits,
+ * et aux administrateurs de les consulter, filtrer et changer leur statut.
+ */
 class DemandeStockRepository
 {
+    /** @var \PDO Instance de connexion à la base de données */
     private $bdd;
 
+    /**
+     * Initialise le repository avec une connexion PDO.
+     *
+     * @param \PDO $bdd Instance de connexion à la base de données
+     */
     public function __construct(\PDO $bdd) {
         $this->bdd = $bdd;
     }
 
+    /**
+     * Récupère toutes les demandes de stock avec les informations du produit et du médecin demandeur.
+     *
+     * Jointure entre demande_stock, produit et utilisateur pour enrichir chaque ligne
+     * avec le libellé du produit et le nom/prénom du médecin.
+     *
+     * @return array Tableau associatif de toutes les demandes de stock
+     */
     public function findAll(): array
     {
         try {
+            // Récupère les demandes avec le libellé du produit et le nom du médecin via jointures
             $sql = "SELECT ds.*,
                         p.libelle AS libelle_produit,
                         u.nom AS nom_medecin,
@@ -34,6 +55,12 @@ class DemandeStockRepository
         }
     }
 
+    /**
+     * Récupère une demande de stock par son identifiant.
+     *
+     * @param mixed $id Identifiant de la demande
+     * @return DemandeStock|null L'objet DemandeStock correspondant, ou null si non trouvé
+     */
     public function findById($id): ?DemandeStock
     {
         try {
@@ -57,9 +84,18 @@ class DemandeStockRepository
         }
     }
 
+    /**
+     * Récupère toutes les demandes de stock filtrées par statut, avec le détail du produit et du médecin.
+     *
+     * Jointure entre demande_stock, produit et utilisateur filtrée sur le statut demandé.
+     *
+     * @param string $statut Statut à filtrer (ex : "en_attente", "acceptée", "refusée")
+     * @return array Tableau associatif des demandes correspondant au statut
+     */
     public function findByStatut(string $statut): array
     {
         try {
+            // Filtre les demandes par statut en joignant le produit et le médecin concernés
             $sql = "SELECT ds.*,
                         p.libelle AS libelle_produit,
                         u.nom AS nom_medecin,
@@ -78,6 +114,13 @@ class DemandeStockRepository
         }
     }
 
+    /**
+     * Met à jour le statut d'une demande de stock.
+     *
+     * @param mixed  $id     Identifiant de la demande
+     * @param string $statut Nouveau statut à appliquer
+     * @return bool Vrai si la mise à jour a réussi, faux sinon
+     */
     public function changerStatut($id, string $statut): bool
     {
         try {
@@ -89,6 +132,12 @@ class DemandeStockRepository
         }
     }
 
+    /**
+     * Insère une nouvelle demande de stock en base de données.
+     *
+     * @param DemandeStock $demande L'objet demande à enregistrer
+     * @return bool Vrai si l'insertion a réussi, faux sinon
+     */
     public function ajouter(DemandeStock $demande): bool
     {
         try {
@@ -109,6 +158,12 @@ class DemandeStockRepository
         }
     }
 
+    /**
+     * Met à jour les informations d'une demande de stock existante.
+     *
+     * @param DemandeStock $demande L'objet demande avec les nouvelles données
+     * @return bool Vrai si la modification a réussi, faux sinon
+     */
     public function modifier(DemandeStock $demande): bool
     {
         try {
@@ -135,6 +190,12 @@ class DemandeStockRepository
         }
     }
 
+    /**
+     * Supprime une demande de stock par son identifiant.
+     *
+     * @param mixed $id Identifiant de la demande à supprimer
+     * @return bool Vrai si la suppression a réussi, faux sinon
+     */
     public function supprimer($id): bool
     {
         try {

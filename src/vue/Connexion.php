@@ -1,4 +1,10 @@
 <?php
+/**
+ * Page de connexion des utilisateurs (tous rôles).
+ * Traite le formulaire POST, vérifie les identifiants et le statut du compte,
+ * initialise la session puis redirige vers l'accueil.
+ * Enregistre également chaque connexion réussie dans la table log_connexion (RGPD).
+ */
 
 session_start();
 
@@ -13,20 +19,19 @@ $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    // ✅ Utilise l’opérateur ?? pour éviter les warnings
     $email = trim($_POST["email"] ?? "");
     $password = trim($_POST["password"] ?? "");
 
-    // Vérifie que les deux champs sont remplis
     if ($email !== "" && $password !== "") {
 
         $utilisateur = $repo->connexion($email, $password);
 
         if ($utilisateur) {
             $status = $utilisateur->getStatus();
-            if ($status === 'refuser') {
-                $error = "Votre compte a été refusé. Contactez l'administrateur.";
-            } elseif ($status !== 'accepter') {
+            // Vérification du statut : refusé, en attente ou accepté
+            if ($status === ‘refuser’) {
+                $error = "Votre compte a été refusé. Contactez l’administrateur.";
+            } elseif ($status !== ‘accepter’) {
                 $error = "Votre compte est en attente de validation par un administrateur.";
             } else {
                 $_SESSION["email"] = $utilisateur->getEmail();
@@ -35,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $_SESSION["prenom"] = $utilisateur->getPrenom();
                 $_SESSION["nom"] = $utilisateur->getNom();
 
-                // Log connexion RGPD
+                // Journalisation de la connexion (traçabilité RGPD)
                 $stmt = $bdd->prepare("INSERT INTO log_connexion (ref_utilisateur, date_connexion, ip) VALUES (?, NOW(), ?)");
                 $stmt->execute([$utilisateur->getIdUtilisateur(), $_SERVER['REMOTE_ADDR'] ?? '']);
 

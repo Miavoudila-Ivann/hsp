@@ -7,14 +7,31 @@ use \PDO;
 use PDOException;
 use \Fournisseur;
 
+/**
+ * Gère les requêtes SQL liées aux fournisseurs de produits médicaux.
+ *
+ * Permet de lister, créer, modifier et supprimer les fournisseurs,
+ * ainsi que de les retrouver selon les produits qu'ils fournissent.
+ */
 class FournisseurRepository
 {
+    /** @var \PDO Instance de connexion à la base de données */
     private $bdd;
 
+    /**
+     * Initialise le repository avec une connexion PDO.
+     *
+     * @param \PDO $bdd Instance de connexion à la base de données
+     */
     public function __construct(\PDO $bdd) {
         $this->bdd = $bdd;
     }
 
+    /**
+     * Récupère tous les fournisseurs, triés par identifiant croissant.
+     *
+     * @return array Tableau associatif de tous les fournisseurs
+     */
     public function findAll(): array
     {
         try {
@@ -27,6 +44,12 @@ class FournisseurRepository
         }
     }
 
+    /**
+     * Récupère un fournisseur par son identifiant.
+     *
+     * @param mixed $id Identifiant du fournisseur
+     * @return Fournisseur|null L'objet Fournisseur correspondant, ou null si non trouvé
+     */
     public function findById($id): ?Fournisseur
     {
         try {
@@ -48,9 +71,19 @@ class FournisseurRepository
         }
     }
 
+    /**
+     * Récupère tous les fournisseurs associés à un produit donné, avec le prix pratiqué.
+     *
+     * Jointure entre fournisseur et la table de liaison fournisseur_produit
+     * pour récupérer le prix unitaire proposé par chaque fournisseur pour ce produit.
+     *
+     * @param mixed $id_produit Identifiant du produit
+     * @return array Tableau associatif des fournisseurs avec leur prix pour le produit
+     */
     public function findByProduit($id_produit): array
     {
         try {
+            // Jointure avec la table fournisseur_produit pour obtenir le prix par fournisseur
             $sql = "SELECT f.*, fp.prix
                     FROM fournisseur f
                     JOIN fournisseur_produit fp ON f.id_fournisseur = fp.ref_fournisseur
@@ -65,6 +98,12 @@ class FournisseurRepository
         }
     }
 
+    /**
+     * Insère un nouveau fournisseur en base de données.
+     *
+     * @param Fournisseur $fournisseur L'objet fournisseur à enregistrer
+     * @return bool Vrai si l'insertion a réussi, faux sinon
+     */
     public function ajouter(Fournisseur $fournisseur): bool
     {
         try {
@@ -83,6 +122,12 @@ class FournisseurRepository
         }
     }
 
+    /**
+     * Met à jour les informations d'un fournisseur existant.
+     *
+     * @param Fournisseur $fournisseur L'objet fournisseur avec les nouvelles données
+     * @return bool Vrai si la modification a réussi, faux sinon
+     */
     public function modifier(Fournisseur $fournisseur): bool
     {
         try {
@@ -105,6 +150,12 @@ class FournisseurRepository
         }
     }
 
+    /**
+     * Supprime un fournisseur par son identifiant.
+     *
+     * @param mixed $id Identifiant du fournisseur à supprimer
+     * @return bool Vrai si la suppression a réussi, faux sinon
+     */
     public function supprimer($id): bool
     {
         try {

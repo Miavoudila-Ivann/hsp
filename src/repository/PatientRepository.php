@@ -7,14 +7,31 @@ use \PDO;
 use PDOException;
 use \Patient;
 
+/**
+ * Gère les requêtes SQL liées aux patients.
+ *
+ * Permet de lister, créer, modifier et supprimer les dossiers patients
+ * enregistrés dans le système hospitalier.
+ */
 class PatientRepository
 {
+    /** @var \PDO Instance de connexion à la base de données */
     private $bdd;
 
+    /**
+     * Initialise le repository avec une connexion PDO.
+     *
+     * @param \PDO $bdd Instance de connexion à la base de données
+     */
     public function __construct(\PDO $bdd) {
         $this->bdd = $bdd;
     }
 
+    /**
+     * Récupère tous les patients, triés par identifiant croissant.
+     *
+     * @return array Tableau associatif de tous les patients
+     */
     public function findAll(): array
     {
         try {
@@ -27,6 +44,12 @@ class PatientRepository
         }
     }
 
+    /**
+     * Récupère un patient par son identifiant.
+     *
+     * @param mixed $id Identifiant du patient
+     * @return Patient|null L'objet Patient correspondant, ou null si non trouvé
+     */
     public function findById($id): ?Patient
     {
         try {
@@ -51,6 +74,12 @@ class PatientRepository
         }
     }
 
+    /**
+     * Insère un nouveau patient en base de données.
+     *
+     * @param Patient $patient L'objet patient à enregistrer
+     * @return bool Vrai si l'insertion a réussi, faux sinon
+     */
     public function ajouter(Patient $patient): bool
     {
         try {
@@ -72,6 +101,12 @@ class PatientRepository
         }
     }
 
+    /**
+     * Met à jour les informations d'un patient existant.
+     *
+     * @param Patient $patient L'objet patient avec les nouvelles données
+     * @return bool Vrai si la modification a réussi, faux sinon
+     */
     public function modifier(Patient $patient): bool
     {
         try {
@@ -100,6 +135,12 @@ class PatientRepository
         }
     }
 
+    /**
+     * Supprime un patient par son identifiant.
+     *
+     * @param mixed $id Identifiant du patient à supprimer
+     * @return bool Vrai si la suppression a réussi, faux sinon
+     */
     public function supprimer($id): bool
     {
         try {

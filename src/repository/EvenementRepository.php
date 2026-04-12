@@ -8,15 +8,32 @@ use \PDO;
 use \PDOException;
 use modele\Evenement;
 
+/**
+ * Gère les requêtes SQL liées aux événements hospitaliers.
+ *
+ * Permet de créer, modifier, supprimer et récupérer les événements
+ * (conférences, formations, journées portes ouvertes, etc.) organisés par l'hôpital.
+ */
 class EvenementRepository
 {
+    /** @var PDO Instance de connexion à la base de données */
     private PDO $bdd;
 
+    /**
+     * Initialise le repository avec une connexion PDO.
+     *
+     * @param PDO $bdd Instance de connexion à la base de données
+     */
     public function __construct(PDO $bdd) {
         $this->bdd = $bdd;
     }
 
-    // Méthode pour créer un événement
+    /**
+     * Insère un nouvel événement en base de données.
+     *
+     * @param Evenement $evenement L'objet événement à enregistrer
+     * @return bool Vrai si l'insertion a réussi, faux sinon
+     */
     public function creerEvenement(Evenement $evenement): bool
     {
         $sql = "
@@ -28,19 +45,24 @@ class EvenementRepository
 
         return $stmt->execute([
             'date_evenement' => $evenement->getDateEvenement(),
-            'description' => $evenement->getDescription(),
-            'lieu' => $evenement->getLieu(),
-            'nb_place' => $evenement->getNbPlace(),
-            'titre' => $evenement->getTitre(),
+            'description'    => $evenement->getDescription(),
+            'lieu'           => $evenement->getLieu(),
+            'nb_place'       => $evenement->getNbPlace(),
+            'titre'          => $evenement->getTitre(),
             'type_evenement' => $evenement->getTypeEvenement()
         ]);
     }
 
-    // Méthode pour modifier un événement
+    /**
+     * Met à jour les informations d'un événement existant.
+     *
+     * @param Evenement $evenement L'objet événement avec les nouvelles données
+     * @return bool Vrai si la modification a réussi, faux sinon
+     */
     public function modifierEvenement(Evenement $evenement): bool
     {
         $sql = "
-            UPDATE evenement SET 
+            UPDATE evenement SET
                 date_evenement = :date_evenement,
                 description = :description,
                 lieu = :lieu,
@@ -53,24 +75,34 @@ class EvenementRepository
         $stmt = $this->bdd->prepare($sql);
 
         return $stmt->execute([
-            'id_evenement' => $evenement->getIdEvenement(),
+            'id_evenement'   => $evenement->getIdEvenement(),
             'date_evenement' => $evenement->getDateEvenement(),
-            'description' => $evenement->getDescription(),
-            'lieu' => $evenement->getLieu(),
-            'nb_place' => $evenement->getNbPlace(),
-            'titre' => $evenement->getTitre(),
+            'description'    => $evenement->getDescription(),
+            'lieu'           => $evenement->getLieu(),
+            'nb_place'       => $evenement->getNbPlace(),
+            'titre'          => $evenement->getTitre(),
             'type_evenement' => $evenement->getTypeEvenement()
         ]);
     }
 
-    // Méthode pour supprimer un événement
+    /**
+     * Supprime un événement par son identifiant.
+     *
+     * @param int $id_evenement Identifiant de l'événement à supprimer
+     * @return bool Vrai si la suppression a réussi, faux sinon
+     */
     public function supprimerEvenement(int $id_evenement): bool
     {
         $stmt = $this->bdd->prepare("DELETE FROM evenement WHERE id_evenement = :id_evenement");
         return $stmt->execute(['id_evenement' => $id_evenement]);
     }
 
-    // Méthode pour récupérer un événement par son ID
+    /**
+     * Récupère un événement par son identifiant.
+     *
+     * @param int $id Identifiant de l'événement
+     * @return Evenement|null L'objet Evenement correspondant, ou null si non trouvé
+     */
     public function getEvenementById(int $id): ?Evenement
     {
         $stmt = $this->bdd->prepare("SELECT * FROM evenement WHERE id_evenement = :id_evenement");
@@ -84,7 +116,11 @@ class EvenementRepository
         return null;
     }
 
-    // 🔹 Méthode pour récupérer tous les événements sous forme d'objets Evenement
+    /**
+     * Récupère tous les événements sous forme d'objets Evenement, triés par date décroissante.
+     *
+     * @return array Tableau d'objets Evenement
+     */
     public function getAllEvenements(): array
     {
         try {

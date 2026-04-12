@@ -3,7 +3,9 @@
     "allow": [
       "Bash(sed:*)",
       "Bash(grep:*)",
-      "Bash(php:*)"
+      "Bash(php:*)",
+      "Bash(find src:*)",
+      "Bash(/c/wamp64/bin/php/php8.2.28/php.exe:*)"
     ]
   }
 }

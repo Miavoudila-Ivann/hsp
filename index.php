@@ -1,4 +1,9 @@
 <?php
+/**
+ * Page d'accueil publique de l'Hôpital Sud Paris.
+ * Présente les services, statistiques, événements et informations de contact.
+ * Accessible à tous ; la navigation s'adapte selon le rôle de l'utilisateur connecté.
+ */
 session_start();
 ?>
 
@@ -43,7 +48,7 @@ $evenements = $evenementRepo->getAllEvenements();
 <body class="scroll-smooth">
 
 <?php
-// Configuration
+// Données statiques : nom, services, stats, points forts, contact, horaires
 $hospital_name = "Hopital Sud Paris";
 $established_year = 1985;
 
@@ -119,31 +124,32 @@ $hours = [
                 <a href="#apropos" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">À Propos</a>
                 <a href="#contact" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Contact</a>
 
-                <!-- ✅ Si connecté -->
+                <!-- Lien Profil : visible uniquement si connecté -->
                 <?php if (isset($_SESSION['id_utilisateur'])): ?>
                     <a href="src/vue/Profil.php" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">
                         Profil
                     </a>
                 <?php endif; ?>
 
-                <!-- ✅ Si admin -->
+                <!-- Accès Dashboard : réservé à l'admin -->
                 <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin"): ?>
                     <form action="src/vue/admin.php" method="get">
                         <button type="submit" class="text-gray-700 hover:text-red-600 font-medium">👥 Accéder au Dashboard</button>
                     </form>
                 <?php endif; ?>
 
+                <!-- Accès Forum : disponible pour tous les rôles internes -->
                 <?php if (isset($_SESSION["role"]) && in_array($_SESSION["role"], ['admin','user','medecin','entreprise'])): ?>
                     <a href="src/vue/forum/index.php" class="text-gray-700 hover:text-blue-600 font-medium">Forum</a>
                 <?php endif; ?>
-                <!-- ✅ Si médecin -->
+                <!-- Lien liste des élèves : réservé au médecin -->
                 <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "medecin"): ?>
                     <a href="src/vue/ListeUtilisateurs.php" class="text-gray-700 hover:text-red-600 transition-colors font-medium">
                         👥 Liste des élèves
                     </a>
                 <?php endif; ?>
 
-                <!-- ✅ Bloc utilisateur connecté -->
+                <!-- Bloc utilisateur : affiche nom/rôle si connecté, sinon menu "Rejoins Nous" -->
                 <?php if (isset($_SESSION["id_utilisateur"])): ?>
                     <div class="flex items-center space-x-4 bg-gray-100 px-4 py-2 rounded-lg">
                         <div class="text-right">
@@ -159,7 +165,6 @@ $hours = [
                         </a>
                     </div>
 
-                    <!-- ✅ Bloc Rejoins Nous (si non connecté) -->
                 <?php else: ?>
                     <div class="relative" id="dropdownContainer">
                         <button id="dropdownButton" class="text-gray-700 hover:text-blue-600 font-medium focus:outline-none flex items-center">
@@ -181,7 +186,7 @@ $hours = [
                 <?php endif; ?>
             </div>
 
-            <!-- ✅ Script pour gérer le menu déroulant -->
+            <!-- Script : fermeture du menu déroulant au clic extérieur -->
             <script>
                 const dropdownButton = document.getElementById('dropdownButton');
                 const dropdownMenu = document.getElementById('dropdownMenu');

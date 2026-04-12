@@ -7,14 +7,31 @@ use \PDO;
 use PDOException;
 use \Chambre;
 
+/**
+ * Gère les requêtes SQL liées aux chambres hospitalières.
+ *
+ * Permet de lister, créer, modifier, supprimer et gérer la disponibilité
+ * des chambres associées à un hôpital.
+ */
 class ChambreRepository
 {
+    /** @var \PDO Instance de connexion à la base de données */
     private $bdd;
 
+    /**
+     * Initialise le repository avec une connexion PDO.
+     *
+     * @param \PDO $bdd Instance de connexion à la base de données
+     */
     public function __construct(\PDO $bdd) {
         $this->bdd = $bdd;
     }
 
+    /**
+     * Récupère toutes les chambres, triées par identifiant croissant.
+     *
+     * @return array Tableau associatif de toutes les chambres
+     */
     public function findAll(): array
     {
         try {
@@ -27,6 +44,12 @@ class ChambreRepository
         }
     }
 
+    /**
+     * Récupère une chambre par son identifiant.
+     *
+     * @param mixed $id Identifiant de la chambre
+     * @return Chambre|null L'objet Chambre correspondant, ou null si non trouvé
+     */
     public function findById($id): ?Chambre
     {
         try {
@@ -48,6 +71,11 @@ class ChambreRepository
         }
     }
 
+    /**
+     * Récupère toutes les chambres disponibles (disponible = 1).
+     *
+     * @return array Tableau associatif des chambres disponibles
+     */
     public function findDisponibles(): array
     {
         try {
@@ -60,6 +88,13 @@ class ChambreRepository
         }
     }
 
+    /**
+     * Met à jour la disponibilité d'une chambre.
+     *
+     * @param mixed $id   Identifiant de la chambre
+     * @param bool  $bool Vrai pour rendre disponible, faux pour indisponible
+     * @return bool Vrai si la mise à jour a réussi, faux sinon
+     */
     public function setDisponible($id, bool $bool): bool
     {
         try {
@@ -71,6 +106,12 @@ class ChambreRepository
         }
     }
 
+    /**
+     * Insère une nouvelle chambre en base de données.
+     *
+     * @param Chambre $chambre L'objet chambre à enregistrer
+     * @return bool Vrai si l'insertion a réussi, faux sinon
+     */
     public function ajouter(Chambre $chambre): bool
     {
         try {
@@ -89,6 +130,12 @@ class ChambreRepository
         }
     }
 
+    /**
+     * Met à jour les informations d'une chambre existante.
+     *
+     * @param Chambre $chambre L'objet chambre avec les nouvelles données
+     * @return bool Vrai si la modification a réussi, faux sinon
+     */
     public function modifier(Chambre $chambre): bool
     {
         try {
@@ -111,6 +158,12 @@ class ChambreRepository
         }
     }
 
+    /**
+     * Supprime une chambre par son identifiant.
+     *
+     * @param mixed $id Identifiant de la chambre à supprimer
+     * @return bool Vrai si la suppression a réussi, faux sinon
+     */
     public function supprimer($id): bool
     {
         try {

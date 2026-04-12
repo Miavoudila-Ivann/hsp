@@ -1,4 +1,11 @@
 <?php
+/**
+ * Page d'inscription des nouveaux utilisateurs (user, médecin, admin).
+ * Valide les données du formulaire côté serveur, crée le compte via le repository
+ * et affiche les messages de succès ou d'erreur.
+ * Le compte est en attente de validation administrateur après inscription.
+ * Accessible à tous (non connectés).
+ */
 require_once __DIR__ . '/../../src/bdd/Bdd.php';
 require_once __DIR__ . '/../../src/repository/UtilisateurRepository.php';
 use repository\UtilisateurRepository;

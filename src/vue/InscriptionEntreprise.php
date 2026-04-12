@@ -1,4 +1,10 @@
 <?php
+/**
+ * Page d'inscription dédiée aux entreprises partenaires.
+ * Vérifie l'unicité de l'email, hache le mot de passe et enregistre
+ * l'entreprise avec le statut 'Attente' (validation admin requise).
+ * Accessible à tous (non connectés).
+ */
 session_start();
 require_once __DIR__ . '/../bdd/Bdd.php';
 require_once __DIR__ . '/../repository/EntrepriseRepository.php';
@@ -16,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $bdd = $database->getBdd();
         $repo = new EntrepriseRepository($bdd);
 
-        // Validation des données
+        // Validation et nettoyage des champs du formulaire
         $nom = trim($_POST['nom_entreprise'] ?? '');
         $email = trim($_POST['email'] ?? '');
         $mdp = trim($_POST['mdp'] ?? '');
@@ -30,13 +36,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $error = "Email invalide.";
         } else {
-            // Vérifier si l'email existe déjà
+            // Contrôle de l'unicité de l'email avant insertion
             $stmt = $bdd->prepare("SELECT COUNT(*) FROM entreprise WHERE email = :email");
             $stmt->execute(['email' => $email]);
             if ($stmt->fetchColumn() > 0) {
                 $error = "Cet email est déjà utilisé.";
             } else {
-                // Hash du mot de passe
+                // Hachage sécurisé du mot de passe avant stockage
                 $hashedPassword = password_hash($mdp, PASSWORD_BCRYPT);
 
                 $entreprise = new Entreprise([

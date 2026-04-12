@@ -1,7 +1,14 @@
 <?php
+/**
+ * Tableau de bord administrateur.
+ * Rôle autorisé : admin uniquement.
+ * Centralise la gestion des utilisateurs, entreprises, candidatures,
+ * contrats, établissements, événements et hôpitaux.
+ * Gère également la validation/refus des comptes avec envoi d'email (PHPMailer).
+ */
 session_start();
 
-// Vérifier si l'utilisateur est admin
+// Redirection si l'utilisateur n'est pas admin
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header('Location: index.php');
     exit();
@@ -28,7 +35,13 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Fonction pour envoyer un email de notification
+/**
+ * Envoie un email de refus à un utilisateur ou une entreprise via SMTP Gmail.
+ * @param string $email       Destinataire
+ * @param string $nom         Nom (ou raison sociale pour une entreprise)
+ * @param string $prenom      Prénom (vide pour une entreprise)
+ * @param string $typeCompte  'utilisateur' ou 'entreprise'
+ */
 function envoyerEmailRefus($email, $nom, $prenom, $typeCompte = 'utilisateur') {
     $mail = new PHPMailer(true);
 
@@ -101,6 +114,9 @@ function envoyerEmailRefus($email, $nom, $prenom, $typeCompte = 'utilisateur') {
         return false;
     }
 }
+/**
+ * Envoie un email d'approbation à un utilisateur ou une entreprise via SMTP Gmail.
+ */
 function envoyerEmailApprobation($email, $nom, $prenom, $typeCompte = 'utilisateur') {
     $mail = new PHPMailer(true);
 
@@ -162,20 +178,17 @@ function envoyerEmailApprobation($email, $nom, $prenom, $typeCompte = 'utilisate
     }
 }
 
-// Refuser un utilisateur
+// Refus d'un utilisateur avec notification par email
 if (isset($_POST['refuser']) && isset($_POST['id_utilisateur'])) {
     $id = (int) $_POST['id_utilisateur'];
 
-    // Récupérer les infos de l'utilisateur avant de refuser
     $stmt = $bdd->prepare("SELECT nom, prenom, email FROM utilisateur WHERE id_utilisateur = ?");
     $stmt->execute([$id]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Mettre à jour le statut
     $stmt = $bdd->prepare("UPDATE utilisateur SET status = 'refuser' WHERE id_utilisateur = ?");
     $stmt->execute([$id]);
 
-    // Envoyer l'email de notification
     if ($user) {
         envoyerEmailRefus($user['email'], $user['nom'], $user['prenom'], 'utilisateur');
     }
@@ -184,9 +197,7 @@ if (isset($_POST['refuser']) && isset($_POST['id_utilisateur'])) {
     exit();
 }
 
-// === REMPLACE LA SECTION "REFUSER UNE ENTREPRISE" PAR CECI ===
-
-// Refuser une entreprise
+// Refus d'une entreprise avec notification par email
 if (isset($_POST['refuser_entreprise']) && isset($_POST['id_entreprise'])) {
     $id = (int) $_POST['id_entreprise'];
 
@@ -228,7 +239,8 @@ $evenementRepo = new EvenementRepository($bdd);
 $hopitalRepo = new HopitalRepository($bdd);
 $entrepriseRepo = new EntrepriseRepository($bdd);
 
-// === GESTION ACTIONS ADMIN ===
+// Instanciation de tous les repositories nécessaires au dashboard
+// === ACTIONS ADMIN ===
 
 // Suppression candidature
 if (isset($_GET['delete_candidature'])) {
@@ -244,9 +256,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['modifier_statut'])) {
     exit();
 }
 
-// === GESTION DES UTILISATEURS EN ATTENTE ===
+// === VALIDATION / REFUS DES UTILISATEURS EN ATTENTE ===
 
-// Approuver un utilisateur
+// Approbation d'un utilisateur avec email de notification
 if (isset($_POST['accepter']) && isset($_POST['id_utilisateur'])) {
     $id = (int) $_POST['id_utilisateur'];
 
@@ -277,9 +289,9 @@ if (isset($_POST['refuser']) && isset($_POST['id_utilisateur'])) {
     exit();
 }
 
-// === GESTION DES ENTREPRISES EN ATTENTE ===
+// === VALIDATION / REFUS DES ENTREPRISES EN ATTENTE ===
 
-// Approuver une entreprise
+// Approbation d'une entreprise
 if (isset($_POST['accepter_entreprise']) && isset($_POST['id_entreprise'])) {
     $id = (int) $_POST['id_entreprise'];
     $stmt = $bdd->prepare("UPDATE entreprise SET status = 'accepter' WHERE id_entreprise = ?");
@@ -297,15 +309,14 @@ if (isset($_POST['refuser_entreprise']) && isset($_POST['id_entreprise'])) {
     exit();
 }
 
-// Récupération des utilisateurs en attente
+// Chargement des comptes en attente de validation
 $stmt = $bdd->query("SELECT * FROM utilisateur WHERE status = 'Attente'");
 $usersEnAttente = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Récupération des entreprises en attente
 $stmtEntreprises = $bdd->query("SELECT * FROM entreprise WHERE status = 'Attente'");
 $entreprisesEnAttente = $stmtEntreprises->fetchAll(PDO::FETCH_ASSOC);
 
-// Récupération de toutes les données
+// Chargement de toutes les données pour l'affichage du dashboard
 $utilisateurs = $utilisateurRepo->findAll();
 $candidatures = $candidatureRepo->findAll();
 $contrats = $contratRepo->findAll();

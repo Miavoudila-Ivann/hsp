@@ -7,17 +7,38 @@ use \PDO;
 use PDOException;
 use \Ordonnance;
 
+/**
+ * Gère les requêtes SQL liées aux ordonnances médicales.
+ *
+ * Permet de lister, créer, modifier et supprimer les ordonnances
+ * émises par les médecins dans le cadre d'un dossier de prise en charge.
+ */
 class OrdonnanceRepository
 {
+    /** @var \PDO Instance de connexion à la base de données */
     private $bdd;
 
+    /**
+     * Initialise le repository avec une connexion PDO.
+     *
+     * @param \PDO $bdd Instance de connexion à la base de données
+     */
     public function __construct(\PDO $bdd) {
         $this->bdd = $bdd;
     }
 
+    /**
+     * Récupère toutes les ordonnances avec les informations du dossier et du médecin émetteur.
+     *
+     * Jointure entre ordonnance, dossier_prise_en_charge et utilisateur pour enrichir
+     * chaque ligne avec la date d'arrivée du dossier et le nom du médecin. Triées par date décroissante.
+     *
+     * @return array Tableau associatif de toutes les ordonnances
+     */
     public function findAll(): array
     {
         try {
+            // Jointure pour obtenir les informations du dossier et du médecin associés à chaque ordonnance
             $sql = "SELECT o.*,
                         d.date_arrivee AS date_arrivee_dossier,
                         d.statut AS statut_dossier,
@@ -35,6 +56,12 @@ class OrdonnanceRepository
         }
     }
 
+    /**
+     * Récupère une ordonnance par son identifiant.
+     *
+     * @param mixed $id Identifiant de l'ordonnance
+     * @return Ordonnance|null L'objet Ordonnance correspondant, ou null si non trouvé
+     */
     public function findById($id): ?Ordonnance
     {
         try {
@@ -57,6 +84,12 @@ class OrdonnanceRepository
         }
     }
 
+    /**
+     * Insère une nouvelle ordonnance en base de données.
+     *
+     * @param Ordonnance $ordonnance L'objet ordonnance à enregistrer
+     * @return bool Vrai si l'insertion a réussi, faux sinon
+     */
     public function ajouter(Ordonnance $ordonnance): bool
     {
         try {
@@ -76,6 +109,12 @@ class OrdonnanceRepository
         }
     }
 
+    /**
+     * Met à jour les informations d'une ordonnance existante.
+     *
+     * @param Ordonnance $ordonnance L'objet ordonnance avec les nouvelles données
+     * @return bool Vrai si la modification a réussi, faux sinon
+     */
     public function modifier(Ordonnance $ordonnance): bool
     {
         try {
@@ -100,6 +139,12 @@ class OrdonnanceRepository
         }
     }
 
+    /**
+     * Supprime une ordonnance par son identifiant.
+     *
+     * @param mixed $id Identifiant de l'ordonnance à supprimer
+     * @return bool Vrai si la suppression a réussi, faux sinon
+     */
     public function supprimer($id): bool
     {
         try {

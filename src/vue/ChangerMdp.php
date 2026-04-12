@@ -1,4 +1,9 @@
 <?php
+/**
+ * Page de changement de mot de passe via lien de réinitialisation.
+ * Vérifie la validité du token (présent dans l'URL et non expiré en base).
+ * Accessible à tout utilisateur possédant un token valide (non connecté requis).
+ */
 
 require __DIR__ . '/../bdd/Bdd.php';
 
@@ -7,13 +12,15 @@ $token = $_GET['token'] ?? '';
 $db = new Bdd();
 $pdo = $db->getBdd();
 
+// Vérification du token : doit exister et ne pas être expiré
 $sql = $pdo->prepare("SELECT * FROM utilisateur WHERE reset_token=? AND reset_expires > NOW()");
 $sql->execute([$token]);
 $utilisateur = $sql->fetch();
 
 if (!$utilisateur) {
     die("Lien invalide ou expiré.");
-}include __DIR__ . '/header.php';
+}
+include __DIR__ . '/header.php';
 ?>
 
 <!DOCTYPE html>

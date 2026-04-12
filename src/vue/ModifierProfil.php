@@ -1,9 +1,15 @@
 <?php
+/**
+ * Page de modification du profil utilisateur (version alternative avec Bootstrap).
+ * Charge les données de l'utilisateur connecté depuis la base de données
+ * et affiche un formulaire pré-rempli pour modification.
+ * Rôles autorisés : tout utilisateur connecté.
+ */
 session_start();
 require_once '../bdd/Bdd.php';
 require_once '../repository/UtilisateurRepository.php';
 
-
+// Vérification de la session
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../../vue/Connexion.php");
     exit();

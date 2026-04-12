@@ -1,5 +1,11 @@
 <?php
+/**
+ * Page d'affichage de la liste des patients.
+ * Rôles autorisés : secrétaire, admin.
+ * Permet la suppression d'un patient via paramètre GET et l'accès au formulaire de création.
+ */
 session_start();
+// Accès réservé aux rôles secrétaire et admin
 if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'secretaire' && $_SESSION['role'] !== 'admin')) {
     header('Location: ../../index.php');
     exit();
@@ -14,6 +20,7 @@ $database = new Bdd();
 $bdd = $database->getBdd();
 $repo = new PatientRepository($bdd);
 
+// Suppression d'un patient si demandée via l'URL
 if (isset($_GET['delete'])) {
     $id = (int)$_GET['delete'];
     $repo->supprimer($id);
